@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"encoding/json"
+	"strings"
 	"time"
 
 	"just-vpn/middleware"
@@ -10,14 +12,15 @@ import (
 )
 
 type PopupResponse struct {
-	Id           int    `json:"id" example:"1"`                                    // 弹窗ID
-	Title        string `json:"title" example:"会员活动"`                              // 弹窗标题
-	Content      string `json:"content" example:"限时开通会员享优惠"`                       // 弹窗内容
-	ImageUrl     string `json:"image_url" example:"https://example.com/popup.png"` // 弹窗图片地址
-	JumpType     string `json:"jump_type" example:"internal"`                      // 跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)
-	JumpTarget   string `json:"jump_target" example:"purchase"`                    // 跳转目标，内部跳转填业务code，外部跳转填URL
-	ShowTimes    int    `json:"show_times" example:"1"`                            // 当前用户已展示次数
-	MaxShowTimes int    `json:"max_show_times" example:"3"`                        // 每个用户最大展示次数，0表示不限次数
+	Id           int      `json:"id" example:"1"`                                    // 弹窗ID
+	Title        string   `json:"title" example:"会员活动"`                              // 弹窗标题
+	Content      string   `json:"content" example:"限时开通会员享优惠"`                       // 弹窗内容
+	ImageUrl     []string `json:"image_url" example:"https://example.com/popup.png"` // 弹窗图片地址数组
+	JumpType     string   `json:"jump_type" example:"internal"`                      // 跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)
+	JumpTarget   string   `json:"jump_target" example:"purchase"`                    // 跳转目标，内部跳转填业务code，外部跳转填URL
+	CanClose     int      `json:"can_close" example:"1"`                             // 是否可关闭(0=不可关闭,1=可关闭)
+	ShowTimes    int      `json:"show_times" example:"1"`                            // 当前用户已展示次数
+	MaxShowTimes int      `json:"max_show_times" example:"3"`                        // 每个用户最大展示次数，0表示不限次数
 }
 
 // PopupHandler 获取统一弹窗
@@ -49,12 +52,37 @@ func PopupHandler(c *gin.Context) {
 		Id:           popup.Id,
 		Title:        popup.Title,
 		Content:      popup.Content,
-		ImageUrl:     popup.ImageUrl,
+		ImageUrl:     popupImageResponseValue(popup.ImageUrl),
 		JumpType:     popup.JumpType,
 		JumpTarget:   popup.JumpTarget,
+		CanClose:     popup.CanClose,
 		ShowTimes:    record.ShowTimes,
 		MaxShowTimes: popup.MaxShowTimes,
 	})
+}
+
+// popupImageResponseValue 兼容后台保存的 JSON 数组、逗号分隔或单个图片地址
+func popupImageResponseValue(value string) []string {
+	trimmed := strings.TrimSpace(value)
+	if trimmed == "" {
+		return []string{}
+	}
+
+	var urls []string
+	if json.Unmarshal([]byte(trimmed), &urls) == nil {
+		return filterPopupImageURLs(urls)
+	}
+	return filterPopupImageURLs(strings.Split(trimmed, ","))
+}
+
+func filterPopupImageURLs(values []string) []string {
+	urls := make([]string, 0, len(values))
+	for _, value := range values {
+		if value = strings.TrimSpace(value); value != "" {
+			urls = append(urls, value)
+		}
+	}
+	return urls
 }
 
 func nextPopupForUser(userId int, platform string, version string, now time.Time) (model.Popup, model.UserPopup, bool, error) {

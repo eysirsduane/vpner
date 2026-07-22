@@ -134,19 +134,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/controller.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "result": {
-                                            "$ref": "#/definitions/controller.HeartbeatResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/controller.Response"
                         }
                     }
                 }
@@ -174,6 +162,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/delayed_popup": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取客户端断网后本地延迟展示的迁移弹窗，并返回当前用户转移码",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "获取延迟弹窗",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
                             "allOf": [
                                 {
                                     "$ref": "#/definitions/controller.Response"
@@ -182,7 +195,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "result": {
-                                            "$ref": "#/definitions/controller.LogoffResponse"
+                                            "$ref": "#/definitions/controller.DelayedPopupResponse"
                                         }
                                     }
                                 }
@@ -432,7 +445,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.HeartbeatResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -658,7 +683,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.LogoffResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -746,6 +783,57 @@ const docTemplate = `{
                                     "properties": {
                                         "result": {
                                             "$ref": "#/definitions/controller.NodeResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/node_config": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据线路代码和连接模式获取加密后的完整 JSON 节点配置",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "获取 JSON 节点配置",
+                "parameters": [
+                    {
+                        "description": "获取 JSON 节点配置请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.NodeConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.NodeConfigResponse"
                                         }
                                     }
                                 }
@@ -1056,43 +1144,6 @@ const docTemplate = `{
                                     "properties": {
                                         "result": {
                                             "$ref": "#/definitions/controller.PopupResponse"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/delayed_popup": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "获取客户端断网后本地延迟展示的迁移弹窗，并返回当前用户转移码",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "系统"
-                ],
-                "summary": "获取延迟弹窗",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/controller.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "result": {
-                                            "$ref": "#/definitions/controller.DelayedPopupResponse"
                                         }
                                     }
                                 }
@@ -1540,6 +1591,56 @@ const docTemplate = `{
                 }
             }
         },
+        "controller.DelayedPopupResponse": {
+            "type": "object",
+            "properties": {
+                "can_close": {
+                    "description": "是否可关闭(0=不可关闭,1=可关闭)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "content": {
+                    "description": "弹窗内容",
+                    "type": "string",
+                    "example": "如当前软件无法使用，请转移到新软件"
+                },
+                "delay_days": {
+                    "description": "断网后延迟展示天数",
+                    "type": "integer",
+                    "example": 3
+                },
+                "id": {
+                    "description": "弹窗ID",
+                    "type": "integer",
+                    "example": 1
+                },
+                "image_url": {
+                    "description": "弹窗图片地址数组",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "/api/v1/upload/pop.png"
+                    ]
+                },
+                "link_url": {
+                    "description": "弹窗跳转链接",
+                    "type": "string",
+                    "example": "https://example.com/download"
+                },
+                "title": {
+                    "description": "弹窗标题",
+                    "type": "string",
+                    "example": "服务迁移提醒"
+                },
+                "transfer_code": {
+                    "description": "当前用户转移码",
+                    "type": "string",
+                    "example": "origin8f3k9q"
+                }
+            }
+        },
         "controller.DeviceInfoResponse": {
             "type": "object",
             "properties": {
@@ -1629,6 +1730,16 @@ const docTemplate = `{
                 "msg_type": {
                     "type": "string",
                     "example": "vpn"
+                }
+            }
+        },
+        "controller.HeartbeatResponse": {
+            "type": "object",
+            "properties": {
+                "connect_status": {
+                    "description": "连接状态(1=继续连接,0=断开连接)",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -1923,16 +2034,6 @@ const docTemplate = `{
                 }
             }
         },
-        "controller.HeartbeatResponse": {
-            "type": "object",
-            "properties": {
-                "connect_status": {
-                    "description": "连接状态(1=继续连接,0=断开连接)",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
         "controller.LineAreaResponse": {
             "type": "object",
             "properties": {
@@ -2001,6 +2102,41 @@ const docTemplate = `{
                 "version": {
                     "type": "string",
                     "example": "1.0.0"
+                }
+            }
+        },
+        "controller.LogoffResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+            }
+        },
+        "controller.NodeConfigRequest": {
+            "type": "object",
+            "required": [
+                "code",
+                "type"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "HK"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "fast"
+                }
+            }
+        },
+        "controller.NodeConfigResponse": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "string",
+                    "example": "x/k5A0v9kiJjL0r3m6X9dA=="
                 }
             }
         },
@@ -2176,54 +2312,14 @@ const docTemplate = `{
                 }
             }
         },
-        "controller.DelayedPopupResponse": {
+        "controller.PopupResponse": {
             "type": "object",
             "properties": {
-                "content": {
-                    "description": "弹窗内容",
-                    "type": "string",
-                    "example": "如当前软件无法使用，请转移到新软件"
-                },
                 "can_close": {
                     "description": "是否可关闭(0=不可关闭,1=可关闭)",
                     "type": "integer",
                     "example": 1
                 },
-                "delay_days": {
-                    "description": "断网后延迟展示天数",
-                    "type": "integer",
-                    "example": 3
-                },
-                "id": {
-                    "description": "弹窗ID",
-                    "type": "integer",
-                    "example": 1
-                },
-                "image_url": {
-                    "description": "弹窗图片地址",
-                    "type": "string",
-                    "example": "/api/v1/upload/pop.png"
-                },
-                "link_url": {
-                    "description": "弹窗跳转链接",
-                    "type": "string",
-                    "example": "https://example.com/download"
-                },
-                "title": {
-                    "description": "弹窗标题",
-                    "type": "string",
-                    "example": "服务迁移提醒"
-                },
-                "transfer_code": {
-                    "description": "当前用户转移码",
-                    "type": "string",
-                    "example": "origin8f3k9q"
-                }
-            }
-        },
-        "controller.PopupResponse": {
-            "type": "object",
-            "properties": {
                 "content": {
                     "description": "弹窗内容",
                     "type": "string",
@@ -2235,9 +2331,14 @@ const docTemplate = `{
                     "example": 1
                 },
                 "image_url": {
-                    "description": "弹窗图片地址",
-                    "type": "string",
-                    "example": "https://example.com/popup.png"
+                    "description": "弹窗图片地址数组",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "https://example.com/popup.png"
+                    ]
                 },
                 "jump_target": {
                     "description": "跳转目标，内部跳转填业务code，外部跳转填URL",
@@ -2347,15 +2448,6 @@ const docTemplate = `{
                 "result": {}
             }
         },
-        "controller.LogoffResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                }
-            }
-        },
         "controller.UserInfoResponse": {
             "type": "object",
             "properties": {
@@ -2386,6 +2478,10 @@ const docTemplate = `{
                 "login_times": {
                     "type": "integer",
                     "example": 1
+                },
+                "password": {
+                    "type": "string",
+                    "example": "pass001"
                 },
                 "platform": {
                     "type": "string",

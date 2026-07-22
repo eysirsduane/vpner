@@ -15,9 +15,10 @@ type Popup struct {
 	BaseModel
 	Title        string     `json:"title" gorm:"column:title;type:varchar(128);comment:弹窗标题"`
 	Content      string     `json:"content" gorm:"column:content;type:text;comment:弹窗内容"`
-	ImageUrl     string     `json:"image_url" gorm:"column:image_url;type:varchar(255);comment:弹窗图片地址"`
+	ImageUrl     string     `json:"image_url" gorm:"column:image_url;type:text;comment:弹窗图片地址，支持JSON字符串数组或英文逗号分隔"`
 	JumpType     string     `json:"jump_type" gorm:"column:jump_type;type:varchar(32);comment:跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)"`
 	JumpTarget   string     `json:"jump_target" gorm:"column:jump_target;type:varchar(255);comment:跳转目标，内部跳转填业务code，外部跳转填URL"`
+	CanClose     int        `json:"can_close" gorm:"column:can_close;type:tinyint;not null;default:1;comment:是否可关闭(0=不可关闭,1=可关闭)"`
 	Status       int        `json:"status" gorm:"column:status;type:int;index:idx_popup_status;comment:状态(0=关闭,1=开启)"`
 	MaxShowTimes int        `json:"max_show_times" gorm:"column:max_show_times;type:int;comment:每个用户最大展示次数，0表示不限次数"`
 	StartTime    *time.Time `json:"start_time" gorm:"column:start_time;type:datetime;index:idx_popup_time;comment:展示开始时间"`

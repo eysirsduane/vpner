@@ -78,7 +78,8 @@ Authorization: Bearer <token>
   "version": "1.0.0",
   "login_times": 1,
   "create_time": "2026-07-06 10:00:00",
-  "last_login_time": "2026-07-06 10:00:00"
+  "last_login_time": "2026-07-06 10:00:00",
+  "password": "pass001"
 }
 ```
 
@@ -95,6 +96,7 @@ Authorization: Bearer <token>
 | vip_time  | 会员到期时间，非会员为空                     |
 | is_new_user | 是否新用户，`1=首次创建的新用户`，`0=老用户` |
 | login_times   | 登录次数                                     |
+| password | 绑定账号的明文密码，游客为空字符串 |
 
 ## 公开接口
 
@@ -176,7 +178,8 @@ POST /api/v1/auto_login
     "version": "1.0.0",
     "login_times": 1,
     "create_time": "2026-07-06 10:00:00",
-    "last_login_time": "2026-07-06 10:00:00"
+    "last_login_time": "2026-07-06 10:00:00",
+    "password": ""
   }
 }
 ```
@@ -621,14 +624,19 @@ GET /api/v1/popup
     "id": 1,
     "title": "会员活动",
     "content": "限时开通会员享优惠",
-    "image_url": "https://example.com/popup.png",
+    "image_url": [
+      "https://example.com/popup.png"
+    ],
     "jump_type": "internal",
     "jump_target": "purchase",
+    "can_close": 1,
     "show_times": 1,
     "max_show_times": 3
   }
 }
 ```
+
+后台配置 `image_url` 可填写单个 URL、英文逗号分隔的多个 URL，或 JSON 字符串数组，接口始终返回 JSON URL 数组。`can_close` 取值：`1=可关闭`、`0=不可关闭`。
 
 `jump_type` 取值：
 
@@ -656,12 +664,18 @@ GET /api/v1/delayed_popup
     "id": 1,
     "title": "服务迁移提醒",
     "content": "如果当前软件长时间无法连接，请使用转移码前往新软件兑换会员权益",
-    "image_url": "/api/v1/file/pop.png",
+    "image_url": [
+      "/api/v1/upload/pop.png"
+    ],
+    "link_url": "https://example.com/download",
+    "can_close": 1,
     "delay_days": 3,
     "transfer_code": "origin8f3k9q"
   }
 }
 ```
+
+延迟弹窗的 `image_url` 规则与普通弹窗一致，始终返回 JSON URL 数组。`can_close` 取值：`1=可关闭`、`0=不可关闭`。
 
 无可用配置时：
 
@@ -966,6 +980,42 @@ POST /api/v1/node
 }
 ```
 
+### 获取 JSON 节点配置
+
+```http
+POST /api/v1/node_config
+```
+
+请求体：
+
+```json
+{
+  "code": "HK",
+  "type": "fast"
+}
+```
+
+字段说明：
+
+| 字段 | 说明 |
+| --- | --- |
+| code | 线路代码 |
+| type | 连接模式，`fast` 或 `极速` 表示极速模式，`global` 或 `全局` 表示全局模式 |
+
+响应：
+
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "result": {
+    "config": "x/k5A0v9kiJjL0r3m6X9dA=="
+  }
+}
+```
+
+`config` 是完整 JSON 节点配置的加密结果，解密流程与 `link_url` 相同：先 AES-CBC/PKCS7 解密，再 base64 解码得到 JSON 配置。该接口与 `node` 使用相同的线路选择、会员校验和临时节点记录逻辑。
+
 ### 确认已连接
 
 ```http
@@ -1026,7 +1076,7 @@ POST /api/v1/vpn_flow
 
 1. 调用 `POST /api/v1/lines_list`
 2. 用户选择线路
-3. 调用 `POST /api/v1/node`
+3. 根据客户端实现调用 `POST /api/v1/node` 或 `POST /api/v1/node_config`
 4. 客户端建立 VPN 连接
 5. 连接成功后调用 `POST /api/v1/connected`
 6. 连接中定时调用 `POST /api/v1/heartbeat`

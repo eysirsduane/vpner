@@ -12,7 +12,7 @@ type DelayedPopup struct {
 	BaseModel
 	Title     string     `json:"title" gorm:"column:title;type:varchar(128);comment:弹窗标题"`
 	Content   string     `json:"content" gorm:"column:content;type:text;comment:弹窗内容"`
-	ImageUrl  string     `json:"image_url" gorm:"column:image_url;type:varchar(255);comment:弹窗图片地址"`
+	ImageUrl  string     `json:"image_url" gorm:"column:image_url;type:text;comment:弹窗图片地址，支持JSON字符串数组或英文逗号分隔"`
 	LinkUrl   string     `json:"link_url" gorm:"column:link_url;type:varchar(255);comment:弹窗跳转链接"`
 	CanClose  int        `json:"can_close" gorm:"column:can_close;type:tinyint;not null;default:1;comment:是否可关闭(0=不可关闭,1=可关闭)"`
 	DelayDays int        `json:"delay_days" gorm:"column:delay_days;type:int;comment:断网后延迟展示天数"`

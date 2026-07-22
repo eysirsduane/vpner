@@ -12,14 +12,14 @@ import (
 const productTransferCodePrefix = "origin"
 
 type DelayedPopupResponse struct {
-	Id           int    `json:"id" example:"1"`                                  // 弹窗ID
-	Title        string `json:"title" example:"服务迁移提醒"`                          // 弹窗标题
-	Content      string `json:"content" example:"如当前软件无法使用，请转移到新软件"`             // 弹窗内容
-	ImageUrl     string `json:"image_url" example:"/api/v1/upload/pop.png"`      // 弹窗图片地址
-	LinkUrl      string `json:"link_url" example:"https://example.com/download"` // 弹窗跳转链接
-	CanClose     int    `json:"can_close" example:"1"`                           // 是否可关闭(0=不可关闭,1=可关闭)
-	DelayDays    int    `json:"delay_days" example:"3"`                          // 断网后延迟展示天数
-	TransferCode string `json:"transfer_code" example:"origin8f3k9q"`            // 当前用户转移码
+	Id           int      `json:"id" example:"1"`                                  // 弹窗ID
+	Title        string   `json:"title" example:"服务迁移提醒"`                          // 弹窗标题
+	Content      string   `json:"content" example:"如当前软件无法使用，请转移到新软件"`             // 弹窗内容
+	ImageUrl     []string `json:"image_url" example:"/api/v1/upload/pop.png"`      // 弹窗图片地址数组
+	LinkUrl      string   `json:"link_url" example:"https://example.com/download"` // 弹窗跳转链接
+	CanClose     int      `json:"can_close" example:"1"`                           // 是否可关闭(0=不可关闭,1=可关闭)
+	DelayDays    int      `json:"delay_days" example:"3"`                          // 断网后延迟展示天数
+	TransferCode string   `json:"transfer_code" example:"origin8f3k9q"`            // 当前用户转移码
 }
 
 // DelayedPopupHandler 获取延迟弹窗
@@ -57,7 +57,7 @@ func DelayedPopupHandler(c *gin.Context) {
 		Id:           popup.Id,
 		Title:        popup.Title,
 		Content:      popup.Content,
-		ImageUrl:     popup.ImageUrl,
+		ImageUrl:     popupImageResponseValue(popup.ImageUrl),
 		LinkUrl:      popup.LinkUrl,
 		CanClose:     popup.CanClose,
 		DelayDays:    popup.DelayDays,

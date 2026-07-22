@@ -84,12 +84,13 @@ func InitRouter() *gin.Engine {
 	// VPN连接相关路由
 	vpn := router.Group("").Use(middleware.JWTAuth())
 	{
-		vpn.POST(mapping.Endpoint("/api/v1/lines_list"), controller.LinesListHandler)  // 获取国家线路列表
-		vpn.POST(mapping.Endpoint("/api/v1/node"), controller.NodeHandler)             // 获取连接节点信息
-		vpn.POST(mapping.Endpoint("/api/v1/connected"), controller.ConnectedHandler)   // 确认 VPN 已连接
-		vpn.POST(mapping.Endpoint("/api/v1/heartbeat"), controller.HeartbeatHandler)   // VPN 心跳上报
-		vpn.POST(mapping.Endpoint("/api/v1/disconnect"), controller.DisconnectHandler) // VPN 断开连接
-		vpn.POST(mapping.Endpoint("/api/v1/vpn_flow"), controller.VpnFlowHandler)      // VPN 使用流量上报
+		vpn.POST(mapping.Endpoint("/api/v1/lines_list"), controller.LinesListHandler)   // 获取国家线路列表
+		vpn.POST(mapping.Endpoint("/api/v1/node"), controller.NodeHandler)              // 获取连接节点信息
+		vpn.POST(mapping.Endpoint("/api/v1/node_config"), controller.NodeConfigHandler) // 获取 JSON 节点配置
+		vpn.POST(mapping.Endpoint("/api/v1/connected"), controller.ConnectedHandler)    // 确认 VPN 已连接
+		vpn.POST(mapping.Endpoint("/api/v1/heartbeat"), controller.HeartbeatHandler)    // VPN 心跳上报
+		vpn.POST(mapping.Endpoint("/api/v1/disconnect"), controller.DisconnectHandler)  // VPN 断开连接
+		vpn.POST(mapping.Endpoint("/api/v1/vpn_flow"), controller.VpnFlowHandler)       // VPN 使用流量上报
 	}
 
 	// swagger 文档路由，只在 dev 环境开启

@@ -215,7 +215,7 @@ func AppleVerifyHandler(c *gin.Context) {
 		PayStatus:     model.OrderPayStatusPaid,
 		PayType:       model.OrderPayTypeAppleIAP,
 		TransactionId: req.TransactionId,
-		VipTime:       formatVipTimeForResponse(vipTime),
+		VipTime:       formatVipTime(vipTime),
 	})
 }
 

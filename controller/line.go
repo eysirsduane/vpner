@@ -102,36 +102,8 @@ func NodeHandler(c *gin.Context) {
 		return
 	}
 
-	user, err := middleware.CurrentUser(c)
-	if err != nil {
-		JsonReturn(c, CodeError, err.Error(), nil)
-		return
-	}
-	if shouldRejectNodeForVipExpired(code, user.VipTime) {
-		JsonReturn(c, CodeVipExpired, "vip time expired", nil)
-		return
-	}
-
-	node, err := model.GetAvailableNode(code)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			JsonReturn(c, CodeError, "line is preparing", nil)
-			return
-		}
-		JsonReturn(c, CodeError, err.Error(), nil)
-		return
-	}
-
-	if user.IsReal != 1 {
-		if err := model.UpdateUserFieldsByID(user.Id, map[string]interface{}{"is_real": 1}); err != nil {
-			JsonReturn(c, CodeError, err.Error(), nil)
-			return
-		}
-	}
-
-	key := fmt.Sprintf("%s%d", tempNodeKeyPrefix, user.Id)
-	if err := redis.Set(key, node, time.Hour); err != nil {
-		JsonReturn(c, CodeError, err.Error(), nil)
+	node, ok := getNodeForCode(c, code)
+	if !ok {
 		return
 	}
 
@@ -143,6 +115,40 @@ func NodeHandler(c *gin.Context) {
 	JsonReturn(c, CodeSuccess, "success", NodeResponse{
 		LinkUrl: linkUrl,
 	})
+}
+
+// getNodeForCode 选择节点并保存临时节点，供连接确认和 JSON 配置接口共同使用
+func getNodeForCode(c *gin.Context, code string) (model.Node, bool) {
+	user, err := middleware.CurrentUser(c)
+	if err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return model.Node{}, false
+	}
+	if shouldRejectNodeForVipExpired(code, user.VipTime) {
+		JsonReturn(c, CodeVipExpired, "vip time expired", nil)
+		return model.Node{}, false
+	}
+
+	node, err := model.GetAvailableNode(code)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			JsonReturn(c, CodeError, "line is preparing", nil)
+			return model.Node{}, false
+		}
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return model.Node{}, false
+	}
+	if user.IsReal != 1 {
+		if err := model.UpdateUserFieldsByID(user.Id, map[string]interface{}{"is_real": 1}); err != nil {
+			JsonReturn(c, CodeError, err.Error(), nil)
+			return model.Node{}, false
+		}
+	}
+	if err := redis.Set(fmt.Sprintf("%s%d", tempNodeKeyPrefix, user.Id), node, time.Hour); err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return model.Node{}, false
+	}
+	return node, true
 }
 
 func encryptedNodeLinkURL(linkUrl string) (string, error) {
@@ -223,8 +229,6 @@ func ConnectedHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	_ = model.RecordDailyActive(user.Id)
-
 	JsonReturn(c, CodeSuccess, "success", nil)
 }
 

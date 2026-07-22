@@ -121,6 +121,7 @@ type UserInfoResponse struct {
 	LoginTimes    int    `json:"login_times" example:"1"`
 	CreateTime    string `json:"create_time" example:"2026-06-29 12:00:00"`
 	LastLoginTime string `json:"last_login_time" example:"2026-06-29 12:00:00"`
+	Password      string `json:"password" example:"pass001"`
 }
 
 type LogoffResponse struct {
@@ -332,13 +333,6 @@ func formatVipTime(vipTime *time.Time) string {
 		return ""
 	}
 	return vipTime.In(time.Local).Format("2006-01-02 15:04:05")
-}
-
-func formatVipTimeForResponse(vipTime *time.Time) string {
-	if vipTime == nil {
-		return ""
-	}
-	return vipTime.In(time.Local).Format("2006-01-02 15:04")
 }
 
 func equalVipTime(left *time.Time, right *time.Time) bool {
@@ -773,7 +767,7 @@ func buildUserInfo(user model.User, isNewUser int) (UserInfoResponse, error) {
 		Username:      user.Username,
 		Type:          user.Type,
 		IsVip:         isVip,
-		VipTime:       formatVipTimeForResponse(user.VipTime),
+		VipTime:       formatVipTime(user.VipTime),
 		IsNewUser:     isNewUser,
 		Platform:      user.Platform,
 		Version:       user.Version,
@@ -783,9 +777,29 @@ func buildUserInfo(user model.User, isNewUser int) (UserInfoResponse, error) {
 	}, nil
 }
 
+func fillUserInfoPassword(info *UserInfoResponse, user model.User) error {
+	if user.Username == "" {
+		return nil
+	}
+
+	account, err := model.GetUserAccountByUsername(user.Username)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return err
+	}
+	info.Password = account.Password
+	return nil
+}
+
 func returnUserInfo(c *gin.Context, user model.User, isNewUser int) {
 	data, err := buildUserInfo(user, isNewUser)
 	if err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return
+	}
+	if err := fillUserInfoPassword(&data, user); err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}

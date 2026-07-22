@@ -48,7 +48,8 @@
           "version": "version",
           "login_times": "login_times",
           "create_time": "create_time",
-          "last_login_time": "last_login_time"
+          "last_login_time": "last_login_time",
+          "password": "password"
         }
       }
     },
@@ -75,7 +76,8 @@
           "version": "version",
           "login_times": "login_times",
           "create_time": "create_time",
-          "last_login_time": "last_login_time"
+          "last_login_time": "last_login_time",
+          "password": "password"
         }
       }
     },
@@ -126,7 +128,8 @@
           "version": "version",
           "login_times": "login_times",
           "create_time": "create_time",
-          "last_login_time": "last_login_time"
+          "last_login_time": "last_login_time",
+          "password": "password"
         }
       }
     },
@@ -149,7 +152,8 @@
           "version": "version",
           "login_times": "login_times",
           "create_time": "create_time",
-          "last_login_time": "last_login_time"
+          "last_login_time": "last_login_time",
+          "password": "password"
         }
       }
     },
@@ -318,7 +322,8 @@
           "version": "version",
           "login_times": "login_times",
           "create_time": "create_time",
-          "last_login_time": "last_login_time"
+          "last_login_time": "last_login_time",
+          "password": "password"
         }
       }
     },
@@ -479,6 +484,7 @@
           "image_url": "image_url",
           "jump_type": "jump_type",
           "jump_target": "jump_target",
+          "can_close": "can_close",
           "show_times": "show_times",
           "max_show_times": "max_show_times"
         }
@@ -628,6 +634,20 @@
         "msg": "msg",
         "result": {
           "link_url": "link_url"
+        }
+      }
+    },
+    "/api/v1/node_config": {
+      "path": "/api/v1/node_config",
+      "request": {
+        "code": "code",
+        "type": "type"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "config": "config"
         }
       }
     },
