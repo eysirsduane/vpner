@@ -40,6 +40,7 @@ docs/swagger.yaml
 docs/*.md
 docs/**/*.md
 !docs/API.md
+!docs/新产品创建规范.md
 docs/*.txt
 docs/oss
 docs/s3
