@@ -108,20 +108,20 @@ type InviteCodeRequest struct {
 }
 
 type UserInfoResponse struct {
-	Id            int    `json:"id" example:"1"`
-	Token         string `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."`
-	DeviceNo      string `json:"device_no" example:"device-001"`
-	Username      string `json:"username" example:""`
-	Type          int    `json:"type" example:"1"`
-	IsVip         int    `json:"is_vip" example:"0"`
-	VipTime       string `json:"vip_time" example:"2026-07-30 23:59:59"`
-	IsNewUser     int    `json:"is_new_user" example:"1"`
-	Platform      string `json:"platform" example:"iphone"`
-	Version       string `json:"version" example:"1.0.0"`
-	LoginTimes    int    `json:"login_times" example:"1"`
-	CreateTime    string `json:"create_time" example:"2026-06-29 12:00:00"`
-	LastLoginTime string `json:"last_login_time" example:"2026-06-29 12:00:00"`
-	Password      string `json:"password" example:"pass001"`
+	Id            int    `json:"id" example:"1"`                                          // 用户ID
+	Token         string `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."` // JWT登录凭证
+	DeviceNo      string `json:"device_no" example:"device-001"`                          // 设备唯一标识
+	Username      string `json:"username" example:""`                                     // 账号名，游客为空
+	Type          int    `json:"type" example:"1"`                                        // 用户类型(1=游客,2=账号用户)
+	IsVip         int    `json:"is_vip" example:"0"`                                      // 会员状态(0=非会员,1=会员有效)
+	VipTime       string `json:"vip_time" example:"2026-07-30 23:59:59"`                  // 会员到期时间，格式yyyy-MM-dd HH:mm:ss
+	IsNewUser     int    `json:"is_new_user" example:"1"`                                 // 是否新用户(0=否,1=是)
+	Platform      string `json:"platform" example:"iphone"`                               // 客户端平台
+	Version       string `json:"version" example:"1.0.0"`                                 // 客户端版本号
+	LoginTimes    int    `json:"login_times" example:"1"`                                 // 登录次数
+	CreateTime    string `json:"create_time" example:"2026-06-29 12:00:00"`               // 用户创建时间
+	LastLoginTime string `json:"last_login_time" example:"2026-06-29 12:00:00"`           // 本次登录时间
+	Password      string `json:"password" example:"pass001"`                              // 绑定账号的明文密码，游客为空
 }
 
 type LogoffResponse struct {

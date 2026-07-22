@@ -18,12 +18,12 @@ const (
 )
 
 type NodeConfigRequest struct {
-	Code string `json:"code" binding:"required" example:"HK"`
-	Type string `json:"type" binding:"required" example:"fast"`
+	Code string `json:"code" binding:"required" example:"HK"`   // 线路代码
+	Type string `json:"type" binding:"required" example:"fast"` // 连接模式(fast=极速,global=全局)
 }
 
 type NodeConfigResponse struct {
-	Config string `json:"config" example:"x/k5A0v9kiJjL0r3m6X9dA=="`
+	Config string `json:"config" example:"x/k5A0v9kiJjL0r3m6X9dA=="` // 加密后的完整JSON节点配置
 }
 
 type nodeConfigOutbound struct {

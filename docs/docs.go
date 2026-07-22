@@ -2122,10 +2122,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "code": {
+                    "description": "线路代码",
                     "type": "string",
                     "example": "HK"
                 },
                 "type": {
+                    "description": "连接模式(fast=极速,global=全局)",
                     "type": "string",
                     "example": "fast"
                 }
@@ -2135,6 +2137,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "config": {
+                    "description": "加密后的完整JSON节点配置",
                     "type": "string",
                     "example": "x/k5A0v9kiJjL0r3m6X9dA=="
                 }
@@ -2452,58 +2455,72 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "create_time": {
+                    "description": "用户创建时间",
                     "type": "string",
                     "example": "2026-06-29 12:00:00"
                 },
                 "device_no": {
+                    "description": "设备唯一标识",
                     "type": "string",
                     "example": "device-001"
                 },
                 "id": {
+                    "description": "用户ID",
                     "type": "integer",
                     "example": 1
                 },
                 "is_new_user": {
+                    "description": "是否新用户(0=否,1=是)",
                     "type": "integer",
                     "example": 1
                 },
                 "is_vip": {
+                    "description": "会员状态(0=非会员,1=会员有效)",
                     "type": "integer",
                     "example": 0
                 },
                 "last_login_time": {
+                    "description": "本次登录时间",
                     "type": "string",
                     "example": "2026-06-29 12:00:00"
                 },
                 "login_times": {
+                    "description": "登录次数",
                     "type": "integer",
                     "example": 1
                 },
                 "password": {
+                    "description": "绑定账号的明文密码，游客为空",
                     "type": "string",
                     "example": "pass001"
                 },
                 "platform": {
+                    "description": "客户端平台",
                     "type": "string",
                     "example": "iphone"
                 },
                 "token": {
+                    "description": "JWT登录凭证",
                     "type": "string",
                     "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                 },
                 "type": {
+                    "description": "用户类型(1=游客,2=账号用户)",
                     "type": "integer",
                     "example": 1
                 },
                 "username": {
+                    "description": "账号名，游客为空",
                     "type": "string",
                     "example": ""
                 },
                 "version": {
+                    "description": "客户端版本号",
                     "type": "string",
                     "example": "1.0.0"
                 },
                 "vip_time": {
+                    "description": "会员到期时间，格式yyyy-MM-dd HH:mm:ss",
                     "type": "string",
                     "example": "2026-07-30 23:59:59"
                 }

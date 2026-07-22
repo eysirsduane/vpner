@@ -93,9 +93,13 @@ Authorization: Bearer <token>
 | username  | 账号名，游客为空                             |
 | type         | `1=游客`，`2=账号用户`                       |
 | is_vip    | `1=会员有效`，`0=非会员`                     |
-| vip_time  | 会员到期时间，非会员为空                     |
+| vip_time  | 会员到期时间，格式 `yyyy-MM-dd HH:mm:ss`，非会员为空 |
 | is_new_user | 是否新用户，`1=首次创建的新用户`，`0=老用户` |
+| platform | 客户端平台，例如 `iphone` 或 `android` |
+| version | 客户端版本号 |
 | login_times   | 登录次数                                     |
+| create_time | 用户创建时间，格式 `yyyy-MM-dd HH:mm:ss` |
+| last_login_time | 本次登录时间，格式 `yyyy-MM-dd HH:mm:ss` |
 | password | 绑定账号的明文密码，游客为空字符串 |
 
 ## 公开接口
