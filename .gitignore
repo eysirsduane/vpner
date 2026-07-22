@@ -1,0 +1,48 @@
+.DS_Store
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Go build and test outputs
+bin/
+dist/
+tmp/
+build/
+coverage.out
+*.test
+*.prof
+
+# Runtime files
+*.pid
+upload/*
+!upload/.gitkeep
+
+# Local environment files and secret overrides
+.env
+.env.*
+
+# Keep local secret overrides out of git.
+*.local.ini
+*.secret.ini
+conf/local.ini
+conf/*.local.ini
+conf/*.secret.ini
+
+docs/swagger.json
+docs/swagger.yaml
+docs/*.md
+docs/**/*.md
+!docs/API.md
+docs/*.txt
+docs/oss
+docs/s3
+
+# Local helper tools
+tools/

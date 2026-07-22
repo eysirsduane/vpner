@@ -1,0 +1,81 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: just-vpn-origin-api:latest
+    container_name: just-vpn-origin-api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "8080:8080"
+    volumes:
+      - upload_data:/app/upload
+
+  mysql:
+    image: mysql:8.4
+    container_name: just-vpn-origin-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: just_vpn.303
+      MYSQL_DATABASE: just_vpn
+      MYSQL_USER: just_vpn
+      MYSQL_PASSWORD: just_vpn.303
+      TZ: Asia/Shanghai
+    ports:
+      - "13306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h 127.0.0.1 -uroot -pjust_vpn.303 --silent",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: just-vpn-origin-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: just_vpn.303
+      TZ: Asia/Shanghai
+    ports:
+      - "16379:6379"
+    command:
+      [
+        "sh",
+        "-c",
+        "redis-server --requirepass \"just_vpn.303\" --appendonly yes --appendfsync everysec --maxmemory 3gb --maxmemory-policy allkeys-lru --timeout 0 --tcp-keepalive 300",
+      ]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "redis-cli -a \"just_vpn.303\" ping | grep -q PONG",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  mysql_data:
+  redis_data:
+  upload_data:

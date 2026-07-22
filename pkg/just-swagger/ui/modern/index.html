@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Just Swagger Modern</title>
+    <link rel="stylesheet" href="./assets/css/tailwind.min.css">
+    <link rel="stylesheet" href="./assets/css/fontawesome.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        .theme-blue { --primary: #3b82f6; --primary-dark: #2563eb; --gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); }
+        .theme-green { --primary: #10b981; --primary-dark: #059669; --gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%); }
+        .theme-purple { --primary: #8b5cf6; --primary-dark: #7c3aed; --gradient: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); }
+        .theme-orange { --primary: #f97316; --primary-dark: #ea580c; --gradient: linear-gradient(135deg, #f97316 0%, #fb923c 100%); }
+        .theme-red { --primary: #ef4444; --primary-dark: #dc2626; --gradient: linear-gradient(135deg, #ef4444 0%, #f87171 100%); }
+        .theme-cyan { --primary: #06b6d4; --primary-dark: #0891b2; --gradient: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%); }
+        
+        .dark {
+            --bg-primary: #18181b;
+            --bg-secondary: #09090b;
+            --bg-tertiary: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --border: #3f3f46;
+            --glass: rgba(24, 24, 27, 0.8);
+        }
+        .light {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f4f4f5;
+            --bg-tertiary: #e4e4e7;
+            --text-primary: #18181b;
+            --text-secondary: #71717a;
+            --border: #d4d4d8;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+        body {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+        .sidebar {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+        }
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .card-glass {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        .method-get { background: var(--gradient); }
+        .method-post { background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); }
+        .method-put { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
+        .method-delete { background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); }
+        .method-patch { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); }
+        .method-options { background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%); }
+        .method-head { background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%); }
+        .api-item { border-radius: 12px; transition: all 0.2s; }
+        .api-item:hover { background: var(--bg-tertiary); transform: translateX(4px); }
+        .api-item.active { background: var(--bg-tertiary); border-left: 3px solid var(--primary); }
+        /* Fix hover text visibility for tag group headers */
+        .tag-group > .tag-header:hover {
+            background: var(--bg-tertiary) !important;
+        }
+        /* Fix hover background in dark mode - override Tailwind's gray-100 */
+        .dark .hover\:bg-gray-100:hover,
+        .dark .hover\:bg-gray-200:hover,
+        .dark .hover\:bg-gray-50:hover {
+            background: var(--bg-tertiary) !important;
+        }
+        .input-field {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+        .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -10px var(--primary); }
+        .response-panel { background: var(--bg-tertiary); border-radius: 12px; }
+        pre code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px; }
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        /* Fix text selection in dark mode */
+        .dark ::selection {
+            background: var(--primary) !important;
+            color: white !important;
+        }
+        .tag-group { border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
+        .welcome-icon { font-size: 80px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.3s ease-out; }
+        
+        @media (max-width: 768px) {
+            #sidebar { 
+                position: fixed; 
+                z-index: 45; 
+                transform: translateX(-100%); 
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                height: 100vh;
+                width: 85%;
+                max-width: 320px;
+            }
+            #sidebar.open { transform: translateX(0); }
+            
+            .mobile-header {
+                display: flex !important;
+                position: sticky;
+                top: 0;
+                z-index: 30;
+                background: var(--glass);
+                backdrop-filter: blur(20px);
+                border-bottom: 1px solid var(--border);
+                padding: 12px 16px;
+                align-items: center;
+                gap: 12px;
+            }
+            .desktop-header { display: none !important; }
+            .card { margin: 8px !important; }
+            
+            .mobile-actions { 
+                display: flex !important; 
+                gap: 8px; 
+                padding: 8px 12px;
+                overflow-x: auto;
+                background: var(--bg-primary);
+                border-bottom: 1px solid var(--border);
+            }
+            .mobile-actions button {
+                flex-shrink: 0;
+                padding: 8px 14px;
+                font-size: 13px;
+                border-radius: 10px;
+            }
+        }
+        @media (min-width: 769px) {
+            #sidebar-overlay, .mobile-header, .mobile-actions { display: none !important; }
+        }
+    </style>
+</head>
+<body class="light theme-purple">
+    <!-- 移动端遮罩 -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden"></div>
+    
+    <div id="app" class="flex h-screen">
+        <!-- Modern Sidebar -->
+        <aside id="sidebar" class="sidebar w-80 flex flex-col h-full">
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h1 class="text-lg font-bold flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-white" style="background: var(--gradient)">
+                            <i class="fas fa-bolt text-sm"></i>
+                        </span>
+                        <span id="doc-title">API Docs</span>
+                    </h1>
+                    <div class="flex gap-1">
+                        <button onclick="openUIThemeModal()" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800" title="UI风格">
+                            <i class="fas fa-swatchbook" style="color: var(--primary)"></i>
+                        </button>
+                        <button onclick="openThemeModal()" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800" title="主题色">
+                            <i class="fas fa-palette" style="color: var(--primary)"></i>
+                        </button>
+                        <button onclick="toggleDarkMode()" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800" title="深色模式">
+                            <i class="fas fa-moon" id="theme-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="搜索接口... (⌘K)" 
+                        class="input-field w-full px-4 py-3 pl-11">
+                    <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto scrollbar-thin px-3" id="api-list">
+                <div class="text-center py-12">
+                    <div class="animate-spin w-8 h-8 border-2 border-gray-300 border-t-purple-500 rounded-full mx-auto"></div>
+                    <p class="mt-3 text-sm" style="color: var(--text-secondary)">加载中...</p>
+                </div>
+            </div>
+            <div class="p-4 text-xs text-center" style="color: var(--text-secondary)">
+                Powered by Just Swagger · <span id="version">v1.2.0</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden p-4">
+            <!-- 移动端顶部栏 -->
+            <div class="mobile-header" style="display: none;">
+                <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <i class="fas fa-bars text-lg" style="color: var(--primary)"></i>
+                </button>
+                <div class="flex-1 min-w-0">
+                    <h1 id="mobile-title" class="font-bold truncate">API Docs</h1>
+                </div>
+                <button onclick="toggleDarkMode()" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <i class="fas fa-moon" id="mobile-theme-icon"></i>
+                </button>
+            </div>
+            
+            <!-- 移动端操作栏 -->
+            <div class="mobile-actions" style="display: none;">
+                <button onclick="openGlobalHeadersModal()" class="border" style="border-color: var(--border)">
+                    <i class="fas fa-key mr-1" style="color: var(--primary)"></i>Headers
+                    <span id="mobile-headers-count" class="ml-1 px-1.5 text-xs rounded-full text-white hidden" style="background: var(--gradient)">0</span>
+                </button>
+                <button onclick="openTokenExtractModal()" class="border" style="border-color: var(--border)">
+                    <i class="fas fa-magic mr-1 text-green-500"></i>Token
+                </button>
+                <button onclick="openUIThemeModal()" class="border" style="border-color: var(--border)">
+                    <i class="fas fa-palette mr-1" style="color: var(--primary)"></i>主题
+                </button>
+            </div>
+            
+            <header class="desktop-header card-glass p-4 mb-4 flex items-center justify-between">
+                <div id="current-api-info">
+                    <h2 class="font-semibold">选择一个接口</h2>
+                    <p class="text-sm" style="color: var(--text-secondary)">从左侧列表开始</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="openGlobalHeadersModal()" class="px-4 py-2 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800 transition-all" style="border-color: var(--border)">
+                        <i class="fas fa-key mr-2" style="color: var(--primary)"></i>全局参数
+                        <span id="headers-count" class="ml-1 px-1.5 py-0.5 text-xs rounded-full text-white hidden" style="background: var(--gradient)">0</span>
+                    </button>
+                    <button onclick="openTokenExtractModal()" class="px-4 py-2 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800 transition-all" style="border-color: var(--border)">
+                        <i class="fas fa-magic mr-2 text-green-500"></i>Token
+                        <span id="token-rules-count" class="ml-1 px-1.5 py-0.5 text-xs rounded-full bg-green-500 text-white hidden">0</span>
+                    </button>
+                    <button onclick="exportDoc()" class="px-4 py-2 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800 transition-all" style="border-color: var(--border)">
+                        <i class="fas fa-download mr-2"></i>导出
+                    </button>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto scrollbar-thin">
+                <div id="welcome-panel" class="card p-12 text-center">
+                    <div class="welcome-icon mb-6">🚀</div>
+                    <h2 class="text-3xl font-bold mb-3">欢迎使用Just Swagger</h2>
+                    <p style="color: var(--text-secondary)" class="mb-8">一个美观、强大的 Swagger UI 替代方案</p>
+                    <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto">
+                        <div class="p-5 rounded-2xl" style="background: var(--bg-tertiary)">
+                            <div class="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center" style="background: var(--gradient)">
+                                <i class="fas fa-search text-white"></i>
+                            </div>
+                            <p class="font-medium">智能搜索</p>
+                        </div>
+                        <div class="p-5 rounded-2xl" style="background: var(--bg-tertiary)">
+                            <div class="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center bg-green-500">
+                                <i class="fas fa-bug text-white"></i>
+                            </div>
+                            <p class="font-medium">在线调试</p>
+                        </div>
+                        <div class="p-5 rounded-2xl" style="background: var(--bg-tertiary)">
+                            <div class="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center bg-orange-500">
+                                <i class="fas fa-magic text-white"></i>
+                            </div>
+                            <p class="font-medium">Token提取</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="api-detail-panel" class="hidden space-y-4">
+                    <div class="card p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span id="detail-method" class="method-get px-4 py-1.5 rounded-lg text-white text-sm font-semibold">GET</span>
+                            <code id="detail-path" class="text-lg font-mono">/api/example</code>
+                            <span id="detail-deprecated" class="hidden bg-red-100 text-red-600 px-2 py-1 rounded-lg text-xs">已废弃</span>
+                        </div>
+                        <h3 id="detail-summary" class="text-xl font-bold mb-2">接口名称</h3>
+                        <pre id="detail-description" style="color: var(--text-secondary)">接口描述</pre>
+                    </div>
+
+                    <div class="card p-6">
+                        <h4 class="font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-list-ul" style="color: var(--primary)"></i>请求参数
+                        </h4>
+                        <div id="params-container">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid var(--border)">
+                                        <th class="text-left py-3 px-3 font-medium">参数名</th>
+                                        <th class="text-left py-3 px-3 font-medium">位置</th>
+                                        <th class="text-left py-3 px-3 font-medium">类型</th>
+                                        <th class="text-left py-3 px-3 font-medium">必填</th>
+                                        <th class="text-left py-3 px-3 font-medium">说明</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="params-table"></tbody>
+                            </table>
+                            <p id="no-params" class="text-center py-6" style="color: var(--text-secondary)">无请求参数</p>
+                        </div>
+                    </div>
+
+                    <div id="request-body-section" class="card p-6 hidden">
+                        <h4 class="font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-code text-green-500"></i>请求体
+                        </h4>
+                        <pre class="response-panel p-4 overflow-x-auto"><code id="request-body-content"></code></pre>
+                    </div>
+
+                    <div id="response-schema-section" class="card p-6 hidden">
+                        <h4 class="font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-sitemap" style="color: var(--primary)"></i>响应结构
+                        </h4>
+                        <div id="response-schema-container"></div>
+                    </div>
+
+                    <div id="debug-panel" class="card p-6">
+                        <h4 class="font-semibold mb-4 flex items-center justify-between">
+                            <span class="flex items-center gap-2">
+                                <i class="fas fa-bug text-orange-500"></i>在线调试
+                            </span>
+                            <button onclick="copyCurl()" class="text-sm px-3 py-1.5 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800 transition-all" style="border-color: var(--border)" title="复制 cURL">
+                                <i class="fas fa-terminal mr-1"></i>cURL
+                            </button>
+                        </h4>
+                        <div class="space-y-4">
+                            <div id="global-headers-container" class="hidden">
+                                <label class="block text-sm font-medium mb-2">全局请求头</label>
+                                <div id="global-headers-list" class="response-panel p-3 text-sm font-mono"></div>
+                            </div>
+                            <div id="debug-params-container"></div>
+                            <div id="debug-body-container" class="hidden">
+                                <div class="flex items-center justify-between mb-3">
+                                    <label class="text-sm font-medium flex items-center gap-2">
+                                        <i class="fas fa-code text-green-500"></i>请求体
+                                    </label>
+                                    <button onclick="toggleBodyEditMode()" id="body-mode-btn" class="text-sm px-3 py-1.5 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800" style="border-color: var(--border)">
+                                        <i class="fas fa-edit mr-1"></i>JSON模式
+                                    </button>
+                                </div>
+                                <div id="body-form-mode">
+                                    <div id="body-fields-container" class="space-y-3"></div>
+                                </div>
+                                <div id="body-json-mode" class="hidden">
+                                    <textarea id="debug-body" rows="6" class="input-field w-full p-4 font-mono text-sm"></textarea>
+                                </div>
+                            </div>
+                            <button onclick="sendRequest()" id="send-btn" class="btn-primary px-8 py-3">
+                                <i class="fas fa-paper-plane mr-2"></i>发送请求
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card p-6">
+                        <h4 class="font-semibold mb-4 flex items-center justify-between">
+                            <span class="flex items-center gap-2">
+                                <i class="fas fa-reply" style="color: var(--primary)"></i>响应结果
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="toggleResponseFormat()" id="format-btn" class="text-sm px-3 py-1.5 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800 transition-all" style="border-color: var(--border)" title="格式化/压缩">
+                                    <i class="fas fa-compress-alt"></i>
+                                </button>
+                                <button onclick="toggleResponseHeaders()" class="text-sm px-3 py-1.5 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800 transition-all" style="border-color: var(--border)" title="响应头">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button onclick="copyResponse()" class="text-sm px-3 py-1.5 rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800 transition-all" style="border-color: var(--border)" title="复制响应">
+                                    <i class="fas fa-copy mr-1"></i>复制
+                                </button>
+                            </div>
+                        </h4>
+                        <div id="response-info" class="mb-3 hidden flex items-center flex-wrap gap-2">
+                            <span id="response-status" class="px-3 py-1 rounded-lg text-white text-sm font-semibold">200</span>
+                            <span id="response-time" class="text-sm" style="color: var(--text-secondary)">0ms</span>
+                            <span id="response-size" class="text-sm" style="color: var(--text-secondary)"></span>
+                        </div>
+                        <div id="response-headers-panel" class="hidden mb-3 p-3 rounded-xl text-xs font-mono overflow-x-auto" style="background: var(--bg-tertiary)">
+                            <div class="font-semibold mb-2" style="color: var(--text-secondary)">响应头</div>
+                            <div id="response-headers-content"></div>
+                        </div>
+                        <div id="response-body-wrapper">
+                            <pre class="response-panel p-4 overflow-x-auto"><code id="response-content">点击"发送请求"查看响应结果</code></pre>
+                            <button id="expand-response-btn" onclick="toggleResponseExpand()" class="hidden w-full mt-2 py-2 text-sm rounded-xl border hover:bg-gray-50 dark:hover:bg-gray-800" style="border-color: var(--border)">
+                                <i class="fas fa-chevron-down mr-1"></i>展开全部
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="global-headers-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onclick="closeGlobalHeadersModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
+            <div class="card p-6 m-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold">全局请求参数</h3>
+                    <button onclick="closeGlobalHeadersModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="global-headers-inputs" class="space-y-3 max-h-64 overflow-y-auto mb-4"></div>
+                <button onclick="addGlobalHeader()" class="w-full py-3 rounded-xl border-2 border-dashed hover:bg-gray-50 dark:hover:bg-gray-800" style="border-color: var(--border)">
+                    <i class="fas fa-plus mr-2"></i>添加参数
+                </button>
+                <div class="flex gap-3 mt-4">
+                    <button onclick="saveGlobalHeaders()" class="btn-primary flex-1 py-3">保存</button>
+                    <button onclick="clearGlobalHeaders()" class="flex-1 py-3 rounded-xl border" style="border-color: var(--border)">清空</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="token-extract-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onclick="closeTokenExtractModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
+            <div class="card p-6 m-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold">Token 自动提取</h3>
+                    <button onclick="closeTokenExtractModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="token-rules-inputs" class="max-h-64 overflow-y-auto mb-4"></div>
+                <button onclick="addTokenRule()" class="w-full py-3 rounded-xl border-2 border-dashed hover:bg-gray-50 dark:hover:bg-gray-800" style="border-color: var(--border)">
+                    <i class="fas fa-plus mr-2"></i>添加规则
+                </button>
+                <div class="flex gap-3 mt-4">
+                    <button onclick="saveTokenRules()" class="btn-primary flex-1 py-3">保存</button>
+                    <button onclick="clearTokenRules()" class="flex-1 py-3 rounded-xl border" style="border-color: var(--border)">清空</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="theme-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onclick="closeThemeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-sm">
+            <div class="card p-6 m-4">
+                <h3 class="text-lg font-bold mb-4">选择主题色</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="setThemeColor('blue')" class="theme-btn p-4 rounded-xl border-2 hover:scale-105 transition-transform" data-theme="blue">
+                        <div class="w-10 h-10 rounded-full mx-auto" style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)"></div>
+                    </button>
+                    <button onclick="setThemeColor('green')" class="theme-btn p-4 rounded-xl border-2 hover:scale-105 transition-transform" data-theme="green">
+                        <div class="w-10 h-10 rounded-full mx-auto" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%)"></div>
+                    </button>
+                    <button onclick="setThemeColor('purple')" class="theme-btn p-4 rounded-xl border-2 hover:scale-105 transition-transform" data-theme="purple">
+                        <div class="w-10 h-10 rounded-full mx-auto" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)"></div>
+                    </button>
+                    <button onclick="setThemeColor('orange')" class="theme-btn p-4 rounded-xl border-2 hover:scale-105 transition-transform" data-theme="orange">
+                        <div class="w-10 h-10 rounded-full mx-auto" style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%)"></div>
+                    </button>
+                    <button onclick="setThemeColor('red')" class="theme-btn p-4 rounded-xl border-2 hover:scale-105 transition-transform" data-theme="red">
+                        <div class="w-10 h-10 rounded-full mx-auto" style="background: linear-gradient(135deg, #ef4444 0%, #f87171 100%)"></div>
+                    </button>
+                    <button onclick="setThemeColor('cyan')" class="theme-btn p-4 rounded-xl border-2 hover:scale-105 transition-transform" data-theme="cyan">
+                        <div class="w-10 h-10 rounded-full mx-auto" style="background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UI Theme Modal -->
+    <div id="ui-theme-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onclick="closeUIThemeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+            <div class="card p-6 m-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold flex items-center gap-2">
+                        <i class="fas fa-swatchbook" style="color: var(--primary)"></i>选择 UI 风格
+                    </h3>
+                    <button onclick="closeUIThemeModal()" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="switchUITheme('default')" class="w-full p-4 rounded-xl border-2 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-all ui-theme-btn" data-ui-theme="default" style="border-color: var(--border)">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center text-white">
+                                <i class="fas fa-th-large"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Default 默认</div>
+                                <div class="text-sm" style="color: var(--text-secondary)">经典蓝色风格，功能完整</div>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="switchUITheme('minimal')" class="w-full p-4 rounded-xl border-2 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-all ui-theme-btn" data-ui-theme="minimal" style="border-color: var(--border)">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center text-white">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Minimal 简约</div>
+                                <div class="text-sm" style="color: var(--text-secondary)">黑白极简，专业干净</div>
+                            </div>
+                        </div>
+                    </button>
+                    <button onclick="switchUITheme('modern')" class="w-full p-4 rounded-xl border-2 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-all ui-theme-btn" data-ui-theme="modern" style="border-color: var(--border)">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white" style="background: var(--gradient)">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Modern 现代</div>
+                                <div class="text-sm" style="color: var(--text-secondary)">渐变毛玻璃，视觉冲击</div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,675 @@
+{
+  "headers": {
+    "platform": "X-Platform",
+    "version": "X-Version",
+    "build": "X-Build",
+    "device_no": "X-Device-No",
+    "client_time": "X-Client-Time",
+    "time_zone": "X-Time-Zone"
+  },
+  "field_affix": {
+    "prefix": "",
+    "suffix": ""
+  },
+  "routes": {
+    "/api/v1/health": {
+      "path": "/api/v1/health",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/auto_login": {
+      "path": "/api/v1/auto_login",
+      "request": {
+        "device_no": "device_no",
+        "platform": "platform",
+        "version": "version",
+        "mobile_name": "mobile_name",
+        "mobile_version": "mobile_version",
+        "mobile_model_name": "mobile_model_name",
+        "source_channel": "source_channel"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "token": "token",
+          "device_no": "device_no",
+          "username": "username",
+          "type": "type",
+          "is_vip": "is_vip",
+          "vip_time": "vip_time",
+          "is_new_user": "is_new_user",
+          "platform": "platform",
+          "version": "version",
+          "login_times": "login_times",
+          "create_time": "create_time",
+          "last_login_time": "last_login_time"
+        }
+      }
+    },
+    "/api/v1/register": {
+      "path": "/api/v1/register",
+      "request": {
+        "device_no": "device_no",
+        "username": "username",
+        "password": "password"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "token": "token",
+          "device_no": "device_no",
+          "username": "username",
+          "type": "type",
+          "is_vip": "is_vip",
+          "vip_time": "vip_time",
+          "is_new_user": "is_new_user",
+          "platform": "platform",
+          "version": "version",
+          "login_times": "login_times",
+          "create_time": "create_time",
+          "last_login_time": "last_login_time"
+        }
+      }
+    },
+    "/api/v1/public_apple_id": {
+      "path": "/api/v1/public_apple_id",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "appid": "appid",
+          "pwd": "pwd"
+        }
+      }
+    },
+    "/api/v1/upload/*filepath": {
+      "path": "/api/v1/upload/*filepath",
+      "request": {},
+      "response": {}
+    },
+    "/api/v1/login": {
+      "path": "/api/v1/login",
+      "request": {
+        "device_no": "device_no",
+        "username": "username",
+        "password": "password",
+        "platform": "platform",
+        "version": "version",
+        "mobile_name": "mobile_name",
+        "mobile_version": "mobile_version",
+        "mobile_model_name": "mobile_model_name",
+        "source_channel": "source_channel"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "token": "token",
+          "device_no": "device_no",
+          "username": "username",
+          "type": "type",
+          "is_vip": "is_vip",
+          "vip_time": "vip_time",
+          "is_new_user": "is_new_user",
+          "platform": "platform",
+          "version": "version",
+          "login_times": "login_times",
+          "create_time": "create_time",
+          "last_login_time": "last_login_time"
+        }
+      }
+    },
+    "/api/v1/logout": {
+      "path": "/api/v1/logout",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "token": "token",
+          "device_no": "device_no",
+          "username": "username",
+          "type": "type",
+          "is_vip": "is_vip",
+          "vip_time": "vip_time",
+          "is_new_user": "is_new_user",
+          "platform": "platform",
+          "version": "version",
+          "login_times": "login_times",
+          "create_time": "create_time",
+          "last_login_time": "last_login_time"
+        }
+      }
+    },
+    "/api/v1/logoff": {
+      "path": "/api/v1/logoff",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/change_password": {
+      "path": "/api/v1/change_password",
+      "request": {
+        "old_password": "old_password",
+        "new_password": "new_password"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/device_info": {
+      "path": "/api/v1/device_info",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "local_device": {
+            "id": "id",
+            "device_no": "device_no",
+            "mobile_name": "mobile_name",
+            "mobile_version": "mobile_version",
+            "mobile_model_name": "mobile_model_name",
+            "platform": "platform",
+            "version": "version",
+            "last_login_time": "last_login_time"
+          },
+          "two_device": {
+            "id": "id",
+            "device_no": "device_no",
+            "mobile_name": "mobile_name",
+            "mobile_version": "mobile_version",
+            "mobile_model_name": "mobile_model_name",
+            "platform": "platform",
+            "version": "version",
+            "last_login_time": "last_login_time"
+          },
+          "devices": {
+            "id": "id",
+            "device_no": "device_no",
+            "mobile_name": "mobile_name",
+            "mobile_version": "mobile_version",
+            "mobile_model_name": "mobile_model_name",
+            "platform": "platform",
+            "version": "version",
+            "last_login_time": "last_login_time"
+          }
+        }
+      }
+    },
+    "/api/v1/device_logout": {
+      "path": "/api/v1/device_logout",
+      "request": {
+        "id": "id"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "local_device": {
+            "id": "id",
+            "device_no": "device_no",
+            "mobile_name": "mobile_name",
+            "mobile_version": "mobile_version",
+            "mobile_model_name": "mobile_model_name",
+            "platform": "platform",
+            "version": "version",
+            "last_login_time": "last_login_time"
+          },
+          "two_device": {
+            "id": "id",
+            "device_no": "device_no",
+            "mobile_name": "mobile_name",
+            "mobile_version": "mobile_version",
+            "mobile_model_name": "mobile_model_name",
+            "platform": "platform",
+            "version": "version",
+            "last_login_time": "last_login_time"
+          },
+          "devices": {
+            "id": "id",
+            "device_no": "device_no",
+            "mobile_name": "mobile_name",
+            "mobile_version": "mobile_version",
+            "mobile_model_name": "mobile_model_name",
+            "platform": "platform",
+            "version": "version",
+            "last_login_time": "last_login_time"
+          }
+        }
+      }
+    },
+    "/api/v1/draw_invite_code": {
+      "path": "/api/v1/draw_invite_code",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "invite_code": "invite_code"
+        }
+      }
+    },
+    "/api/v1/invite_code": {
+      "path": "/api/v1/invite_code",
+      "request": {
+        "invite_code": "invite_code"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/invite_detail": {
+      "path": "/api/v1/invite_detail",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "invite_code": "invite_code",
+          "invite_valid": "invite_valid",
+          "share_count": "share_count",
+          "reward_time": "reward_time",
+          "per_invite_seconds": "per_invite_seconds",
+          "per_invite_text": "per_invite_text",
+          "milestones": {
+            "count": "count",
+            "reward_seconds": "reward_seconds",
+            "reward_text": "reward_text"
+          }
+        }
+      }
+    },
+    "/api/v1/user_info": {
+      "path": "/api/v1/user_info",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "token": "token",
+          "device_no": "device_no",
+          "username": "username",
+          "type": "type",
+          "is_vip": "is_vip",
+          "vip_time": "vip_time",
+          "is_new_user": "is_new_user",
+          "platform": "platform",
+          "version": "version",
+          "login_times": "login_times",
+          "create_time": "create_time",
+          "last_login_time": "last_login_time"
+        }
+      }
+    },
+    "/api/v1/init": {
+      "path": "/api/v1/init",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "agreements": {
+            "user_agreement": "user_agreement",
+            "privacy_agreement": "privacy_agreement"
+          },
+          "share": {
+            "qrcode": "qrcode",
+            "links": "links"
+          },
+          "invite": {
+            "valid_hours": "valid_hours",
+            "per_invite_seconds": "per_invite_seconds",
+            "per_invite_text": "per_invite_text",
+            "max_reward_days": "max_reward_days",
+            "milestones": {
+              "count": "count",
+              "reward_seconds": "reward_seconds",
+              "reward_text": "reward_text"
+            }
+          },
+          "app": {
+            "website": "website",
+            "new_user_free_seconds": "new_user_free_seconds"
+          },
+          "tools": {
+            "customer_service_enabled": "customer_service_enabled",
+            "customer_service_url": "customer_service_url",
+            "clean_memory_enabled": "clean_memory_enabled",
+            "message_enabled": "message_enabled"
+          },
+          "proxy": {
+            "skip_domains": "skip_domains"
+          }
+        }
+      }
+    },
+    "/api/v1/version": {
+      "path": "/api/v1/version",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "has_update": "has_update",
+          "name": "name",
+          "platform": "platform",
+          "version": "version",
+          "build": "build",
+          "force": "force",
+          "url": "url",
+          "size": "size",
+          "content": "content"
+        }
+      }
+    },
+    "/api/v1/advert": {
+      "path": "/api/v1/advert",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "position": "position",
+          "title": "title",
+          "content": "content",
+          "image_url": "image_url",
+          "link_url": "link_url",
+          "show_times": "show_times",
+          "max_show_times": "max_show_times",
+          "sorter": "sorter"
+        }
+      }
+    },
+    "/api/v1/notice": {
+      "path": "/api/v1/notice",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "system": {
+            "list": {
+              "id": "id",
+              "title": "title",
+              "content": "content",
+              "is_read": "is_read",
+              "create_time": "create_time"
+            },
+            "total": "total",
+            "unread_count": "unread_count"
+          },
+          "user": {
+            "list": {
+              "id": "id",
+              "title": "title",
+              "content": "content",
+              "is_read": "is_read",
+              "create_time": "create_time"
+            },
+            "total": "total",
+            "unread_count": "unread_count"
+          }
+        }
+      }
+    },
+    "/api/v1/notice/unread": {
+      "path": "/api/v1/notice/unread",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "system": {
+            "list": {
+              "id": "id",
+              "title": "title",
+              "content": "content",
+              "is_read": "is_read",
+              "create_time": "create_time"
+            },
+            "total": "total",
+            "unread_count": "unread_count"
+          },
+          "user": {
+            "list": {
+              "id": "id",
+              "title": "title",
+              "content": "content",
+              "is_read": "is_read",
+              "create_time": "create_time"
+            },
+            "total": "total",
+            "unread_count": "unread_count"
+          }
+        }
+      }
+    },
+    "/api/v1/popup": {
+      "path": "/api/v1/popup",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "title": "title",
+          "content": "content",
+          "image_url": "image_url",
+          "jump_type": "jump_type",
+          "jump_target": "jump_target",
+          "show_times": "show_times",
+          "max_show_times": "max_show_times"
+        }
+      }
+    },
+    "/api/v1/delayed_popup": {
+      "path": "/api/v1/delayed_popup",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "$field": "result",
+          "id": "id",
+          "title": "title",
+          "content": "content",
+          "image_url": "image_url",
+          "link_url": "link_url",
+		  "can_close": "can_close",
+          "delay_days": "delay_days",
+          "transfer_code": "transfer_code"
+        }
+      }
+    },
+    "/api/v1/read_notice": {
+      "path": "/api/v1/read_notice",
+      "request": {
+        "system_ids": "system_ids",
+        "user_ids": "user_ids"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/error": {
+      "path": "/api/v1/error",
+      "request": {
+        "msg": "msg",
+        "mobile_version": "mobile_version",
+        "mobile_model_name": "mobile_model_name",
+        "msg_type": "msg_type"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/packages": {
+      "path": "/api/v1/packages",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "id": "id",
+          "apple_id": "apple_id",
+          "name": "name",
+          "sub_name": "sub_name",
+          "selected": "selected",
+          "corner": "corner",
+          "price": "price",
+          "price_text": "price_text",
+          "origin_price": "origin_price",
+          "value": "value",
+          "remark": "remark",
+          "day": "day"
+        }
+      }
+    },
+    "/api/v1/pay/launch": {
+      "path": "/api/v1/pay/launch",
+      "request": {
+        "package_id": "package_id"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "type": "type",
+          "target": "target",
+          "app_account_token": "app_account_token"
+        }
+      }
+    },
+    "/api/v1/pay/apple_verify": {
+      "path": "/api/v1/pay/apple_verify",
+      "request": {
+        "transaction_id": "transaction_id"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "order_no": "order_no",
+          "pay_status": "pay_status",
+          "pay_type": "pay_type",
+          "transaction_id": "transaction_id",
+          "vip_time": "vip_time"
+        }
+      }
+    },
+    "/api/v1/pay/apple_callback": {
+      "path": "/api/v1/pay/apple_callback",
+      "request": {
+        "signedPayload": "signedPayload"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/pay/xx_callback": {
+      "path": "/api/v1/pay/xx_callback",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/lines_list": {
+      "path": "/api/v1/lines_list",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "country": "country",
+          "code": "code",
+          "min_conn_time": "min_conn_time",
+          "max_conn_time": "max_conn_time",
+          "img_url": "img_url"
+        }
+      }
+    },
+    "/api/v1/node": {
+      "path": "/api/v1/node",
+      "request": {
+        "code": "code"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "link_url": "link_url"
+        }
+      }
+    },
+    "/api/v1/connected": {
+      "path": "/api/v1/connected",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/heartbeat": {
+      "path": "/api/v1/heartbeat",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "connect_status": "connect_status"
+        }
+      }
+    },
+    "/api/v1/disconnect": {
+      "path": "/api/v1/disconnect",
+      "request": {},
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    },
+    "/api/v1/vpn_flow": {
+      "path": "/api/v1/vpn_flow",
+      "request": {
+        "flow": "flow"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": "result"
+      }
+    }
+  }
+}
