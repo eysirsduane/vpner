@@ -5,6 +5,7 @@ import (
 	"just-vpn/docs"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -338,6 +339,34 @@ func TestLoadRejectsMissingProductIdentity(t *testing.T) {
 	}
 	if err := Load(path); err == nil {
 		t.Fatal("expected missing swagger_path to be rejected")
+	}
+}
+
+func TestLoadRejectsResponseObjectWithoutTargetField(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "mapping.json")
+	data := []byte(`{
+		"product_code": "test",
+		"swagger_path": "/app/docs",
+		"routes": {
+			"/api/v1/test": {
+				"response": {
+					"result": {
+						"id": "recordId"
+					}
+				}
+			}
+		}
+	}`)
+	if err := os.WriteFile(path, data, 0600); err != nil {
+		t.Fatalf("write mapping fixture: %v", err)
+	}
+
+	err := Load(path)
+	if err == nil {
+		t.Fatal("expected response object without $field to be rejected")
+	}
+	if !strings.Contains(err.Error(), "response.result object mapping requires non-empty $field") {
+		t.Fatalf("unexpected validation error: %v", err)
 	}
 }
 

@@ -38,6 +38,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "token": "token",
           "device_no": "device_no",
@@ -66,6 +67,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "token": "token",
           "device_no": "device_no",
@@ -90,6 +92,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "appid": "appid",
           "pwd": "pwd"
@@ -118,6 +121,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "token": "token",
           "device_no": "device_no",
@@ -142,6 +146,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "token": "token",
           "device_no": "device_no",
@@ -187,7 +192,9 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "local_device": {
+            "$field": "local_device",
             "id": "id",
             "device_no": "device_no",
             "mobile_name": "mobile_name",
@@ -198,6 +205,7 @@
             "last_login_time": "last_login_time"
           },
           "two_device": {
+            "$field": "two_device",
             "id": "id",
             "device_no": "device_no",
             "mobile_name": "mobile_name",
@@ -208,6 +216,7 @@
             "last_login_time": "last_login_time"
           },
           "devices": {
+            "$field": "devices",
             "id": "id",
             "device_no": "device_no",
             "mobile_name": "mobile_name",
@@ -229,7 +238,9 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "local_device": {
+            "$field": "local_device",
             "id": "id",
             "device_no": "device_no",
             "mobile_name": "mobile_name",
@@ -240,6 +251,7 @@
             "last_login_time": "last_login_time"
           },
           "two_device": {
+            "$field": "two_device",
             "id": "id",
             "device_no": "device_no",
             "mobile_name": "mobile_name",
@@ -250,6 +262,7 @@
             "last_login_time": "last_login_time"
           },
           "devices": {
+            "$field": "devices",
             "id": "id",
             "device_no": "device_no",
             "mobile_name": "mobile_name",
@@ -269,6 +282,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "invite_code": "invite_code"
         }
       }
@@ -291,6 +305,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "invite_code": "invite_code",
           "invite_valid": "invite_valid",
           "share_count": "share_count",
@@ -298,6 +313,7 @@
           "per_invite_seconds": "per_invite_seconds",
           "per_invite_text": "per_invite_text",
           "milestones": {
+            "$field": "milestones",
             "count": "count",
             "reward_seconds": "reward_seconds",
             "reward_text": "reward_text"
@@ -312,6 +328,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "token": "token",
           "device_no": "device_no",
@@ -336,36 +353,44 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "agreements": {
+            "$field": "agreements",
             "user_agreement": "user_agreement",
             "privacy_agreement": "privacy_agreement"
           },
           "share": {
+            "$field": "share",
             "qrcode": "qrcode",
             "links": "links"
           },
           "invite": {
+            "$field": "invite",
             "valid_hours": "valid_hours",
             "per_invite_seconds": "per_invite_seconds",
             "per_invite_text": "per_invite_text",
             "max_reward_days": "max_reward_days",
             "milestones": {
+              "$field": "milestones",
               "count": "count",
               "reward_seconds": "reward_seconds",
               "reward_text": "reward_text"
             }
           },
           "app": {
+            "$field": "app",
             "website": "website",
             "new_user_free_seconds": "new_user_free_seconds"
           },
           "tools": {
+            "$field": "tools",
             "customer_service_enabled": "customer_service_enabled",
             "customer_service_url": "customer_service_url",
             "clean_memory_enabled": "clean_memory_enabled",
             "message_enabled": "message_enabled"
           },
           "proxy": {
+            "$field": "proxy",
             "skip_domains": "skip_domains"
           }
         }
@@ -378,6 +403,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "has_update": "has_update",
           "name": "name",
           "platform": "platform",
@@ -397,6 +423,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "position": "position",
           "title": "title",
@@ -416,8 +443,11 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "system": {
+            "$field": "system",
             "list": {
+              "$field": "list",
               "id": "id",
               "title": "title",
               "content": "content",
@@ -428,7 +458,9 @@
             "unread_count": "unread_count"
           },
           "user": {
+            "$field": "user",
             "list": {
+              "$field": "list",
               "id": "id",
               "title": "title",
               "content": "content",
@@ -448,8 +480,11 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "system": {
+            "$field": "system",
             "list": {
+              "$field": "list",
               "id": "id",
               "title": "title",
               "content": "content",
@@ -460,7 +495,9 @@
             "unread_count": "unread_count"
           },
           "user": {
+            "$field": "user",
             "list": {
+              "$field": "list",
               "id": "id",
               "title": "title",
               "content": "content",
@@ -480,6 +517,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "title": "title",
           "content": "content",
@@ -505,7 +543,7 @@
           "content": "content",
           "image_url": "image_url",
           "link_url": "link_url",
-		  "can_close": "can_close",
+          "can_close": "can_close",
           "delay_days": "delay_days",
           "transfer_code": "transfer_code"
         }
@@ -544,6 +582,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "id": "id",
           "apple_id": "apple_id",
           "name": "name",
@@ -568,6 +607,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "type": "type",
           "target": "target",
           "app_account_token": "app_account_token"
@@ -583,6 +623,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "order_no": "order_no",
           "pay_status": "pay_status",
           "pay_type": "pay_type",
@@ -618,6 +659,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "country": "country",
           "code": "code",
           "min_conn_time": "min_conn_time",
@@ -635,6 +677,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "link_url": "link_url"
         }
       }
@@ -649,6 +692,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "config": "config"
         }
       }
@@ -669,6 +713,7 @@
         "code": "code",
         "msg": "msg",
         "result": {
+          "$field": "result",
           "connect_status": "connect_status"
         }
       }

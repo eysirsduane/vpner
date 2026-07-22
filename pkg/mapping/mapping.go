@@ -97,6 +97,30 @@ func validateIdentityConfig(cfg *Config) error {
 	if !strings.HasPrefix(strings.TrimSpace(cfg.SwaggerPath), "/") {
 		return fmt.Errorf("mapping swagger_path must start with /")
 	}
+	for originalPath, route := range cfg.Routes {
+		if err := validateResponseObjectFields(route.Response, "response"); err != nil {
+			return fmt.Errorf("mapping route %s: %w", originalPath, err)
+		}
+	}
+	return nil
+}
+
+func validateResponseObjectFields(fields map[string]interface{}, path string) error {
+	for sourceField, fieldMapping := range fields {
+		nestedFields, ok := fieldMapping.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		fieldPath := path + "." + sourceField
+		targetField, ok := nestedFields[nestedTargetFieldKey].(string)
+		if !ok || strings.TrimSpace(targetField) == "" {
+			return fmt.Errorf("%s object mapping requires non-empty %s", fieldPath, nestedTargetFieldKey)
+		}
+		if err := validateResponseObjectFields(nestedFields, fieldPath); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
