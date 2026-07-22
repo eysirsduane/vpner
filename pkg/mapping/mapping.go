@@ -30,9 +30,11 @@ type FieldAffix struct {
 }
 
 type Config struct {
-	Headers    map[string]string       `json:"headers"`
-	FieldAffix FieldAffix              `json:"field_affix"`
-	Routes     map[string]RouteMapping `json:"routes"`
+	ProductCode string                  `json:"product_code"`
+	SwaggerPath string                  `json:"swagger_path"`
+	Headers     map[string]string       `json:"headers"`
+	FieldAffix  FieldAffix              `json:"field_affix"`
+	Routes      map[string]RouteMapping `json:"routes"`
 }
 
 const nestedTargetFieldKey = "$field"
@@ -73,6 +75,9 @@ func Load(path string) error {
 	if err := json.Unmarshal(data, cfg); err != nil {
 		return err
 	}
+	if err := validateIdentityConfig(cfg); err != nil {
+		return err
+	}
 	if cfg.Routes == nil {
 		cfg.Routes = map[string]RouteMapping{}
 	}
@@ -83,6 +88,26 @@ func Load(path string) error {
 
 	RouteConfig = cfg
 	return nil
+}
+
+func validateIdentityConfig(cfg *Config) error {
+	if strings.TrimSpace(cfg.ProductCode) == "" {
+		return fmt.Errorf("mapping product_code is required")
+	}
+	if !strings.HasPrefix(strings.TrimSpace(cfg.SwaggerPath), "/") {
+		return fmt.Errorf("mapping swagger_path must start with /")
+	}
+	return nil
+}
+
+// ProductCode returns the immutable code used by transfer codes and daily statistics
+func ProductCode() string {
+	return strings.TrimSpace(RouteConfig.ProductCode)
+}
+
+// SwaggerPath returns the externally exposed Swagger UI path for the active product
+func SwaggerPath() string {
+	return strings.TrimSpace(RouteConfig.SwaggerPath)
 }
 
 func applyFieldAffix(cfg *Config) {

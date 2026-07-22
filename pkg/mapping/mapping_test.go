@@ -248,6 +248,8 @@ func TestLoadAppliesFieldAffixToRequestAndResponseFields(t *testing.T) {
 
 	path := filepath.Join(t.TempDir(), "mapping.json")
 	data := []byte(`{
+		"product_code": "test",
+		"swagger_path": "/app/docs",
 		"field_affix": {
 			"prefix": "p_",
 			"suffix": "_s"
@@ -289,6 +291,12 @@ func TestLoadAppliesFieldAffixToRequestAndResponseFields(t *testing.T) {
 	if got := HeaderField("version"); got != "X-App-Version" {
 		t.Fatalf("expected header not to use affix, got %q", got)
 	}
+	if got := ProductCode(); got != "test" {
+		t.Fatalf("expected product code test, got %q", got)
+	}
+	if got := SwaggerPath(); got != "/app/docs" {
+		t.Fatalf("expected swagger path /app/docs, got %q", got)
+	}
 
 	mapped := MapResponse("/api/v1/test", map[string]interface{}{
 		"code": 200,
@@ -319,6 +327,17 @@ func TestLoadAppliesFieldAffixToRequestAndResponseFields(t *testing.T) {
 	}
 	if invite["p_validHours_s"] != int64(24) {
 		t.Fatalf("expected affixed valid hours, got %#v", invite["p_validHours_s"])
+	}
+}
+
+func TestLoadRejectsMissingProductIdentity(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "mapping.json")
+	data := []byte(`{"product_code":"test","routes":{}}`)
+	if err := os.WriteFile(path, data, 0600); err != nil {
+		t.Fatalf("write mapping fixture: %v", err)
+	}
+	if err := Load(path); err == nil {
+		t.Fatal("expected missing swagger_path to be rejected")
 	}
 }
 

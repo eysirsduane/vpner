@@ -11,8 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const swaggerDocPath = "/api/v1/docs"
-
 func InitRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Recovery())
@@ -96,6 +94,7 @@ func InitRouter() *gin.Engine {
 	// swagger 文档路由，只在 dev 环境开启
 	if setting.AppConfig.RunMode == setting.AppModeDev {
 		apiBaseURL := ""
+		swaggerDocPath := mapping.SwaggerPath()
 		router.GET(swaggerDocPath+"/*any", justswagger.Handler(justswagger.Config{
 			Title:             setting.AppConfig.Product + " API",
 			Description:       "API 文档",

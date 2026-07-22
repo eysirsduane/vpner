@@ -21,6 +21,7 @@ type App struct {
 	MappingFile  string
 	JwtSecret    string
 	JwtExpire    time.Duration
+	InternalKey  string
 }
 
 type Database struct {
@@ -115,6 +116,7 @@ func loadApp() {
 	AppConfig.MappingFile = sec.Key("MappingFile").MustString("conf/mapping.json")
 	AppConfig.JwtSecret = sec.Key("JwtSecret").MustString("just-vpn-jwt-secret")
 	AppConfig.JwtExpire = time.Duration(sec.Key("JwtExpireHours").MustInt(720)) * time.Hour
+	AppConfig.InternalKey = sec.Key("InternalKey").MustString("")
 }
 
 func normalizeRunMode(mode string) string {

@@ -9,12 +9,11 @@ import (
 
 	"just-vpn/middleware"
 	"just-vpn/model"
+	"just-vpn/pkg/setting"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
-const internalReportKey = "just.303"
 
 type errorReportParams struct {
 	Msg             string
@@ -163,7 +162,7 @@ func InternalReportStatsHandler(c *gin.Context) {
 	if strings.TrimSpace(req.Key) == "" {
 		req.Key = c.GetHeader("X-Report-Key")
 	}
-	if req.Key != internalReportKey {
+	if req.Key == "" || setting.AppConfig.InternalKey == "" || req.Key != setting.AppConfig.InternalKey {
 		internalReportJSON(c, http.StatusForbidden, CodeError, "invalid key", InternalReportStatsResult{})
 		return
 	}
@@ -200,7 +199,7 @@ func InternalMemberLookupHandler(c *gin.Context) {
 	if strings.TrimSpace(req.Key) == "" {
 		req.Key = c.GetHeader("X-Lookup-Key")
 	}
-	if req.Key != internalReportKey {
+	if req.Key == "" || setting.AppConfig.InternalKey == "" || req.Key != setting.AppConfig.InternalKey {
 		internalMemberLookupJSON(c, http.StatusForbidden, CodeError, "invalid key", InternalMemberLookupResult{})
 		return
 	}

@@ -1,9 +1,13 @@
 package controller
 
-import "testing"
+import (
+	"testing"
 
-func TestCurrentProductRouteCodeUsesFixedProductCode(t *testing.T) {
-	if got := currentProductRouteCode(); got != "origin" {
-		t.Fatalf("currentProductRouteCode() = %q, want %q", got, "origin")
+	"just-vpn/pkg/mapping"
+)
+
+func TestCurrentProductRouteCodeUsesMappingProductCode(t *testing.T) {
+	if got, want := currentProductRouteCode(), mapping.ProductCode(); got != want {
+		t.Fatalf("currentProductRouteCode() = %q, want %q", got, want)
 	}
 }

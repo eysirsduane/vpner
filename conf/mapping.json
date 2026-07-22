@@ -1,4 +1,6 @@
 {
+  "product_code": "origin",
+  "swagger_path": "/api/v1/docs",
   "headers": {
     "platform": "X-Platform",
     "version": "X-Version",

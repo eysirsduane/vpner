@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"just-vpn/pkg/mapping"
 	"just-vpn/pkg/redis"
 
 	goredis "github.com/go-redis/redis"
@@ -13,9 +14,8 @@ import (
 )
 
 const (
-	DailyStatProductCode = "origin"
-	dailyStatRedisTTL    = 7 * 24 * time.Hour
-	dailyStatBatchSize   = 1000
+	dailyStatRedisTTL  = 7 * 24 * time.Hour
+	dailyStatBatchSize = 1000
 )
 
 // DailyStat 每日统计表
@@ -83,7 +83,7 @@ func SyncDailyStatForDate(statDate time.Time) error {
 	}
 	return upsertDailyStat(DailyStat{
 		StatDate:         statDate,
-		ProductCode:      DailyStatProductCode,
+		ProductCode:      mapping.ProductCode(),
 		DailyActiveUsers: activeUsers,
 		DailyNewUsers:    newUsers,
 	})
@@ -179,7 +179,7 @@ func redisSetIntersectCount(leftKey string, rightKey string) (int, error) {
 	if redis.Redis == nil {
 		return 0, nil
 	}
-	tempKey := fmt.Sprintf("stat:%s:retention:tmp:%d", DailyStatProductCode, time.Now().UnixNano())
+	tempKey := fmt.Sprintf("stat:%s:retention:tmp:%d", mapping.ProductCode(), time.Now().UnixNano())
 	count, err := redis.Redis.SInterStore(tempKey, leftKey, rightKey).Result()
 	if err != nil {
 		return 0, err
@@ -257,7 +257,7 @@ func updateDailyRetention(statDate time.Time, day int, users int, rate float64) 
 		return nil
 	}
 	return DB.Model(&DailyStat{}).
-		Where("stat_date = ? AND product_code = ?", statDate, DailyStatProductCode).
+		Where("stat_date = ? AND product_code = ?", statDate, mapping.ProductCode()).
 		Updates(updates).Error
 }
 
@@ -274,9 +274,9 @@ func chinaStatDate(t time.Time) time.Time {
 }
 
 func dailyActiveKey(date time.Time) string {
-	return fmt.Sprintf("stat:%s:dau:%s", DailyStatProductCode, date.Format("20060102"))
+	return fmt.Sprintf("stat:%s:dau:%s", mapping.ProductCode(), date.Format("20060102"))
 }
 
 func dailyNewKey(date time.Time) string {
-	return fmt.Sprintf("stat:%s:new:%s", DailyStatProductCode, date.Format("20060102"))
+	return fmt.Sprintf("stat:%s:new:%s", mapping.ProductCode(), date.Format("20060102"))
 }

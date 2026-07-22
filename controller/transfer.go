@@ -5,11 +5,10 @@ import (
 
 	"just-vpn/middleware"
 	"just-vpn/model"
+	"just-vpn/pkg/mapping"
 
 	"github.com/gin-gonic/gin"
 )
-
-const productTransferCodePrefix = "origin"
 
 type DelayedPopupResponse struct {
 	Id           int      `json:"id" example:"1"`                                  // 弹窗ID
@@ -86,5 +85,5 @@ func nextDelayedPopup(platform string, version string, now time.Time) (model.Del
 }
 
 func currentProductRouteCode() string {
-	return productTransferCodePrefix
+	return mapping.ProductCode()
 }
