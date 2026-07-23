@@ -35,6 +35,7 @@ type Order struct {
 	PayStatus       int        `json:"pay_status" gorm:"column:pay_status;type:int;index:idx_pay_status;comment:支付状态(1=未支付,3=已支付,4=已退款)"`
 	PayType         string     `json:"pay_type" gorm:"column:pay_type;type:varchar(32);comment:支付方式"`
 	PayReason       string     `json:"pay_reason" gorm:"column:pay_reason;type:varchar(128);comment:支付分流原因"`
+	ClientTimeZone  string     `json:"client_time_zone" gorm:"column:client_time_zone;type:varchar(128);comment:发起支付时客户端时区"`
 	PayProductId    string     `json:"pay_product_id" gorm:"column:pay_product_id;type:varchar(128);comment:支付产品ID"`
 	AppAccountToken string     `json:"app_account_token" gorm:"column:app_account_token;type:varchar(64);index:idx_app_account_token;comment:苹果内购订单标识"`
 	Uid             int        `json:"uid" gorm:"column:uid;type:int;index:idx_uid;comment:用户ID"`

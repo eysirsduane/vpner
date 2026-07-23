@@ -127,7 +127,7 @@ func PayLaunchHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	order := buildLaunchOrder(c, user, pack, decision, requestIP, requestIPRegion)
+	order := buildLaunchOrder(user, pack, decision, requestIP, requestIPRegion, clientInfo)
 	if decision.payType == PayLaunchTypeAppleIAP {
 		order.AppAccountToken = newAppleAccountToken()
 	} else if decision.payType == PayLaunchTypeH5 {
@@ -481,32 +481,33 @@ func splitCommaConfig(value string) []string {
 	return result
 }
 
-func buildLaunchOrder(c *gin.Context, user model.User, pack model.Package, decision payLaunchDecision, requestIP string, requestIPRegion string) model.Order {
+func buildLaunchOrder(user model.User, pack model.Package, decision payLaunchDecision, requestIP string, requestIPRegion string, clientInfo middleware.ClientInfo) model.Order {
 	orderFlag := 1
 	if isValidVipTime(user.VipTime) {
 		orderFlag = 2
 	}
 	return model.Order{
-		PakId:         pack.Id,
-		PakName:       pack.Name,
-		PakTime:       pack.Day * 24 * 60 * 60,
-		OrderNo:       util.GetOrderId(),
-		Name:          pack.Name,
-		PayStatus:     model.OrderPayStatusUnpaid,
-		PayType:       decision.payType,
-		PayReason:     decision.reason,
-		PayProductId:  pack.AppleId,
-		Uid:           user.Id,
-		RegPlatform:   user.Platform,
-		RegTime:       user.CreateTime,
-		Price:         pack.Price,
-		Money:         pack.Price,
-		Origin:        middleware.CurrentClientInfo(c).Platform,
-		Ip:            requestIP,
-		OrderFlag:     orderFlag,
-		PaySource:     model.OrderPaySourceLaunch,
-		SourceChannel: user.SourceChannel,
-		RegIpRegion:   requestIPRegion,
+		PakId:          pack.Id,
+		PakName:        pack.Name,
+		PakTime:        pack.Day * 24 * 60 * 60,
+		OrderNo:        util.GetOrderId(),
+		Name:           pack.Name,
+		PayStatus:      model.OrderPayStatusUnpaid,
+		PayType:        decision.payType,
+		PayReason:      decision.reason,
+		ClientTimeZone: clientInfo.TimeZone,
+		PayProductId:   pack.AppleId,
+		Uid:            user.Id,
+		RegPlatform:    user.Platform,
+		RegTime:        user.CreateTime,
+		Price:          pack.Price,
+		Money:          pack.Price,
+		Origin:         clientInfo.Platform,
+		Ip:             requestIP,
+		OrderFlag:      orderFlag,
+		PaySource:      model.OrderPaySourceLaunch,
+		SourceChannel:  user.SourceChannel,
+		RegIpRegion:    requestIPRegion,
 	}
 }
 
