@@ -29,3 +29,57 @@ func TestBuildLaunchOrderUsesPaymentRequestIPAndRegion(t *testing.T) {
 		t.Fatalf("order.RegTime = %v, want %v", order.RegTime, createdAt)
 	}
 }
+
+func TestShouldForceAppleByTimeZone(t *testing.T) {
+	tests := []struct {
+		name     string
+		timeZone string
+		want     bool
+	}{
+		{name: "Shanghai", timeZone: "Asia/Shanghai", want: false},
+		{name: "Shanghai case insensitive", timeZone: " asia/shanghai ", want: false},
+		{name: "Chongqing alias", timeZone: "Asia/Chongqing", want: false},
+		{name: "Urumqi", timeZone: "Asia/Urumqi", want: false},
+		{name: "Hong Kong", timeZone: "Asia/Hong_Kong", want: true},
+		{name: "Taipei", timeZone: "Asia/Taipei", want: true},
+		{name: "Singapore", timeZone: "Asia/Singapore", want: true},
+		{name: "Los Angeles", timeZone: "America/Los_Angeles", want: true},
+		{name: "missing", timeZone: "", want: true},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			matched, reason := shouldForceAppleByTimeZone(payContext{timeZone: test.timeZone})
+			if matched != test.want {
+				t.Fatalf("matched = %v, want %v", matched, test.want)
+			}
+			wantReason := "mainland_china_timezone"
+			if test.want {
+				wantReason = "non_mainland_timezone"
+			}
+			if reason != wantReason {
+				t.Fatalf("reason = %q, want %q", reason, wantReason)
+			}
+		})
+	}
+}
+
+func TestDecidePayLaunchPrioritizesNonMainlandTimeZone(t *testing.T) {
+	pack := model.Package{AppleId: "vip_month"}
+	decision, err := decidePayLaunch(payContext{
+		pack:     pack,
+		timeZone: "Europe/London",
+	})
+	if err != nil {
+		t.Fatalf("decidePayLaunch() error = %v", err)
+	}
+	if decision.payType != PayLaunchTypeAppleIAP {
+		t.Fatalf("decision.payType = %q, want %q", decision.payType, PayLaunchTypeAppleIAP)
+	}
+	if decision.target != pack.AppleId {
+		t.Fatalf("decision.target = %q, want %q", decision.target, pack.AppleId)
+	}
+	if decision.reason != "non_mainland_timezone" {
+		t.Fatalf("decision.reason = %q, want %q", decision.reason, "non_mainland_timezone")
+	}
+}

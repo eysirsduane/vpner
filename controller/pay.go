@@ -66,17 +66,18 @@ type payLaunchDecision struct {
 }
 
 type payContext struct {
-	c       *gin.Context
-	user    model.User
-	pack    model.Package
-	now     time.Time
-	regions string
-	version string
+	c        *gin.Context
+	user     model.User
+	pack     model.Package
+	now      time.Time
+	regions  string
+	version  string
+	timeZone string
 }
 
 // PayLaunchHandler 发起支付
 // @Summary 发起支付
-// @Description 根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐 apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带
+// @Description 非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐 apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带
 // @Tags 支付
 // @Accept json
 // @Produce json
@@ -111,14 +112,16 @@ func PayLaunchHandler(c *gin.Context) {
 	}
 	requestIP := c.ClientIP()
 	requestIPRegion := loginIPRegion(requestIP)
+	clientInfo := middleware.CurrentClientInfo(c)
 
 	decision, err := decidePayLaunch(payContext{
-		c:       c,
-		user:    user,
-		pack:    pack,
-		now:     time.Now().In(time.Local),
-		regions: requestIPRegion,
-		version: middleware.CurrentClientInfo(c).Version,
+		c:        c,
+		user:     user,
+		pack:     pack,
+		now:      time.Now().In(time.Local),
+		regions:  requestIPRegion,
+		version:  clientInfo.Version,
+		timeZone: clientInfo.TimeZone,
 	})
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
@@ -308,6 +311,9 @@ func XXPayCallbackHandler(c *gin.Context) {
 }
 
 func decidePayLaunch(ctx payContext) (payLaunchDecision, error) {
+	if matched, reason := shouldForceAppleByTimeZone(ctx); matched {
+		return appleIAPDecision(ctx.pack, reason), nil
+	}
 	if matched, reason := shouldForceAppleByOverseas(ctx); matched {
 		return appleIAPDecision(ctx.pack, reason), nil
 	}
@@ -330,6 +336,24 @@ func decidePayLaunch(ctx payContext) (payLaunchDecision, error) {
 		return appleIAPDecision(ctx.pack, reason), nil
 	}
 	return h5PayDecision("allowed"), nil
+}
+
+// shouldForceAppleByTimeZone 判断客户端是否明确处于中国大陆时区。
+// 未传时区时无法确认用户位于中国大陆，因此按非大陆时区处理。
+func shouldForceAppleByTimeZone(ctx payContext) (bool, string) {
+	timeZone := strings.ToLower(strings.TrimSpace(ctx.timeZone))
+	switch timeZone {
+	case "asia/shanghai",
+		"asia/chongqing",
+		"asia/chungking",
+		"asia/harbin",
+		"asia/urumqi",
+		"asia/kashgar",
+		"prc":
+		return false, "mainland_china_timezone"
+	default:
+		return true, "non_mainland_timezone"
+	}
 }
 
 // shouldForceAppleByOverseas 判断非中国 IP 是否仅允许苹果内购

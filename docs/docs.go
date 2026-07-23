@@ -1049,7 +1049,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐 apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带",
+                "description": "非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐 apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带",
                 "consumes": [
                     "application/json"
                 ],
