@@ -126,10 +126,10 @@ func parseNodeSubscriptionResponse(body []byte) ([]nodeSubscriptionItem, error) 
 
 func normalizeNodeSubscriptionItems(items []nodeSubscriptionItem) []nodeSubscriptionItem {
 	nodes := make([]nodeSubscriptionItem, 0, len(items))
-	seen := make(map[string]struct{}, len(items))
+	indexByAddress := make(map[string]int, len(items))
 	for _, item := range items {
 		item.Content = strings.TrimSpace(item.Content)
-		item.IP = strings.TrimSpace(item.IP)
+		item.IP = normalizeNodeSubscriptionAddress(item.IP)
 		if item.Content == "" || !strings.Contains(item.Content, "://") || item.IP == "" {
 			continue
 		}
@@ -148,10 +148,11 @@ func normalizeNodeSubscriptionItems(items []nodeSubscriptionItem) []nodeSubscrip
 		if item.NodeType == "" {
 			continue
 		}
-		if _, exists := seen[item.Content]; exists {
+		if index, exists := indexByAddress[item.IP]; exists {
+			nodes[index] = item
 			continue
 		}
-		seen[item.Content] = struct{}{}
+		indexByAddress[item.IP] = len(nodes)
 		nodes = append(nodes, item)
 	}
 	return nodes
@@ -177,53 +178,24 @@ func parseNodeSubscription(content string) []string {
 
 func syncPulledNodes(nodes []nodeSubscriptionItem) (NodeSubscriptionSyncResult, error) {
 	result := NodeSubscriptionSyncResult{Pulled: len(nodes)}
-	newNodes := make([]Node, 0)
-	links := make([]string, 0, len(nodes))
-	nodeByLink := make(map[string]nodeSubscriptionItem, len(nodes))
+	if len(nodes) == 0 {
+		result.Retained = true
+		return result, nil
+	}
+
+	addresses := make([]string, 0, len(nodes))
+	added := 0
 	for _, node := range nodes {
-		links = append(links, node.Content)
-		nodeByLink[node.Content] = node
+		addresses = append(addresses, node.IP)
 	}
 
 	err := DB.Transaction(func(tx *gorm.DB) error {
 		var existing []Node
-		if err := tx.Where("link_url IN ?", links).Find(&existing).Error; err != nil {
+		if err := tx.Where("LOWER(TRIM(address)) IN ?", addresses).Order("id ASC").Find(&existing).Error; err != nil {
 			return err
 		}
-
-		existingLinks := make(map[string]struct{}, len(existing))
-		for _, node := range existing {
-			existingLinks[node.LinkUrl] = struct{}{}
-			item := nodeByLink[node.LinkUrl]
-			name := nodeSubscriptionDisplayName(item)
-			if node.Code == item.Code && node.CodeName == item.CodeName && node.NodeType == item.NodeType && node.Address == item.IP && node.Name == name {
-				continue
-			}
-			if err := tx.Model(&Node{}).Where("id = ?", node.Id).Updates(map[string]interface{}{
-				"code":      item.Code,
-				"code_name": item.CodeName,
-				"node_type": item.NodeType,
-				"address":   item.IP,
-				"name":      name,
-			}).Error; err != nil {
-				return err
-			}
-		}
-		for _, item := range nodes {
-			if _, exists := existingLinks[item.Content]; exists {
-				continue
-			}
-			name := nodeSubscriptionDisplayName(item)
-			newNodes = append(newNodes, Node{
-				Code:     item.Code,
-				CodeName: item.CodeName,
-				Name:     name,
-				NodeType: item.NodeType,
-				LinkUrl:  item.Content,
-				Address:  item.IP,
-				Status:   NodeStatusEnabled,
-			})
-		}
+		plan := buildNodeSubscriptionSyncPlan(nodes, existing)
+		added = len(plan.NewNodes)
 
 		if shouldReplacePulledNodes(len(nodes)) {
 			if err := tx.Model(&Node{}).Where("status <> ?", NodeStatusDisabled).Update("status", NodeStatusDisabled).Error; err != nil {
@@ -232,11 +204,23 @@ func syncPulledNodes(nodes []nodeSubscriptionItem) (NodeSubscriptionSyncResult, 
 		} else {
 			result.Retained = true
 		}
-		if err := tx.Model(&Node{}).Where("link_url IN ?", links).Update("status", NodeStatusEnabled).Error; err != nil {
-			return err
+		if len(plan.DuplicateIDs) > 0 {
+			if err := tx.Model(&Node{}).Where("id IN ?", plan.DuplicateIDs).Update("status", NodeStatusDisabled).Error; err != nil {
+				return err
+			}
 		}
-		if len(newNodes) > 0 {
-			if err := tx.CreateInBatches(newNodes, 200).Error; err != nil {
+		for _, update := range plan.Updates {
+			if err := tx.Model(&Node{}).Where("id = ?", update.ID).Updates(update.Fields).Error; err != nil {
+				return err
+			}
+		}
+		if len(plan.ActivateIDs) > 0 {
+			if err := tx.Model(&Node{}).Where("id IN ?", plan.ActivateIDs).Update("status", NodeStatusEnabled).Error; err != nil {
+				return err
+			}
+		}
+		if len(plan.NewNodes) > 0 {
+			if err := tx.CreateInBatches(plan.NewNodes, 200).Error; err != nil {
 				return err
 			}
 		}
@@ -247,13 +231,84 @@ func syncPulledNodes(nodes []nodeSubscriptionItem) (NodeSubscriptionSyncResult, 
 	}
 
 	InvalidateAvailableNodeCache()
-	result.Added = len(newNodes)
-	result.Activated = len(links)
+	result.Added = added
+	result.Activated = len(nodes)
 	return result, nil
+}
+
+type nodeSubscriptionUpdate struct {
+	ID     int
+	Fields map[string]interface{}
+}
+
+type nodeSubscriptionSyncPlan struct {
+	Updates      []nodeSubscriptionUpdate
+	NewNodes     []Node
+	ActivateIDs  []int
+	DuplicateIDs []int
+}
+
+func buildNodeSubscriptionSyncPlan(nodes []nodeSubscriptionItem, existing []Node) nodeSubscriptionSyncPlan {
+	plan := nodeSubscriptionSyncPlan{
+		Updates:      make([]nodeSubscriptionUpdate, 0, len(nodes)),
+		NewNodes:     make([]Node, 0, len(nodes)),
+		ActivateIDs:  make([]int, 0, len(nodes)),
+		DuplicateIDs: make([]int, 0),
+	}
+	existingByAddress := make(map[string]Node, len(existing))
+	for _, node := range existing {
+		address := normalizeNodeSubscriptionAddress(node.Address)
+		if _, exists := existingByAddress[address]; exists {
+			plan.DuplicateIDs = append(plan.DuplicateIDs, node.Id)
+			continue
+		}
+		existingByAddress[address] = node
+	}
+	for _, item := range nodes {
+		name := nodeSubscriptionDisplayName(item)
+		node, exists := existingByAddress[item.IP]
+		if !exists {
+			plan.NewNodes = append(plan.NewNodes, Node{
+				Code:     item.Code,
+				CodeName: item.CodeName,
+				Name:     name,
+				NodeType: item.NodeType,
+				LinkUrl:  item.Content,
+				Address:  item.IP,
+				Status:   NodeStatusEnabled,
+			})
+			continue
+		}
+		plan.ActivateIDs = append(plan.ActivateIDs, node.Id)
+		if node.Code == item.Code &&
+			node.CodeName == item.CodeName &&
+			node.NodeType == item.NodeType &&
+			node.Address == item.IP &&
+			node.Name == name &&
+			node.LinkUrl == item.Content {
+			continue
+		}
+		plan.Updates = append(plan.Updates, nodeSubscriptionUpdate{
+			ID: node.Id,
+			Fields: map[string]interface{}{
+				"code":      item.Code,
+				"code_name": item.CodeName,
+				"node_type": item.NodeType,
+				"link_url":  item.Content,
+				"address":   item.IP,
+				"name":      name,
+			},
+		})
+	}
+	return plan
 }
 
 func shouldReplacePulledNodes(nodeCount int) bool {
 	return nodeCount >= nodeSubscriptionMinNodes
+}
+
+func normalizeNodeSubscriptionAddress(address string) string {
+	return strings.ToLower(strings.TrimSpace(address))
 }
 
 func nodeSubscriptionMetadata(link string) (nodeType, address, name string) {

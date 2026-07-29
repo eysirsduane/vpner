@@ -34,6 +34,62 @@ func TestShouldReplacePulledNodes(t *testing.T) {
 	}
 }
 
+func TestNormalizeNodeSubscriptionItemsKeepsLatestItemByAddress(t *testing.T) {
+	nodes := normalizeNodeSubscriptionItems([]nodeSubscriptionItem{
+		{IP: " SAME.EXAMPLE.COM ", Content: "vmess://old", Code: "AUTO", CodeName: "自动", NodeType: "vmess"},
+		{IP: "other.example.com", Content: "vmess://other", Code: "AUTO", CodeName: "自动", NodeType: "vmess"},
+		{IP: "same.example.com", Content: "vmess://new", Code: "AUTO", CodeName: "自动", NodeType: "vmess"},
+	})
+	if len(nodes) != 2 {
+		t.Fatalf("normalizeNodeSubscriptionItems() count = %d, want 2", len(nodes))
+	}
+	if nodes[0].IP != "same.example.com" || nodes[0].Content != "vmess://new" {
+		t.Fatalf("same address item = %#v, want latest content", nodes[0])
+	}
+	if nodes[1].IP != "other.example.com" {
+		t.Fatalf("other address item = %#v", nodes[1])
+	}
+}
+
+func TestBuildNodeSubscriptionSyncPlanMatchesAddressAndUpdatesAllFields(t *testing.T) {
+	nodes := []nodeSubscriptionItem{
+		{IP: "same.example.com", Content: "anytls://new", Code: "US", CodeName: "美国", NodeType: "anytls"},
+		{IP: "fresh.example.com", Content: "vmess://fresh", Code: "AUTO", CodeName: "自动", NodeType: "vmess"},
+	}
+	existing := []Node{
+		{BaseModel: BaseModel{Id: 5}, Code: "AUTO", CodeName: "自动", Name: "自动节点", NodeType: "vmess", LinkUrl: "vmess://old", Address: "SAME.EXAMPLE.COM", Status: NodeStatusEnabled},
+		{BaseModel: BaseModel{Id: 9}, Code: "HK", CodeName: "香港", Name: "重复节点", NodeType: "vmess", LinkUrl: "vmess://duplicate", Address: "same.example.com", Status: NodeStatusEnabled},
+	}
+
+	plan := buildNodeSubscriptionSyncPlan(nodes, existing)
+	if len(plan.ActivateIDs) != 1 || plan.ActivateIDs[0] != 5 {
+		t.Fatalf("ActivateIDs = %#v, want [5]", plan.ActivateIDs)
+	}
+	if len(plan.DuplicateIDs) != 1 || plan.DuplicateIDs[0] != 9 {
+		t.Fatalf("DuplicateIDs = %#v, want [9]", plan.DuplicateIDs)
+	}
+	if len(plan.Updates) != 1 || plan.Updates[0].ID != 5 {
+		t.Fatalf("Updates = %#v, want one update for node 5", plan.Updates)
+	}
+	fields := plan.Updates[0].Fields
+	wantFields := map[string]interface{}{
+		"code":      "US",
+		"code_name": "美国",
+		"node_type": "anytls",
+		"link_url":  "anytls://new",
+		"address":   "same.example.com",
+		"name":      "美国节点",
+	}
+	for key, want := range wantFields {
+		if got := fields[key]; got != want {
+			t.Fatalf("Updates[0].Fields[%q] = %#v, want %#v", key, got, want)
+		}
+	}
+	if len(plan.NewNodes) != 1 || plan.NewNodes[0].Address != "fresh.example.com" || plan.NewNodes[0].LinkUrl != "vmess://fresh" {
+		t.Fatalf("NewNodes = %#v, want fresh node", plan.NewNodes)
+	}
+}
+
 func TestParseNodeSubscriptionResponseFromDispatch(t *testing.T) {
 	nodes, err := parseNodeSubscriptionResponse([]byte(`{
   "code": 200,
