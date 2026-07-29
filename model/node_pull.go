@@ -17,7 +17,7 @@ const (
 	nodeSubscriptionMaxBytes = 10 << 20
 	nodeSubscriptionCode     = "AUTO"
 	nodeSubscriptionName     = "智能线路"
-	nodeSubscriptionMinNodes = 5
+	nodeSubscriptionMinNodes = 2
 )
 
 // NodeSubscriptionSyncResult 节点订阅同步结果
@@ -45,7 +45,7 @@ type nodeDispatchPullResponse struct {
 	} `json:"data"`
 }
 
-// SyncNodesFromConfiguredSource 拉取订阅节点，节点不足时保留已有启用节点
+// SyncNodesFromConfiguredSource 拉取订阅节点；少于两个有效节点时保留已有启用节点
 func SyncNodesFromConfiguredSource() (NodeSubscriptionSyncResult, error) {
 	pullURL := strings.TrimSpace(ConfigValue(ConfigNodePullURL, ""))
 	if pullURL == "" {

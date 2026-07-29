@@ -22,12 +22,12 @@ func TestNodeSubscriptionMetadata(t *testing.T) {
 }
 
 func TestShouldReplacePulledNodes(t *testing.T) {
-	for _, nodeCount := range []int{0, 1, 4} {
+	for _, nodeCount := range []int{0, 1} {
 		if shouldReplacePulledNodes(nodeCount) {
 			t.Fatalf("shouldReplacePulledNodes(%d) = true, want false", nodeCount)
 		}
 	}
-	for _, nodeCount := range []int{5, 6} {
+	for _, nodeCount := range []int{2, 4, 5, 6} {
 		if !shouldReplacePulledNodes(nodeCount) {
 			t.Fatalf("shouldReplacePulledNodes(%d) = false, want true", nodeCount)
 		}
