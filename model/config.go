@@ -21,6 +21,8 @@ const (
 	ConfigToolMessageEnabled         = "tool.message_enabled"
 	ConfigNodeLinkAESKey             = "node.link_aes_key"
 	ConfigNodePullURL                = "node.pull_url"
+	ConfigNodeReviewVersions         = "node.review_versions"
+	ConfigNodeReviewLink             = "node.review_link"
 	ConfigSkipProxyDomains           = "skip_proxy_domains"
 	ConfigRealLogoffVersions         = "account.real_logoff_versions"
 	ConfigMaxLoginDevices            = "account.max_login_devices"
@@ -138,6 +140,18 @@ func InitConfigs() error {
 			Code:      ConfigNodePullURL,
 			Value:     "",
 			Remark:    "节点订阅拉取地址，留空表示不自动同步",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigNodeReviewVersions,
+			Value:     "",
+			Remark:    "审核版本列表，多个用英文逗号分隔，留空表示关闭审核节点",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigNodeReviewLink,
+			Value:     "",
+			Remark:    "审核版本固定使用的节点字符串",
 		},
 		{
 			BaseModel: BaseModel{CreateTime: now},

@@ -129,14 +129,17 @@ func getNodeForCode(c *gin.Context, code string) (model.Node, bool) {
 		return model.Node{}, false
 	}
 
-	node, err := model.GetAvailableNode(code)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			JsonReturn(c, CodeError, "line is preparing", nil)
+	node, reviewNodeEnabled := configuredReviewNode(middleware.CurrentClientInfo(c).Version, code)
+	if !reviewNodeEnabled {
+		node, err = model.GetAvailableNode(code)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				JsonReturn(c, CodeError, "line is preparing", nil)
+				return model.Node{}, false
+			}
+			JsonReturn(c, CodeError, err.Error(), nil)
 			return model.Node{}, false
 		}
-		JsonReturn(c, CodeError, err.Error(), nil)
-		return model.Node{}, false
 	}
 	if user.IsReal != 1 {
 		if err := model.UpdateUserFieldsByID(user.Id, map[string]interface{}{"is_real": 1}); err != nil {
