@@ -24,6 +24,7 @@ const (
 
 	popupShowRecordPrefix  = "popup:show"
 	advertShowRecordPrefix = "advert:show"
+	popupDailyShowPrefix   = "popup:daily_show"
 )
 
 var removeCleanShowRecordScript = goredis.NewScript(`
@@ -31,6 +32,29 @@ if redis.call("HGET", KEYS[1], "show_times") == ARGV[1] and redis.call("HGET", K
 	return redis.call("SREM", KEYS[2], KEYS[1])
 end
 return 0
+`)
+
+var acquirePopupDailyShowScript = goredis.NewScript(`
+local current = tonumber(redis.call("GET", KEYS[1]) or "0")
+local limit = tonumber(ARGV[1])
+if current >= limit then
+	return 0
+end
+redis.call("INCR", KEYS[1])
+redis.call("PEXPIRE", KEYS[1], ARGV[2])
+return 1
+`)
+
+var releasePopupDailyShowScript = goredis.NewScript(`
+local current = tonumber(redis.call("GET", KEYS[1]) or "0")
+if current <= 0 then
+	return 0
+end
+if current == 1 then
+	redis.call("DEL", KEYS[1])
+	return 0
+end
+return redis.call("DECR", KEYS[1])
 `)
 
 type showRecordCacheType struct {
@@ -56,6 +80,45 @@ func UserPopupCanShow(userId int, popup Popup) (UserPopup, bool, error) {
 		return record, false, nil
 	}
 	return record, true, nil
+}
+
+func AcquirePopupDailyShow(popup Popup, now time.Time) (bool, error) {
+	if popup.MaxDailyShowTimes <= 0 {
+		return true, nil
+	}
+	if redis.Redis == nil {
+		return false, fmt.Errorf("redis is not initialized")
+	}
+	result, err := acquirePopupDailyShowScript.Run(
+		redis.Redis,
+		[]string{popupDailyShowKey(popup.Id, now)},
+		popup.MaxDailyShowTimes,
+		popupDailyShowTTL(now).Milliseconds(),
+	).Int()
+	if err != nil {
+		return false, err
+	}
+	return result == 1, nil
+}
+
+func ReleasePopupDailyShow(popup Popup, now time.Time) error {
+	if popup.MaxDailyShowTimes <= 0 || redis.Redis == nil {
+		return nil
+	}
+	return releasePopupDailyShowScript.Run(
+		redis.Redis,
+		[]string{popupDailyShowKey(popup.Id, now)},
+	).Err()
+}
+
+func popupDailyShowKey(popupId int, now time.Time) string {
+	return fmt.Sprintf("%s:%s:%d", popupDailyShowPrefix, now.In(time.Local).Format("20060102"), popupId)
+}
+
+func popupDailyShowTTL(now time.Time) time.Duration {
+	localNow := now.In(time.Local)
+	nextDay := time.Date(localNow.Year(), localNow.Month(), localNow.Day()+1, 0, 0, 0, 0, time.Local)
+	return nextDay.Sub(localNow) + time.Hour
 }
 
 func AddUserPopupShow(userId int, popupId int, now time.Time) (UserPopup, error) {

@@ -105,8 +105,16 @@ func nextPopupForUser(userId int, registerTime time.Time, platform string, versi
 		} else if !ok {
 			continue
 		}
+		acquired, err := model.AcquirePopupDailyShow(popup, now)
+		if err != nil {
+			return model.Popup{}, model.UserPopup{}, false, err
+		}
+		if !acquired {
+			continue
+		}
 		record, err := model.AddUserPopupShow(userId, popup.Id, now)
 		if err != nil {
+			_ = model.ReleasePopupDailyShow(popup, now)
 			return model.Popup{}, model.UserPopup{}, false, err
 		}
 		return popup, record, true, nil
