@@ -39,7 +39,7 @@ func PopupHandler(c *gin.Context) {
 	}
 	clientInfo := middleware.CurrentClientInfo(c)
 	now := time.Now().In(time.Local).Truncate(time.Second)
-	popup, record, ok, err := nextPopupForUser(user.Id, clientInfo.Platform, clientInfo.Version, now)
+	popup, record, ok, err := nextPopupForUser(user.Id, user.CreateTime, clientInfo.Platform, clientInfo.Version, now)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -85,7 +85,7 @@ func filterPopupImageURLs(values []string) []string {
 	return urls
 }
 
-func nextPopupForUser(userId int, platform string, version string, now time.Time) (model.Popup, model.UserPopup, bool, error) {
+func nextPopupForUser(userId int, registerTime time.Time, platform string, version string, now time.Time) (model.Popup, model.UserPopup, bool, error) {
 	popups, err := model.GetEnabledPopups(now)
 	if err != nil {
 		return model.Popup{}, model.UserPopup{}, false, err
@@ -95,6 +95,9 @@ func nextPopupForUser(userId int, platform string, version string, now time.Time
 			continue
 		}
 		if !model.MatchCSVRule(popup.Versions, version) {
+			continue
+		}
+		if !popup.CanShowToRegisteredUser(registerTime, now) {
 			continue
 		}
 		if _, ok, err := model.UserPopupCanShow(userId, popup); err != nil {
