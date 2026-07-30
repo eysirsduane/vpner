@@ -66,3 +66,29 @@ func TestPopupCanShowToRegisteredUser(t *testing.T) {
 		})
 	}
 }
+
+func TestPopupCanShowToIPRegion(t *testing.T) {
+	testCases := []struct {
+		name   string
+		popup  Popup
+		region string
+		want   bool
+	}{
+		{name: "地区限制关闭", popup: Popup{OnlyMainland: 0}, region: "995|美国|0|加利福尼亚|洛杉矶|谷歌", want: true},
+		{name: "中国大陆", popup: Popup{OnlyMainland: 1}, region: "995|中国|0|上海|上海市|电信", want: true},
+		{name: "香港", popup: Popup{OnlyMainland: 1}, region: "2163|中国|0|香港|0|电讯盈科", want: false},
+		{name: "澳门", popup: Popup{OnlyMainland: 1}, region: "2164|中国|0|澳门|0|电讯", want: false},
+		{name: "台湾", popup: Popup{OnlyMainland: 1}, region: "2165|中国|0|台湾|台北市|中华电信", want: false},
+		{name: "海外", popup: Popup{OnlyMainland: 1}, region: "995|美国|0|加利福尼亚|洛杉矶|谷歌", want: false},
+		{name: "未知", popup: Popup{OnlyMainland: 1}, region: "995|0|0|0|0|0", want: false},
+		{name: "空值", popup: Popup{OnlyMainland: 1}, region: "", want: false},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			if got := testCase.popup.CanShowToIPRegion(testCase.region); got != testCase.want {
+				t.Fatalf("CanShowToIPRegion(%q) = %v, want %v", testCase.region, got, testCase.want)
+			}
+		})
+	}
+}

@@ -21,6 +21,7 @@ type Popup struct {
 	CanClose          int        `json:"can_close" gorm:"column:can_close;type:tinyint;not null;default:1;comment:是否可关闭(0=不可关闭,1=可关闭)"`
 	Status            int        `json:"status" gorm:"column:status;type:int;index:idx_popup_status;comment:状态(0=关闭,1=开启)"`
 	OnlyNewUser       int        `json:"only_new_user" gorm:"column:only_new_user;type:tinyint;not null;default:0;comment:是否仅新用户展示(0=所有用户,1=仅新用户)"`
+	OnlyMainland      int        `json:"only_mainland" gorm:"column:only_mainland;type:tinyint;not null;default:1;comment:是否仅中国大陆IP用户展示(0=所有地区,1=仅中国大陆)"`
 	NewUserHours      int        `json:"new_user_hours" gorm:"column:new_user_hours;type:int;not null;default:24;comment:新用户注册时长阈值，单位小时"`
 	MaxShowTimes      int        `json:"max_show_times" gorm:"column:max_show_times;type:int;comment:每个用户最大展示次数，0表示不限次数"`
 	MaxDailyShowTimes int        `json:"max_daily_show_times" gorm:"column:max_daily_show_times;type:int;not null;default:0;comment:每天全体用户最大展示次数，0表示不限次数"`
@@ -41,6 +42,23 @@ func (popup Popup) CanShowToRegisteredUser(registerTime time.Time, now time.Time
 		return false
 	}
 	return now.Sub(registerTime).Hours() <= float64(popup.NewUserHours)
+}
+
+func (popup Popup) CanShowToIPRegion(region string) bool {
+	if popup.OnlyMainland != 1 {
+		return true
+	}
+	parts := strings.Split(strings.TrimSpace(region), "|")
+	if len(parts) < 5 || strings.TrimSpace(parts[1]) != "中国" {
+		return false
+	}
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if strings.Contains(part, "香港") || strings.Contains(part, "澳门") || strings.Contains(part, "台湾") {
+			return false
+		}
+	}
+	return true
 }
 
 func GetEnabledPopups(now time.Time) ([]Popup, error) {

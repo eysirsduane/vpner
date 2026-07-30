@@ -39,7 +39,7 @@ func PopupHandler(c *gin.Context) {
 	}
 	clientInfo := middleware.CurrentClientInfo(c)
 	now := time.Now().In(time.Local).Truncate(time.Second)
-	popup, record, ok, err := nextPopupForUser(user.Id, user.CreateTime, clientInfo.Platform, clientInfo.Version, now)
+	popup, record, ok, err := nextPopupForUser(user.Id, user.CreateTime, clientInfo.Platform, clientInfo.Version, c.ClientIP(), now)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -85,11 +85,13 @@ func filterPopupImageURLs(values []string) []string {
 	return urls
 }
 
-func nextPopupForUser(userId int, registerTime time.Time, platform string, version string, now time.Time) (model.Popup, model.UserPopup, bool, error) {
+func nextPopupForUser(userId int, registerTime time.Time, platform string, version string, requestIP string, now time.Time) (model.Popup, model.UserPopup, bool, error) {
 	popups, err := model.GetEnabledPopups(now)
 	if err != nil {
 		return model.Popup{}, model.UserPopup{}, false, err
 	}
+	ipRegion := ""
+	ipRegionLoaded := false
 	for _, popup := range popups {
 		if !model.MatchCSVRule(popup.Platforms, platform) {
 			continue
@@ -99,6 +101,15 @@ func nextPopupForUser(userId int, registerTime time.Time, platform string, versi
 		}
 		if !popup.CanShowToRegisteredUser(registerTime, now) {
 			continue
+		}
+		if popup.OnlyMainland == 1 {
+			if !ipRegionLoaded {
+				ipRegion = loginIPRegion(requestIP)
+				ipRegionLoaded = true
+			}
+			if !popup.CanShowToIPRegion(ipRegion) {
+				continue
+			}
 		}
 		if _, ok, err := model.UserPopupCanShow(userId, popup); err != nil {
 			return model.Popup{}, model.UserPopup{}, false, err
