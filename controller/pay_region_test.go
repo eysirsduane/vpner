@@ -2,6 +2,20 @@ package controller
 
 import "testing"
 
+func TestShouldForceAppleByOverseasCanBeDisabled(t *testing.T) {
+	original := payOverseasIPConfigValue
+	payOverseasIPConfigValue = func(string, string) string { return "0" }
+	t.Cleanup(func() { payOverseasIPConfigValue = original })
+
+	matched, reason := shouldForceAppleByOverseas(payContext{regions: "995|美国|0|加利福尼亚|洛杉矶|谷歌"})
+	if matched {
+		t.Fatal("matched = true, want false when overseas IP Apple-only switch is disabled")
+	}
+	if reason != "overseas_apple_only_disabled" {
+		t.Fatalf("reason = %q, want %q", reason, "overseas_apple_only_disabled")
+	}
+}
+
 func TestIPRegionCountry(t *testing.T) {
 	testCases := []struct {
 		name    string

@@ -8,26 +8,27 @@ import (
 )
 
 const (
-	PayConfigOnlyAppleRegions  = "only_apple_regions"
-	PayConfigOnlyAppleVersions = "only_apple_versions"
-	PayConfigH5AppleAmount     = "h5_apple_amount"
-	PayConfigH5Target          = "h5_target"
-	PayConfigPaidThirdDirectH5 = "paid_third_direct_h5"
-	PayConfigOverseasAppleOnly = "overseas_apple_only"
-	PayConfigAppleVerifyMode   = "apple.verify_mode"
-	PayConfigAppleBundleId     = "apple.bundle_id"
-	PayConfigAppleIssuerId     = "apple.issuer_id"
-	PayConfigAppleKeyId        = "apple.key_id"
-	PayConfigApplePrivateKey   = "apple.private_key"
-	PayConfigAppleMockProduct  = "apple.mock_product_id"
-	PayConfigXXPayAPIURL       = "xxpay.api_url"
-	PayConfigXXPayMchId        = "xxpay.mch_id"
-	PayConfigXXPayAppId        = "xxpay.app_id"
-	PayConfigXXPayKey          = "xxpay.key"
-	PayConfigXXPayNotifyURL    = "xxpay.notify_url"
-	PayConfigXXPayReturnURL    = "xxpay.return_url"
-	PayConfigXXPayAlipayID     = "xxpay.alipay_product_id"
-	PayConfigXXPayCallbackIPs  = "xxpay.callback_ips"
+	PayConfigOnlyAppleRegions          = "only_apple_regions"
+	PayConfigOnlyAppleVersions         = "only_apple_versions"
+	PayConfigH5AppleAmount             = "h5_apple_amount"
+	PayConfigH5Target                  = "h5_target"
+	PayConfigPaidThirdDirectH5         = "paid_third_direct_h5"
+	PayConfigOverseasAppleOnly         = "overseas_apple_only"
+	PayConfigOverseasTimeZoneAppleOnly = "overseas_timezone_apple_only"
+	PayConfigAppleVerifyMode           = "apple.verify_mode"
+	PayConfigAppleBundleId             = "apple.bundle_id"
+	PayConfigAppleIssuerId             = "apple.issuer_id"
+	PayConfigAppleKeyId                = "apple.key_id"
+	PayConfigApplePrivateKey           = "apple.private_key"
+	PayConfigAppleMockProduct          = "apple.mock_product_id"
+	PayConfigXXPayAPIURL               = "xxpay.api_url"
+	PayConfigXXPayMchId                = "xxpay.mch_id"
+	PayConfigXXPayAppId                = "xxpay.app_id"
+	PayConfigXXPayKey                  = "xxpay.key"
+	PayConfigXXPayNotifyURL            = "xxpay.notify_url"
+	PayConfigXXPayReturnURL            = "xxpay.return_url"
+	PayConfigXXPayAlipayID             = "xxpay.alipay_product_id"
+	PayConfigXXPayCallbackIPs          = "xxpay.callback_ips"
 
 	legacyConfigPayOnlyAppleRegions  = "pay.only_apple_regions"
 	legacyConfigPayOnlyAppleVersions = "pay.only_apple_versions"
@@ -102,6 +103,12 @@ func InitPayConfigs() error {
 			Code:      PayConfigOverseasAppleOnly,
 			Value:     "1",
 			Remark:    "海外IP是否仅允许苹果内购(0=关闭,1=开启)",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      PayConfigOverseasTimeZoneAppleOnly,
+			Value:     "1",
+			Remark:    "海外时区是否仅允许苹果内购(0=关闭,1=开启)",
 		},
 		{
 			BaseModel: BaseModel{CreateTime: now},

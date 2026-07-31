@@ -35,6 +35,7 @@ func TestBuildLaunchOrderUsesPaymentRequestIPAndRegion(t *testing.T) {
 }
 
 func TestShouldForceAppleByTimeZone(t *testing.T) {
+	stubPayTimeZoneConfig(t, "1")
 	tests := []struct {
 		name     string
 		timeZone string
@@ -68,7 +69,20 @@ func TestShouldForceAppleByTimeZone(t *testing.T) {
 	}
 }
 
+func TestShouldForceAppleByTimeZoneCanBeDisabled(t *testing.T) {
+	stubPayTimeZoneConfig(t, "0")
+
+	matched, reason := shouldForceAppleByTimeZone(payContext{timeZone: "Europe/London"})
+	if matched {
+		t.Fatal("matched = true, want false when overseas time zone Apple-only switch is disabled")
+	}
+	if reason != "overseas_timezone_apple_only_disabled" {
+		t.Fatalf("reason = %q, want %q", reason, "overseas_timezone_apple_only_disabled")
+	}
+}
+
 func TestDecidePayLaunchPrioritizesNonMainlandTimeZone(t *testing.T) {
+	stubPayTimeZoneConfig(t, "1")
 	pack := model.Package{AppleId: "vip_month"}
 	decision, err := decidePayLaunch(payContext{
 		pack:     pack,
@@ -86,4 +100,11 @@ func TestDecidePayLaunchPrioritizesNonMainlandTimeZone(t *testing.T) {
 	if decision.reason != "non_mainland_timezone" {
 		t.Fatalf("decision.reason = %q, want %q", decision.reason, "non_mainland_timezone")
 	}
+}
+
+func stubPayTimeZoneConfig(t *testing.T, value string) {
+	t.Helper()
+	original := payTimeZoneConfigValue
+	payTimeZoneConfigValue = func(string, string) string { return value }
+	t.Cleanup(func() { payTimeZoneConfigValue = original })
 }

@@ -341,6 +341,9 @@ func decidePayLaunch(ctx payContext) (payLaunchDecision, error) {
 // shouldForceAppleByTimeZone 判断客户端是否明确处于中国大陆时区。
 // 未传时区时无法确认用户位于中国大陆，因此按非大陆时区处理。
 func shouldForceAppleByTimeZone(ctx payContext) (bool, string) {
+	if strings.TrimSpace(payTimeZoneConfigValue(model.PayConfigOverseasTimeZoneAppleOnly, "1")) != "1" {
+		return false, "overseas_timezone_apple_only_disabled"
+	}
 	timeZone := strings.ToLower(strings.TrimSpace(ctx.timeZone))
 	switch timeZone {
 	case "asia/shanghai",
@@ -356,9 +359,11 @@ func shouldForceAppleByTimeZone(ctx payContext) (bool, string) {
 	}
 }
 
+var payTimeZoneConfigValue = model.PayConfigValue
+
 // shouldForceAppleByOverseas 判断非中国 IP 是否仅允许苹果内购
 func shouldForceAppleByOverseas(ctx payContext) (bool, string) {
-	if strings.TrimSpace(model.PayConfigValue(model.PayConfigOverseasAppleOnly, "1")) != "1" {
+	if strings.TrimSpace(payOverseasIPConfigValue(model.PayConfigOverseasAppleOnly, "1")) != "1" {
 		return false, "overseas_apple_only_disabled"
 	}
 	country := ipRegionCountry(ctx.regions)
@@ -367,6 +372,8 @@ func shouldForceAppleByOverseas(ctx payContext) (bool, string) {
 	}
 	return true, "overseas_region:" + country
 }
+
+var payOverseasIPConfigValue = model.PayConfigValue
 
 func ipRegionCountry(region string) string {
 	parts := strings.Split(strings.TrimSpace(region), "|")
