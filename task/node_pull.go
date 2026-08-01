@@ -2,23 +2,49 @@ package task
 
 import (
 	"log"
+	"strconv"
+	"strings"
 	"time"
 
 	"just-vpn/model"
 )
 
-const nodePullInterval = 5 * time.Minute
+const (
+	defaultNodePullInterval       = 5 * time.Minute
+	nodePullIntervalCheckInterval = time.Second
+)
 
-// StartNodePullTask 启动节点订阅同步任务，启动后立即执行，之后每五分钟执行一次
+// StartNodePullTask 启动节点订阅同步任务，启动后立即执行，之后按配置间隔执行
 func StartNodePullTask() {
 	go func() {
 		runNodePull()
-		ticker := time.NewTicker(nodePullInterval)
+		lastPullTime := time.Now()
+		ticker := time.NewTicker(nodePullIntervalCheckInterval)
 		defer ticker.Stop()
-		for range ticker.C {
+		for now := range ticker.C {
+			if now.Sub(lastPullTime) < configuredNodePullInterval() {
+				continue
+			}
 			runNodePull()
+			lastPullTime = time.Now()
 		}
 	}()
+}
+
+func configuredNodePullInterval() time.Duration {
+	return parseNodePullInterval(model.ConfigValue(model.ConfigNodePullIntervalSeconds, "300"))
+}
+
+func parseNodePullInterval(value string) time.Duration {
+	seconds, err := strconv.ParseUint(strings.TrimSpace(value), 10, 64)
+	if err != nil || seconds == 0 {
+		return defaultNodePullInterval
+	}
+	interval, err := time.ParseDuration(strconv.FormatUint(seconds, 10) + "s")
+	if err != nil || interval <= 0 {
+		return defaultNodePullInterval
+	}
+	return interval
 }
 
 func runNodePull() {

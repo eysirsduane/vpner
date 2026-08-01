@@ -21,6 +21,7 @@ const (
 	ConfigToolMessageEnabled         = "tool.message_enabled"
 	ConfigNodeLinkAESKey             = "node.link_aes_key"
 	ConfigNodePullURL                = "node.pull_url"
+	ConfigNodePullIntervalSeconds    = "node.pull_interval_seconds"
 	ConfigNodeReviewVersions         = "node.review_versions"
 	ConfigNodeReviewLink             = "node.review_link"
 	ConfigSkipProxyDomains           = "skip_proxy_domains"
@@ -140,6 +141,12 @@ func InitConfigs() error {
 			Code:      ConfigNodePullURL,
 			Value:     "",
 			Remark:    "节点订阅拉取地址，留空表示不自动同步",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigNodePullIntervalSeconds,
+			Value:     "300",
+			Remark:    "节点拉取时间间隔，单位秒，无效或非正数时使用300秒",
 		},
 		{
 			BaseModel: BaseModel{CreateTime: now},
