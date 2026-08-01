@@ -39,6 +39,8 @@ type InternalReportStatsResult struct {
 	NewUsers         int64   `json:"new_users"`
 	ConnectBaseUsers int64   `json:"connect_base_users"`
 	ConnectedUsers   int64   `json:"connected_users"`
+	CreatedOrders    int64   `json:"created_orders"`
+	PaidOrders       int64   `json:"paid_orders"`
 	TotalIncome      float64 `json:"total_income"`
 	AppleIncome      float64 `json:"apple_income"`
 	ThirdPartyIncome float64 `json:"third_party_income"`
@@ -264,6 +266,9 @@ func queryInternalReportStats(start, end time.Time) (InternalReportStatsResult, 
 		}
 	}
 
+	if err := queryInternalReportPaymentStats(start, end, &result); err != nil {
+		return result, err
+	}
 	if err := queryInternalReportIncome(start, end, &result); err != nil {
 		return result, err
 	}
@@ -443,6 +448,24 @@ WHERE u.id IN ?
 		result.ConnectBaseUsers += connectBaseUsers
 		result.ConnectedUsers += connectedUsers
 	}
+	return nil
+}
+
+func queryInternalReportPaymentStats(start, end time.Time, result *InternalReportStatsResult) error {
+	var createdOrders, paidOrders int64
+	if err := model.DB.Raw(`
+SELECT
+  COUNT(*) AS created_orders,
+  COALESCE(SUM(CASE WHEN pay_status = 3 THEN 1 ELSE 0 END), 0) AS paid_orders
+FROM `+"`order`"+`
+WHERE create_time >= ?
+  AND create_time < ?
+`, start, end).Row().Scan(&createdOrders, &paidOrders); err != nil {
+		return err
+	}
+
+	result.CreatedOrders = createdOrders
+	result.PaidOrders = paidOrders
 	return nil
 }
 
