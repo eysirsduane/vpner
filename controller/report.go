@@ -455,12 +455,16 @@ func queryInternalReportPaymentStats(start, end time.Time, result *InternalRepor
 	var createdOrders, paidOrders int64
 	if err := model.DB.Raw(`
 SELECT
-  COUNT(*) AS created_orders,
-  COALESCE(SUM(CASE WHEN pay_status = 3 THEN 1 ELSE 0 END), 0) AS paid_orders
-FROM `+"`order`"+`
-WHERE create_time >= ?
-  AND create_time < ?
-`, start, end).Row().Scan(&createdOrders, &paidOrders); err != nil {
+  COUNT(DISTINCT o.uid) AS created_orders,
+  COUNT(DISTINCT CASE WHEN o.pay_status = 3 THEN o.uid END) AS paid_orders
+FROM `+"`order`"+` o
+INNER JOIN `+"`user`"+` u
+  ON u.id = o.uid
+  AND u.create_time >= ?
+  AND u.create_time < ?
+WHERE o.create_time >= ?
+  AND o.create_time < ?
+`, start, end, start, end).Row().Scan(&createdOrders, &paidOrders); err != nil {
 		return err
 	}
 
