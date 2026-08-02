@@ -53,7 +53,7 @@ func TestNormalizeNodeSubscriptionItemsKeepsLatestItemByAddress(t *testing.T) {
 
 func TestBuildNodeSubscriptionSyncPlanMatchesAddressAndUpdatesAllFields(t *testing.T) {
 	nodes := []nodeSubscriptionItem{
-		{IP: "same.example.com", Content: "anytls://new", Code: "US", CodeName: "美国", NodeType: "anytls"},
+		{IP: "same.example.com", Content: "anytls://new", Code: "US", CodeName: "美国", NodeType: "anytls", IncludeAuto: 1},
 		{IP: "fresh.example.com", Content: "vmess://fresh", Code: "AUTO", CodeName: "自动", NodeType: "vmess"},
 	}
 	existing := []Node{
@@ -73,12 +73,13 @@ func TestBuildNodeSubscriptionSyncPlanMatchesAddressAndUpdatesAllFields(t *testi
 	}
 	fields := plan.Updates[0].Fields
 	wantFields := map[string]interface{}{
-		"code":      "US",
-		"code_name": "美国",
-		"node_type": "anytls",
-		"link_url":  "anytls://new",
-		"address":   "same.example.com",
-		"name":      "美国节点",
+		"code":         "US",
+		"code_name":    "美国",
+		"include_auto": 1,
+		"node_type":    "anytls",
+		"link_url":     "anytls://new",
+		"address":      "same.example.com",
+		"name":         "美国节点",
 	}
 	for key, want := range wantFields {
 		if got := fields[key]; got != want {
@@ -100,7 +101,8 @@ func TestParseNodeSubscriptionResponseFromDispatch(t *testing.T) {
       "content": "vmess://example",
       "code": "HK",
       "code_name": "香港",
-      "node_type": "vmess"
+      "node_type": "vmess",
+      "include_auto": 1
     }]
   }
 }`))
@@ -108,7 +110,18 @@ func TestParseNodeSubscriptionResponseFromDispatch(t *testing.T) {
 		t.Fatalf("parseNodeSubscriptionResponse() = %#v, %v", nodes, err)
 	}
 	got := nodes[0]
-	if got.IP != "47.245.116.113" || got.Content != "vmess://example" || got.Code != "HK" || got.CodeName != "香港" || got.NodeType != "vmess" {
+	if got.IP != "47.245.116.113" || got.Content != "vmess://example" || got.Code != "HK" || got.CodeName != "香港" || got.NodeType != "vmess" || got.IncludeAuto != 1 {
 		t.Fatalf("unexpected node: %#v", got)
+	}
+}
+
+func TestNodeForRequestedCodeUsesAutomaticRouteWithoutChangingPhysicalCountry(t *testing.T) {
+	node := Node{Code: "HK", CodeName: "香港", Name: "香港节点", IncludeAuto: 1}
+	got := nodeForRequestedCode(node, "AUTO")
+	if got.Code != "AUTO" || got.CodeName != nodeSubscriptionName || got.Name != nodeSubscriptionName+"节点" {
+		t.Fatalf("automatic route node = %#v", got)
+	}
+	if node.Code != "HK" || node.CodeName != "香港" {
+		t.Fatalf("physical node was mutated: %#v", node)
 	}
 }

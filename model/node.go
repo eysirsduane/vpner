@@ -21,6 +21,7 @@ type Node struct {
 	BaseModel
 	Code             string     `json:"code" gorm:"column:code;type:varchar(64);comment:所属国家代码"`
 	CodeName         string     `json:"code_name" gorm:"column:code_name;type:varchar(128);comment:所属国家名称"`
+	IncludeAuto      int        `json:"include_auto" gorm:"column:include_auto;type:tinyint;not null;default:0;index;comment:是否同时参与自动线路 1是 0否"`
 	Name             string     `json:"name" gorm:"column:name;type:varchar(128);comment:节点名称"`
 	NodeType         string     `json:"node_type" gorm:"column:node_type;type:varchar(32);comment:节点类型"`
 	LinkUrl          string     `json:"link_url" gorm:"column:link_url;type:text;comment:链接地址或JSON节点数据"`
@@ -70,7 +71,13 @@ func InvalidateAvailableNodeCache() {
 
 func GetAvailableNodesByCodeFromDB(code string) ([]Node, error) {
 	var nodes []Node
-	err := DB.Where("code = ?", code).Where("status = ?", NodeStatusEnabled).Order("id ASC").Find(&nodes).Error
+	query := DB.Where("status = ?", NodeStatusEnabled)
+	if code == nodeSubscriptionCode {
+		query = query.Where("(code = ? OR include_auto = ?)", nodeSubscriptionCode, 1)
+	} else {
+		query = query.Where("code = ?", code)
+	}
+	err := query.Order("id ASC").Find(&nodes).Error
 	return nodes, err
 }
 
@@ -122,6 +129,7 @@ func SelectNodeByOnlineCount(nodes []Node) (Node, bool) {
 }
 
 func GetAvailableNode(code string) (Node, error) {
+	code = strings.ToUpper(strings.TrimSpace(code))
 	nodes, err := GetAvailableNodesByCode(code)
 	if err != nil {
 		return Node{}, err
@@ -136,7 +144,16 @@ func GetAvailableNode(code string) (Node, error) {
 	if !ok {
 		return Node{}, gorm.ErrRecordNotFound
 	}
-	return node, nil
+	return nodeForRequestedCode(node, code), nil
+}
+
+func nodeForRequestedCode(node Node, requestedCode string) Node {
+	if strings.EqualFold(strings.TrimSpace(requestedCode), nodeSubscriptionCode) && !strings.EqualFold(node.Code, nodeSubscriptionCode) {
+		node.Code = nodeSubscriptionCode
+		node.CodeName = nodeSubscriptionName
+		node.Name = nodeSubscriptionName + "节点"
+	}
+	return node
 }
 
 func AddNodeTodayActiveCount(id int) error {

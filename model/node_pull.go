@@ -30,11 +30,12 @@ type NodeSubscriptionSyncResult struct {
 }
 
 type nodeSubscriptionItem struct {
-	IP       string `json:"ip"`
-	Content  string `json:"content"`
-	Code     string `json:"code"`
-	CodeName string `json:"code_name"`
-	NodeType string `json:"node_type"`
+	IP          string `json:"ip"`
+	Content     string `json:"content"`
+	Code        string `json:"code"`
+	CodeName    string `json:"code_name"`
+	IncludeAuto int    `json:"include_auto"`
+	NodeType    string `json:"node_type"`
 }
 
 type nodeDispatchPullResponse struct {
@@ -142,6 +143,9 @@ func normalizeNodeSubscriptionItems(items []nodeSubscriptionItem) []nodeSubscrip
 			item.CodeName = nodeSubscriptionName
 		}
 		item.NodeType = strings.TrimSpace(item.NodeType)
+		if item.IncludeAuto != 1 || item.Code == nodeSubscriptionCode {
+			item.IncludeAuto = 0
+		}
 		if item.NodeType == "" && strings.Contains(item.Content, "://") {
 			item.NodeType, _, _ = nodeSubscriptionMetadata(item.Content)
 		}
@@ -269,19 +273,21 @@ func buildNodeSubscriptionSyncPlan(nodes []nodeSubscriptionItem, existing []Node
 		node, exists := existingByAddress[item.IP]
 		if !exists {
 			plan.NewNodes = append(plan.NewNodes, Node{
-				Code:     item.Code,
-				CodeName: item.CodeName,
-				Name:     name,
-				NodeType: item.NodeType,
-				LinkUrl:  item.Content,
-				Address:  item.IP,
-				Status:   NodeStatusEnabled,
+				Code:        item.Code,
+				CodeName:    item.CodeName,
+				IncludeAuto: item.IncludeAuto,
+				Name:        name,
+				NodeType:    item.NodeType,
+				LinkUrl:     item.Content,
+				Address:     item.IP,
+				Status:      NodeStatusEnabled,
 			})
 			continue
 		}
 		plan.ActivateIDs = append(plan.ActivateIDs, node.Id)
 		if node.Code == item.Code &&
 			node.CodeName == item.CodeName &&
+			node.IncludeAuto == item.IncludeAuto &&
 			node.NodeType == item.NodeType &&
 			node.Address == item.IP &&
 			node.Name == name &&
@@ -291,12 +297,13 @@ func buildNodeSubscriptionSyncPlan(nodes []nodeSubscriptionItem, existing []Node
 		plan.Updates = append(plan.Updates, nodeSubscriptionUpdate{
 			ID: node.Id,
 			Fields: map[string]interface{}{
-				"code":      item.Code,
-				"code_name": item.CodeName,
-				"node_type": item.NodeType,
-				"link_url":  item.Content,
-				"address":   item.IP,
-				"name":      name,
+				"code":         item.Code,
+				"code_name":    item.CodeName,
+				"include_auto": item.IncludeAuto,
+				"node_type":    item.NodeType,
+				"link_url":     item.Content,
+				"address":      item.IP,
+				"name":         name,
 			},
 		})
 	}
