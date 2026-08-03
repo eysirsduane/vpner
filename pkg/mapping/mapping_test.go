@@ -657,3 +657,59 @@ func TestMapSwaggerCurrentDocsUsesConfiguredMapping(t *testing.T) {
 		}
 	}
 }
+
+func TestMapSwaggerCurrentDocsHasNoUnmappedClientResponseRefs(t *testing.T) {
+	var doc map[string]interface{}
+	if err := json.Unmarshal(MapSwagger(docs.SwaggerInfo.ReadDoc()), &doc); err != nil {
+		t.Fatalf("unmarshal mapped current swagger: %v", err)
+	}
+
+	paths, _ := doc["paths"].(map[string]interface{})
+	serverOnlyRoutes := map[string]bool{
+		"/api/v1/pay/apple_callback": true,
+		"/api/v1/pay/xx_callback":    true,
+	}
+	for originalPath, route := range RouteConfig.Routes {
+		if serverOnlyRoutes[originalPath] {
+			continue
+		}
+		path, ok := paths[swaggerWildcardPath(route.Path)].(map[string]interface{})
+		if !ok {
+			t.Fatalf("expected mapped client path %s", route.Path)
+		}
+		for method, operationValue := range path {
+			operation, ok := operationValue.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			responses, ok := operation["responses"]
+			if !ok {
+				continue
+			}
+			if ref := firstSwaggerRef(responses); ref != "" {
+				t.Fatalf("mapped client response %s %s still contains unmapped schema reference %s", strings.ToUpper(method), route.Path, ref)
+			}
+		}
+	}
+}
+
+func firstSwaggerRef(value interface{}) string {
+	switch item := value.(type) {
+	case map[string]interface{}:
+		if ref, _ := item["$ref"].(string); ref != "" {
+			return ref
+		}
+		for _, nested := range item {
+			if ref := firstSwaggerRef(nested); ref != "" {
+				return ref
+			}
+		}
+	case []interface{}:
+		for _, nested := range item {
+			if ref := firstSwaggerRef(nested); ref != "" {
+				return ref
+			}
+		}
+	}
+	return ""
+}

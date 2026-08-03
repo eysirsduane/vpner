@@ -170,7 +170,10 @@
       "response": {
         "code": "code",
         "msg": "msg",
-        "result": "result"
+        "result": {
+          "$field": "result",
+          "token": "token"
+        }
       }
     },
     "/api/v1/change_password": {
