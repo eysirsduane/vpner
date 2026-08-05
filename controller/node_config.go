@@ -27,10 +27,9 @@ type NodeConfigResponse struct {
 }
 
 type nodeConfigOutbound struct {
-	Value     map[string]interface{}
-	Host      string
-	Domain    string
-	ProxyOnly bool
+	Value  map[string]interface{}
+	Host   string
+	Domain string
 }
 
 // NodeConfigHandler 获取客户端 JSON 节点配置
@@ -103,11 +102,6 @@ func buildNodeClientConfig(link, configType string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	outbounds := []interface{}{outbound.Value}
-	if !outbound.ProxyOnly {
-		outbounds = append(outbounds, fixedNodeOutbound("direct"), fixedNodeOutbound("block"), fixedNodeOutbound("dns"))
-	}
-
 	config := map[string]interface{}{
 		"inbounds": []interface{}{map[string]interface{}{
 			"sniff":          true,
@@ -122,7 +116,7 @@ func buildNodeClientConfig(link, configType string) (string, error) {
 		}},
 		"dns":       buildNodeConfigDNS(outbound.Domain, configType),
 		"log":       map[string]interface{}{"level": "debug", "timestamp": true, "output": "singboxlog.log"},
-		"outbounds": outbounds,
+		"outbounds": []interface{}{outbound.Value, fixedNodeOutbound("direct"), fixedNodeOutbound("block"), fixedNodeOutbound("dns")},
 		"route":     buildNodeConfigRoute(outbound.Host, outbound.Domain, configType),
 	}
 
@@ -364,7 +358,7 @@ func parseChimneyConfigOutbound(parsed *url.URL) (nodeConfigOutbound, error) {
 		"protocol": "chimney",
 		"settings": settings,
 	}
-	return nodeConfigOutbound{Value: proxy, Host: host, Domain: nodeConfigDomain(host), ProxyOnly: true}, nil
+	return nodeConfigOutbound{Value: proxy, Host: host, Domain: nodeConfigDomain(host)}, nil
 }
 
 func splitChimneyNodeConfigSNIs(value string) []string {

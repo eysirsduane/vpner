@@ -106,7 +106,10 @@ func TestBuildNodeClientConfigChimney(t *testing.T) {
 				"connectTimeoutMs":10000,
 				"handshakeTimeoutMs":10000
 			}
-		}
+		},
+		{"tag":"direct","type":"direct"},
+		{"tag":"block","type":"block"},
+		{"tag":"dns_out","type":"dns"}
 	]`
 	var expected interface{}
 	if err := json.Unmarshal([]byte(expectedJSON), &expected); err != nil {
