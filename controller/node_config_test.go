@@ -2,11 +2,13 @@ package controller
 
 import (
 	"encoding/json"
+	"reflect"
 	"testing"
 )
 
 const nodeConfigVLESSTestURL = "vless://1c95dc1f-c0a2-4557-b0b5-6f8dff000016@38.180.188.71:443?flow=xtls-rprx-vision&security=tls&sni=www.digicert.com&fp=chrome&alpn=h2&insecure=1&pcs=C6BDD94AFC8B7D7223DBC3FE57A246F2FC7B09750113976733E4ADC437FB5E91"
 const nodeConfigAnyTLSDomainTestURL = "anytls://password@example.com:443?security=tls&sni=cdn.example.com&fp=chrome&alpn=h2"
+const nodeConfigChimneyTestURL = "chimney://123a48fd-9a6b-4a6d-8801-97288e665bed@ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn?security=tls&sni=www.cloudflare.com+developers.cloudflare.com+dash.cloudflare.com+community.cloudflare.com+ot.www.cloudflare.com+static.cloudflareinsights.com&fp=chrome&tagLen=16&poolSize=4&tcpBufferSize=65536&connectTimeoutMs=10000&handshakeTimeoutMs=10000#123456"
 
 func TestBuildNodeClientConfigFastWithIPNode(t *testing.T) {
 	config, err := buildNodeClientConfig(nodeConfigVLESSTestURL, nodeConfigTypeFast)
@@ -69,6 +71,52 @@ func TestBuildNodeClientConfigGlobalWithDomainNode(t *testing.T) {
 	routeRules := route["rules"].([]interface{})
 	if routeRules[1].(map[string]interface{})["domain"].([]interface{})[0] != "example.com" {
 		t.Fatalf("unexpected route domain rule: %#v", routeRules[1])
+	}
+}
+
+func TestBuildNodeClientConfigChimney(t *testing.T) {
+	config, err := buildNodeClientConfig(nodeConfigChimneyTestURL, nodeConfigTypeFast)
+	if err != nil {
+		t.Fatalf("buildNodeClientConfig returned error: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(config), &result); err != nil {
+		t.Fatalf("unmarshal config: %v", err)
+	}
+	const expectedJSON = `[
+		{
+			"tag":"proxy",
+			"protocol":"chimney",
+			"settings":{
+				"relayAddr":"ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn:4435",
+				"snis":[
+					"www.cloudflare.com",
+					"developers.cloudflare.com",
+					"dash.cloudflare.com",
+					"community.cloudflare.com",
+					"ot.www.cloudflare.com",
+					"static.cloudflareinsights.com"
+				],
+				"userId":"123a48fd-9a6b-4a6d-8801-97288e665bed",
+				"tagLen":16,
+				"fingerprint":"chrome",
+				"poolSize":4,
+				"tcpBufferSize":65536,
+				"connectTimeoutMs":10000,
+				"handshakeTimeoutMs":10000
+			}
+		}
+	]`
+	var expected interface{}
+	if err := json.Unmarshal([]byte(expectedJSON), &expected); err != nil {
+		t.Fatalf("unmarshal expected outbounds: %v", err)
+	}
+	if !reflect.DeepEqual(result["outbounds"], expected) {
+		t.Fatalf("unexpected Chimney outbounds\ngot:  %#v\nwant: %#v", result["outbounds"], expected)
+	}
+	if result["dns"] == nil || result["route"] == nil || result["inbounds"] == nil {
+		t.Fatal("Chimney config must retain the shared DNS, route and inbound sections")
 	}
 }
 

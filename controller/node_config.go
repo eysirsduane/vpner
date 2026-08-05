@@ -27,9 +27,10 @@ type NodeConfigResponse struct {
 }
 
 type nodeConfigOutbound struct {
-	Value  map[string]interface{}
-	Host   string
-	Domain string
+	Value     map[string]interface{}
+	Host      string
+	Domain    string
+	ProxyOnly bool
 }
 
 // NodeConfigHandler 获取客户端 JSON 节点配置
@@ -102,6 +103,10 @@ func buildNodeClientConfig(link, configType string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	outbounds := []interface{}{outbound.Value}
+	if !outbound.ProxyOnly {
+		outbounds = append(outbounds, fixedNodeOutbound("direct"), fixedNodeOutbound("block"), fixedNodeOutbound("dns"))
+	}
 
 	config := map[string]interface{}{
 		"inbounds": []interface{}{map[string]interface{}{
@@ -117,7 +122,7 @@ func buildNodeClientConfig(link, configType string) (string, error) {
 		}},
 		"dns":       buildNodeConfigDNS(outbound.Domain, configType),
 		"log":       map[string]interface{}{"level": "debug", "timestamp": true, "output": "singboxlog.log"},
-		"outbounds": []interface{}{outbound.Value, fixedNodeOutbound("direct"), fixedNodeOutbound("block"), fixedNodeOutbound("dns")},
+		"outbounds": outbounds,
 		"route":     buildNodeConfigRoute(outbound.Host, outbound.Domain, configType),
 	}
 
@@ -215,6 +220,8 @@ func parseNodeConfigOutbound(link string) (nodeConfigOutbound, error) {
 		return parseVLESSConfigOutbound(parsed)
 	case "vmess":
 		return parseVMessConfigOutbound(trimmed)
+	case "chimney":
+		return parseChimneyConfigOutbound(parsed)
 	default:
 		return nodeConfigOutbound{}, fmt.Errorf("unsupported node protocol")
 	}
@@ -309,6 +316,68 @@ func parseVMessConfigOutbound(link string) (nodeConfigOutbound, error) {
 		}
 	}
 	return nodeConfigOutbound{Value: proxy, Host: host, Domain: nodeConfigDomain(host)}, nil
+}
+
+func parseChimneyConfigOutbound(parsed *url.URL) (nodeConfigOutbound, error) {
+	if parsed.User == nil || strings.TrimSpace(parsed.User.Username()) == "" {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney user id is required")
+	}
+	host := strings.TrimSpace(parsed.Hostname())
+	if host == "" {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney server is required")
+	}
+	port := 4435
+	if rawPort := strings.TrimSpace(parsed.Port()); rawPort != "" {
+		parsedPort, err := strconv.Atoi(rawPort)
+		if err != nil || parsedPort <= 0 || parsedPort > 65535 {
+			return nodeConfigOutbound{}, fmt.Errorf("chimney port is invalid")
+		}
+		port = parsedPort
+	}
+
+	query := parsed.Query()
+	snis := splitChimneyNodeConfigSNIs(query.Get("sni"))
+	if len(snis) == 0 {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney sni is required")
+	}
+	fingerprint := strings.TrimSpace(query.Get("fp"))
+	if fingerprint == "" {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney fingerprint is required")
+	}
+
+	settings := map[string]interface{}{
+		"relayAddr":   net.JoinHostPort(host, strconv.Itoa(port)),
+		"snis":        snis,
+		"userId":      strings.TrimSpace(parsed.User.Username()),
+		"fingerprint": fingerprint,
+	}
+	for _, field := range []string{"tagLen", "poolSize", "tcpBufferSize", "connectTimeoutMs", "handshakeTimeoutMs"} {
+		value, err := positiveNodeConfigQueryInt(query, field)
+		if err != nil {
+			return nodeConfigOutbound{}, fmt.Errorf("chimney %s is invalid", field)
+		}
+		settings[field] = value
+	}
+
+	proxy := map[string]interface{}{
+		"tag":      "proxy",
+		"protocol": "chimney",
+		"settings": settings,
+	}
+	return nodeConfigOutbound{Value: proxy, Host: host, Domain: nodeConfigDomain(host), ProxyOnly: true}, nil
+}
+
+func splitChimneyNodeConfigSNIs(value string) []string {
+	value = strings.NewReplacer("+", " ", ",", " ").Replace(value)
+	return strings.Fields(value)
+}
+
+func positiveNodeConfigQueryInt(query url.Values, field string) (int, error) {
+	value, err := strconv.Atoi(strings.TrimSpace(query.Get(field)))
+	if err != nil || value <= 0 {
+		return 0, fmt.Errorf("invalid positive integer")
+	}
+	return value, nil
 }
 
 func parseNodeHostPort(parsed *url.URL) (string, int, error) {
