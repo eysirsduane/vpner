@@ -64,7 +64,6 @@ type loginParams struct {
 }
 
 type changePasswordParams struct {
-	OldPassword string
 	NewPassword string
 }
 
@@ -95,7 +94,6 @@ type LoginRequest struct {
 }
 
 type ChangePasswordRequest struct {
-	OldPassword string `json:"old_password" binding:"required" example:"pass001"`
 	NewPassword string `json:"new_password" binding:"required" example:"pass002"`
 }
 
@@ -275,7 +273,6 @@ func getLoginParams(body map[string]interface{}) loginParams {
 func getChangePasswordParams(body map[string]interface{}) changePasswordParams {
 	const originalPath = "/api/v1/change_password"
 	return changePasswordParams{
-		OldPassword: getMappedBodyString(body, originalPath, "old_password", ""),
 		NewPassword: getMappedBodyString(body, originalPath, "new_password", ""),
 	}
 }
@@ -1347,7 +1344,7 @@ func configuredMaxLoginDevices(value string) int {
 
 // ChangePasswordHandler 修改密码
 // @Summary 修改密码
-// @Description 当前登录账号校验旧密码后修改账号密码
+// @Description 当前登录账号无需提交旧密码，直接设置新密码
 // @Tags 账号
 // @Accept json
 // @Produce json
@@ -1373,16 +1370,8 @@ func ChangePasswordHandler(c *gin.Context) {
 	}
 
 	params := getChangePasswordParams(body)
-	if msg := validatePassword(params.OldPassword, "old_password"); msg != "" {
-		JsonReturn(c, CodeError, msg, nil)
-		return
-	}
 	if msg := validatePassword(params.NewPassword, "new_password"); msg != "" {
 		JsonReturn(c, CodeError, msg, nil)
-		return
-	}
-	if params.OldPassword == params.NewPassword {
-		JsonReturn(c, CodeError, "new_password must be different", nil)
 		return
 	}
 
@@ -1395,8 +1384,8 @@ func ChangePasswordHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	if account.Password != params.OldPassword {
-		JsonReturn(c, CodeError, "old_password error", nil)
+	if account.Password == params.NewPassword {
+		JsonReturn(c, CodeError, "new_password must be different", nil)
 		return
 	}
 

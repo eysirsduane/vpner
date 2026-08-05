@@ -179,7 +179,6 @@
     "/api/v1/change_password": {
       "path": "/api/v1/change_password",
       "request": {
-        "old_password": "old_password",
         "new_password": "new_password"
       },
       "response": {

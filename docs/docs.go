@@ -108,7 +108,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "当前登录账号校验旧密码后修改账号密码",
+                "description": "当前登录账号无需提交旧密码，直接设置新密码",
                 "consumes": [
                     "application/json"
                 ],
@@ -1577,17 +1577,12 @@ const docTemplate = `{
         "controller.ChangePasswordRequest": {
             "type": "object",
             "required": [
-                "new_password",
-                "old_password"
+                "new_password"
             ],
             "properties": {
                 "new_password": {
                     "type": "string",
                     "example": "pass002"
-                },
-                "old_password": {
-                    "type": "string",
-                    "example": "pass001"
                 }
             }
         },

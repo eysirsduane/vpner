@@ -295,10 +295,11 @@ POST /api/v1/change_password
 
 ```json
 {
-  "old_password": "pass001",
   "new_password": "pass002"
 }
 ```
+
+当前登录账号无需提交旧密码；新密码不能与当前密码相同。
 
 ### 获取设备列表
 

@@ -5,7 +5,24 @@ import (
 	"time"
 
 	"just-vpn/model"
+	"just-vpn/pkg/mapping"
 )
+
+func TestGetChangePasswordParamsOnlyUsesNewPassword(t *testing.T) {
+	const originalPath = "/api/v1/change_password"
+	fields := mapping.RequestFields(originalPath)
+	if _, exists := fields["old_password"]; exists {
+		t.Fatal("change password mapping must not expose old_password")
+	}
+
+	newPasswordField := mapping.RequestField(originalPath, "new_password")
+	params := getChangePasswordParams(map[string]interface{}{
+		newPasswordField: "333333",
+	})
+	if params.NewPassword != "333333" {
+		t.Fatalf("NewPassword = %q, want %q", params.NewPassword, "333333")
+	}
+}
 
 func TestCSVContainsExact(t *testing.T) {
 	tests := []struct {
