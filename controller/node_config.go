@@ -142,7 +142,7 @@ func buildNodeConfigDNS(domain, configType string) map[string]interface{} {
 
 	dns := map[string]interface{}{
 		"servers": []interface{}{
-			map[string]interface{}{"strategy": "prefer_ipv4", "detour": "proxy", "address_strategy": "prefer_ipv4", "tag": "dns_proxy", "address": "tcp://8.8.8.8"},
+			map[string]interface{}{"strategy": "prefer_ipv4", "detour": "proxy", "address_strategy": "prefer_ipv4", "tag": "dns_proxy", "address": "1.1.1.1"},
 			map[string]interface{}{"strategy": "prefer_ipv4", "detour": "direct", "address_strategy": "prefer_ipv4", "tag": "dns_local", "address": "223.5.5.5"},
 			map[string]interface{}{"tag": "dns_block", "address": "rcode://refused"},
 		},
