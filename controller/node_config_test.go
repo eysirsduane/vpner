@@ -86,27 +86,25 @@ func TestBuildNodeClientConfigChimney(t *testing.T) {
 	}
 	const expectedJSON = `[
 		{
+			"type":"chimney",
 			"tag":"proxy",
-			"protocol":"chimney",
-			"settings":{
-				"relayAddr":"ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn",
-				"server_port":443,
-				"snis":[
-					"www.cloudflare.com",
-					"developers.cloudflare.com",
-					"dash.cloudflare.com",
-					"community.cloudflare.com",
-					"ot.www.cloudflare.com",
-					"static.cloudflareinsights.com"
-				],
-				"userId":"123a48fd-9a6b-4a6d-8801-97288e665bed",
-				"tagLen":16,
-				"fingerprint":"chrome",
-				"poolSize":4,
-				"tcpBufferSize":65536,
-				"connectTimeoutMs":10000,
-				"handshakeTimeoutMs":10000
-			}
+			"server":"ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn",
+			"server_port":443,
+			"snis":[
+				"www.cloudflare.com",
+				"developers.cloudflare.com",
+				"dash.cloudflare.com",
+				"community.cloudflare.com",
+				"ot.www.cloudflare.com",
+				"static.cloudflareinsights.com"
+			],
+			"user_id":"123a48fd-9a6b-4a6d-8801-97288e665bed",
+			"fingerprint":"chrome",
+			"tag_len":16,
+			"pool_size":4,
+			"tcp_buffer_size":65536,
+			"connect_timeout":"10s",
+			"handshake_timeout":"10s"
 		},
 		{"tag":"direct","type":"direct"},
 		{"tag":"block","type":"block"},

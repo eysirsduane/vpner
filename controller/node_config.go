@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -335,25 +336,40 @@ func parseChimneyConfigOutbound(parsed *url.URL) (nodeConfigOutbound, error) {
 		return nodeConfigOutbound{}, fmt.Errorf("chimney fingerprint is required")
 	}
 
-	settings := map[string]interface{}{
-		"relayAddr":   host,
-		"server_port": port,
-		"snis":        snis,
-		"userId":      strings.TrimSpace(parsed.User.Username()),
-		"fingerprint": fingerprint,
+	tagLen, err := positiveNodeConfigQueryInt(query, "tagLen")
+	if err != nil {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney tagLen is invalid")
 	}
-	for _, field := range []string{"tagLen", "poolSize", "tcpBufferSize", "connectTimeoutMs", "handshakeTimeoutMs"} {
-		value, err := positiveNodeConfigQueryInt(query, field)
-		if err != nil {
-			return nodeConfigOutbound{}, fmt.Errorf("chimney %s is invalid", field)
-		}
-		settings[field] = value
+	poolSize, err := positiveNodeConfigQueryInt(query, "poolSize")
+	if err != nil {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney poolSize is invalid")
+	}
+	tcpBufferSize, err := positiveNodeConfigQueryInt(query, "tcpBufferSize")
+	if err != nil {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney tcpBufferSize is invalid")
+	}
+	connectTimeout, err := positiveNodeConfigQueryDuration(query, "connectTimeoutMs")
+	if err != nil {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney connectTimeoutMs is invalid")
+	}
+	handshakeTimeout, err := positiveNodeConfigQueryDuration(query, "handshakeTimeoutMs")
+	if err != nil {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney handshakeTimeoutMs is invalid")
 	}
 
 	proxy := map[string]interface{}{
-		"tag":      "proxy",
-		"protocol": "chimney",
-		"settings": settings,
+		"type":              "chimney",
+		"tag":               "proxy",
+		"server":            host,
+		"server_port":       port,
+		"snis":              snis,
+		"user_id":           strings.TrimSpace(parsed.User.Username()),
+		"fingerprint":       fingerprint,
+		"tag_len":           tagLen,
+		"pool_size":         poolSize,
+		"tcp_buffer_size":   tcpBufferSize,
+		"connect_timeout":   connectTimeout,
+		"handshake_timeout": handshakeTimeout,
 	}
 	return nodeConfigOutbound{Value: proxy, Host: host, Domain: nodeConfigDomain(host)}, nil
 }
@@ -369,6 +385,14 @@ func positiveNodeConfigQueryInt(query url.Values, field string) (int, error) {
 		return 0, fmt.Errorf("invalid positive integer")
 	}
 	return value, nil
+}
+
+func positiveNodeConfigQueryDuration(query url.Values, field string) (string, error) {
+	milliseconds, err := strconv.ParseInt(strings.TrimSpace(query.Get(field)), 10, 64)
+	if err != nil || milliseconds <= 0 || milliseconds > int64((1<<63-1)/time.Millisecond) {
+		return "", fmt.Errorf("invalid positive duration")
+	}
+	return (time.Duration(milliseconds) * time.Millisecond).String(), nil
 }
 
 func parseNodeHostPort(parsed *url.URL) (string, int, error) {
