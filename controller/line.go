@@ -266,7 +266,7 @@ func HeartbeatHandler(c *gin.Context) {
 		return
 	}
 	if !ok {
-		JsonReturn(c, CodeSuccess, "当前没有连接记录", HeartbeatResponse{ConnectStatus: 0})
+		JsonReturn(c, CodeSuccess, "success", HeartbeatResponse{ConnectStatus: 1})
 		return
 	}
 
