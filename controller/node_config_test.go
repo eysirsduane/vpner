@@ -8,7 +8,7 @@ import (
 
 const nodeConfigVLESSTestURL = "vless://1c95dc1f-c0a2-4557-b0b5-6f8dff000016@38.180.188.71:443?flow=xtls-rprx-vision&security=tls&sni=www.digicert.com&fp=chrome&alpn=h2&insecure=1&pcs=C6BDD94AFC8B7D7223DBC3FE57A246F2FC7B09750113976733E4ADC437FB5E91"
 const nodeConfigAnyTLSDomainTestURL = "anytls://password@example.com:443?security=tls&sni=cdn.example.com&fp=chrome&alpn=h2"
-const nodeConfigChimneyTestURL = "chimney://123a48fd-9a6b-4a6d-8801-97288e665bed@ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn?security=tls&sni=www.cloudflare.com+developers.cloudflare.com+dash.cloudflare.com+community.cloudflare.com+ot.www.cloudflare.com+static.cloudflareinsights.com&fp=chrome&tagLen=16&poolSize=4&tcpBufferSize=65536&connectTimeoutMs=10000&handshakeTimeoutMs=10000#123456"
+const nodeConfigChimneyTestURL = "chimney://123a48fd-9a6b-4a6d-8801-97288e665bed@ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn:443?security=tls&sni=www.cloudflare.com+developers.cloudflare.com+dash.cloudflare.com+community.cloudflare.com+ot.www.cloudflare.com+static.cloudflareinsights.com&fp=chrome&tagLen=16&poolSize=4&tcpBufferSize=65536&connectTimeoutMs=10000&handshakeTimeoutMs=10000#123456"
 
 func TestBuildNodeClientConfigFastWithIPNode(t *testing.T) {
 	config, err := buildNodeClientConfig(nodeConfigVLESSTestURL, nodeConfigTypeFast)
@@ -89,7 +89,8 @@ func TestBuildNodeClientConfigChimney(t *testing.T) {
 			"tag":"proxy",
 			"protocol":"chimney",
 			"settings":{
-				"relayAddr":"ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn:4435",
+				"relayAddr":"ts6dh42309db4se3g5sds35g4s3dg.oylfmxz.cn",
+				"server_port":443,
 				"snis":[
 					"www.cloudflare.com",
 					"developers.cloudflare.com",

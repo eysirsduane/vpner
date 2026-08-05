@@ -320,13 +320,9 @@ func parseChimneyConfigOutbound(parsed *url.URL) (nodeConfigOutbound, error) {
 	if host == "" {
 		return nodeConfigOutbound{}, fmt.Errorf("chimney server is required")
 	}
-	port := 4435
-	if rawPort := strings.TrimSpace(parsed.Port()); rawPort != "" {
-		parsedPort, err := strconv.Atoi(rawPort)
-		if err != nil || parsedPort <= 0 || parsedPort > 65535 {
-			return nodeConfigOutbound{}, fmt.Errorf("chimney port is invalid")
-		}
-		port = parsedPort
+	port, err := strconv.Atoi(strings.TrimSpace(parsed.Port()))
+	if err != nil || port <= 0 || port > 65535 {
+		return nodeConfigOutbound{}, fmt.Errorf("chimney port is invalid")
 	}
 
 	query := parsed.Query()
@@ -340,7 +336,8 @@ func parseChimneyConfigOutbound(parsed *url.URL) (nodeConfigOutbound, error) {
 	}
 
 	settings := map[string]interface{}{
-		"relayAddr":   net.JoinHostPort(host, strconv.Itoa(port)),
+		"relayAddr":   host,
+		"server_port": port,
 		"snis":        snis,
 		"userId":      strings.TrimSpace(parsed.User.Username()),
 		"fingerprint": fingerprint,
