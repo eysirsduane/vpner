@@ -47,3 +47,7 @@ docs/s3
 
 # Local helper tools
 tools/
+
+# Project documentation (local only)
+/docs/*
+!/docs/docs.go
