@@ -36,14 +36,17 @@ type InternalReportStatsRequest struct {
 }
 
 type InternalReportStatsResult struct {
-	NewUsers         int64   `json:"new_users"`
-	ConnectBaseUsers int64   `json:"connect_base_users"`
-	ConnectedUsers   int64   `json:"connected_users"`
-	CreatedOrders    int64   `json:"created_orders"`
-	PaidOrders       int64   `json:"paid_orders"`
-	TotalIncome      float64 `json:"total_income"`
-	AppleIncome      float64 `json:"apple_income"`
-	ThirdPartyIncome float64 `json:"third_party_income"`
+	NewUsers          int64   `json:"new_users"`
+	DailyActiveUsers  int64   `json:"daily_active_users"`
+	ConnectBaseUsers  int64   `json:"connect_base_users"`
+	ConnectedUsers    int64   `json:"connected_users"`
+	CreatedOrders     int64   `json:"created_orders"`
+	PaidOrders        int64   `json:"paid_orders"`
+	NewPurchaseIncome float64 `json:"new_purchase_income"`
+	RenewalIncome     float64 `json:"renewal_income"`
+	TotalIncome       float64 `json:"total_income"`
+	AppleIncome       float64 `json:"apple_income"`
+	ThirdPartyIncome  float64 `json:"third_party_income"`
 }
 
 type internalReportResponse struct {
@@ -248,6 +251,12 @@ func parseInternalReportTime(value string) (time.Time, error) {
 
 func queryInternalReportStats(start, end time.Time) (InternalReportStatsResult, error) {
 	var result InternalReportStatsResult
+	dailyActiveUsers, err := model.DailyActiveUserCountForReport(start)
+	if err != nil {
+		return result, err
+	}
+	result.DailyActiveUsers = dailyActiveUsers
+
 	newUserIds, hasNewUserCache, err := dailyNewUserIDsForReport(start, end)
 	if err != nil {
 		return result, err
@@ -474,23 +483,44 @@ WHERE o.create_time >= ?
 }
 
 func queryInternalReportIncome(start, end time.Time, result *InternalReportStatsResult) error {
-	var totalCents, appleCents, thirdPartyCents int64
+	var totalCents, appleCents, thirdPartyCents, newPurchaseCents, renewalCents int64
 	if err := model.DB.Raw(`
 SELECT
-  COALESCE(SUM(money), 0) AS total_income,
-  COALESCE(SUM(CASE WHEN pay_type = 'apple_iap' THEN money ELSE 0 END), 0) AS apple_income,
-  COALESCE(SUM(CASE WHEN pay_type <> 'apple_iap' THEN money ELSE 0 END), 0) AS third_party_income
-FROM `+"`order`"+`
-WHERE pay_status = 3
-  AND pay_time >= ?
-  AND pay_time < ?
-`, start, end).Row().Scan(&totalCents, &appleCents, &thirdPartyCents); err != nil {
+  COALESCE(SUM(classified.money), 0) AS total_income,
+  COALESCE(SUM(CASE WHEN classified.pay_type = 'apple_iap' THEN classified.money ELSE 0 END), 0) AS apple_income,
+  COALESCE(SUM(CASE WHEN classified.pay_type <> 'apple_iap' THEN classified.money ELSE 0 END), 0) AS third_party_income,
+  COALESCE(SUM(CASE WHEN classified.is_first_purchase = 1 THEN classified.money ELSE 0 END), 0) AS new_purchase_income,
+  COALESCE(SUM(CASE WHEN classified.is_first_purchase = 0 THEN classified.money ELSE 0 END), 0) AS renewal_income
+FROM (
+  SELECT
+    o.id,
+    o.uid,
+    o.money,
+    o.pay_type,
+    CASE WHEN NOT EXISTS (
+      SELECT 1
+      FROM `+"`order`"+` prior_order
+      WHERE prior_order.uid = o.uid
+        AND prior_order.pay_status = 3
+        AND (
+          prior_order.pay_time < o.pay_time
+          OR (prior_order.pay_time = o.pay_time AND prior_order.id < o.id)
+        )
+    ) THEN 1 ELSE 0 END AS is_first_purchase
+  FROM `+"`order`"+` o
+  WHERE o.pay_status = 3
+    AND o.pay_time >= ?
+    AND o.pay_time < ?
+) classified
+`, start, end).Row().Scan(&totalCents, &appleCents, &thirdPartyCents, &newPurchaseCents, &renewalCents); err != nil {
 		return err
 	}
 
 	result.TotalIncome = centsToYuan(totalCents)
 	result.AppleIncome = centsToYuan(appleCents)
 	result.ThirdPartyIncome = centsToYuan(thirdPartyCents)
+	result.NewPurchaseIncome = centsToYuan(newPurchaseCents)
+	result.RenewalIncome = centsToYuan(renewalCents)
 	return nil
 }
 

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -56,6 +57,35 @@ func DailyNewUserIDsFromCache(statDate time.Time) ([]int, bool, error) {
 		return nil, exists, err
 	}
 	return redisSetIntMembers(key)
+}
+
+// DailyActiveUserCountForReport returns the de-duplicated active user count for
+// a report date. The live Redis set is preferred for today's cumulative report;
+// daily_stat is the fallback for an already persisted day.
+func DailyActiveUserCountForReport(statDate time.Time) (int64, error) {
+	statDate = chinaStatDate(statDate)
+	if redis.Redis != nil {
+		exists, err := redisKeyExists(dailyActiveKey(statDate))
+		if err != nil {
+			return 0, err
+		}
+		if exists {
+			count, err := redisSetCount(dailyActiveKey(statDate))
+			return int64(count), err
+		}
+	}
+
+	var stat DailyStat
+	err := DB.Where("stat_date = ?", statDate.Format("2006-01-02")).
+		Order("id DESC").
+		First(&stat).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, err
+	}
+	return int64(stat.DailyActiveUsers), nil
 }
 
 func SyncDailyStatForDate(statDate time.Time) error {
