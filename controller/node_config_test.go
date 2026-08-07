@@ -20,6 +20,10 @@ func TestBuildNodeClientConfigFastWithIPNode(t *testing.T) {
 	if err := json.Unmarshal([]byte(config), &result); err != nil {
 		t.Fatalf("unmarshal config: %v", err)
 	}
+	inbounds := result["inbounds"].([]interface{})
+	if len(inbounds) != 1 || inbounds[0].(map[string]interface{})["sniff_override_destination"] != true {
+		t.Fatalf("unexpected inbounds: %#v", inbounds)
+	}
 	outbounds := result["outbounds"].([]interface{})
 	if len(outbounds) != 4 {
 		t.Fatalf("outbounds count = %d, want 4", len(outbounds))
