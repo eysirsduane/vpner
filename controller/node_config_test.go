@@ -78,6 +78,34 @@ func TestBuildNodeClientConfigGlobalWithDomainNode(t *testing.T) {
 	}
 }
 
+func TestBuildNodeClientConfigAddsSkipProxyDomains(t *testing.T) {
+	config, err := buildNodeClientConfig(
+		nodeConfigVLESSTestURL,
+		nodeConfigTypeGlobal,
+		" direct.example.com ",
+		"api.example.com",
+		"DIRECT.example.com",
+		"",
+	)
+	if err != nil {
+		t.Fatalf("buildNodeClientConfig returned error: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(config), &result); err != nil {
+		t.Fatalf("unmarshal config: %v", err)
+	}
+	want := []interface{}{"direct.example.com", "api.example.com"}
+	dnsRules := result["dns"].(map[string]interface{})["rules"].([]interface{})
+	if !reflect.DeepEqual(dnsRules[1].(map[string]interface{})["domain"], want) {
+		t.Fatalf("unexpected DNS domains: %#v", dnsRules[1])
+	}
+	routeRules := result["route"].(map[string]interface{})["rules"].([]interface{})
+	if !reflect.DeepEqual(routeRules[2].(map[string]interface{})["domain"], want) {
+		t.Fatalf("unexpected route domains: %#v", routeRules[2])
+	}
+}
+
 func TestBuildNodeClientConfigChimney(t *testing.T) {
 	config, err := buildNodeClientConfig(nodeConfigChimneyTestURL, nodeConfigTypeFast)
 	if err != nil {

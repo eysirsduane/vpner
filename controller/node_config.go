@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"just-vpn/model"
 )
 
 const (
@@ -74,7 +76,7 @@ func NodeConfigHandler(c *gin.Context) {
 		return
 	}
 
-	config, err := buildNodeClientConfig(node.LinkUrl, configType)
+	config, err := buildNodeClientConfig(node.LinkUrl, configType, nodeConfigSkipProxyDomains()...)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -98,11 +100,12 @@ func normalizeNodeConfigType(value string) (string, error) {
 	}
 }
 
-func buildNodeClientConfig(link, configType string) (string, error) {
+func buildNodeClientConfig(link, configType string, skipProxyDomains ...string) (string, error) {
 	outbound, err := parseNodeConfigOutbound(link)
 	if err != nil {
 		return "", err
 	}
+	domains := mergeNodeConfigDomains(outbound.Domain, skipProxyDomains)
 	config := map[string]interface{}{
 		"inbounds": []interface{}{map[string]interface{}{
 			"sniff":                      true,
@@ -116,10 +119,10 @@ func buildNodeClientConfig(link, configType string) (string, error) {
 			"type":                       "tun",
 			"inet4_address":              "172.19.0.1/30",
 		}},
-		"dns":       buildNodeConfigDNS(outbound.Domain, configType),
+		"dns":       buildNodeConfigDNS(domains, configType),
 		"log":       map[string]interface{}{"level": "debug", "timestamp": true, "output": "singboxlog.log"},
 		"outbounds": []interface{}{outbound.Value, fixedNodeOutbound("direct"), fixedNodeOutbound("block"), fixedNodeOutbound("dns")},
-		"route":     buildNodeConfigRoute(outbound.Host, outbound.Domain, configType),
+		"route":     buildNodeConfigRoute(outbound.Host, domains, configType),
 	}
 
 	data, err := json.Marshal(config)
@@ -129,10 +132,10 @@ func buildNodeClientConfig(link, configType string) (string, error) {
 	return string(data), nil
 }
 
-func buildNodeConfigDNS(domain, configType string) map[string]interface{} {
+func buildNodeConfigDNS(domains []string, configType string) map[string]interface{} {
 	rules := []interface{}{map[string]interface{}{"server": "dns_local", "outbound": "any"}}
-	if domain != "" {
-		rules = append(rules, map[string]interface{}{"server": "dns_local", "domain": []string{domain}})
+	if len(domains) > 0 {
+		rules = append(rules, map[string]interface{}{"server": "dns_local", "domain": domains})
 	}
 	if configType == nodeConfigTypeFast {
 		rules = append(rules,
@@ -157,7 +160,7 @@ func buildNodeConfigDNS(domain, configType string) map[string]interface{} {
 	return dns
 }
 
-func buildNodeConfigRoute(host, domain, configType string) map[string]interface{} {
+func buildNodeConfigRoute(host string, domains []string, configType string) map[string]interface{} {
 	rules := []interface{}{map[string]interface{}{"protocol": "dns", "outbound": "dns_out"}}
 	if ip := net.ParseIP(host); ip != nil {
 		bits := 32
@@ -165,8 +168,9 @@ func buildNodeConfigRoute(host, domain, configType string) map[string]interface{
 			bits = 128
 		}
 		rules = append(rules, map[string]interface{}{"ip_cidr": []string{ip.String() + "/" + strconv.Itoa(bits)}, "outbound": "direct"})
-	} else if domain != "" {
-		rules = append(rules, map[string]interface{}{"outbound": "direct", "domain": []string{domain}})
+	}
+	if len(domains) > 0 {
+		rules = append(rules, map[string]interface{}{"outbound": "direct", "domain": domains})
 	}
 	rules = append(rules, map[string]interface{}{"protocol": "quic", "outbound": "block"})
 
@@ -197,6 +201,28 @@ func buildNodeConfigRoute(host, domain, configType string) map[string]interface{
 		map[string]interface{}{"path": "geoip-cn.srs", "type": "local", "tag": "geoip-cn", "format": "binary"},
 	}
 	return route
+}
+
+func nodeConfigSkipProxyDomains() []string {
+	return strings.Split(model.ConfigValue(model.ConfigSkipProxyDomains, ""), ",")
+}
+
+func mergeNodeConfigDomains(nodeDomain string, configuredDomains []string) []string {
+	domains := make([]string, 0, len(configuredDomains)+1)
+	seen := make(map[string]struct{}, len(configuredDomains)+1)
+	for _, domain := range append([]string{nodeDomain}, configuredDomains...) {
+		domain = strings.TrimSpace(domain)
+		if domain == "" {
+			continue
+		}
+		key := strings.ToLower(domain)
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		domains = append(domains, domain)
+	}
+	return domains
 }
 
 func fixedNodeOutbound(kind string) map[string]interface{} {
