@@ -22,6 +22,7 @@ type Node struct {
 	Code             string     `json:"code" gorm:"column:code;type:varchar(64);comment:所属国家代码"`
 	CodeName         string     `json:"code_name" gorm:"column:code_name;type:varchar(128);comment:所属国家名称"`
 	IncludeAuto      int        `json:"include_auto" gorm:"column:include_auto;type:tinyint;not null;default:0;index;comment:是否同时参与自动线路 1是 0否"`
+	IsTrial          int        `json:"is_trial" gorm:"column:is_trial;type:tinyint;not null;default:0;comment:是否为试用节点 1是 0否"`
 	Name             string     `json:"name" gorm:"column:name;type:varchar(128);comment:节点名称"`
 	NodeType         string     `json:"node_type" gorm:"column:node_type;type:varchar(32);comment:节点类型"`
 	LinkUrl          string     `json:"link_url" gorm:"column:link_url;type:text;comment:链接地址或JSON节点数据"`
@@ -128,23 +129,41 @@ func SelectNodeByOnlineCount(nodes []Node) (Node, bool) {
 	return selected, true
 }
 
-func GetAvailableNode(code string) (Node, error) {
+func GetAvailableNode(code string, trialUser bool) (Node, error) {
 	code = strings.ToUpper(strings.TrimSpace(code))
 	nodes, err := GetAvailableNodesByCode(code)
 	if err != nil {
 		return Node{}, err
 	}
+	nodes = preferredNodesForTrialStatus(nodes, trialUser)
 	if len(nodes) == 0 && code != "AUTO" {
 		nodes, err = GetAvailableNodesByCode("AUTO")
 		if err != nil {
 			return Node{}, err
 		}
+		nodes = preferredNodesForTrialStatus(nodes, trialUser)
 	}
 	node, ok := SelectNodeByOnlineCount(nodes)
 	if !ok {
 		return Node{}, gorm.ErrRecordNotFound
 	}
 	return nodeForRequestedCode(node, code), nil
+}
+
+func preferredNodesForTrialStatus(nodes []Node, trialUser bool) []Node {
+	normalNodes := make([]Node, 0, len(nodes))
+	trialNodes := make([]Node, 0, len(nodes))
+	for _, node := range nodes {
+		if node.IsTrial == 1 {
+			trialNodes = append(trialNodes, node)
+			continue
+		}
+		normalNodes = append(normalNodes, node)
+	}
+	if trialUser && len(trialNodes) > 0 {
+		return trialNodes
+	}
+	return normalNodes
 }
 
 func nodeForRequestedCode(node Node, requestedCode string) Node {

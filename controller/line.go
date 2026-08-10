@@ -131,7 +131,8 @@ func getNodeForCode(c *gin.Context, code string) (model.Node, bool) {
 
 	node, reviewNodeEnabled := configuredReviewNode(middleware.CurrentClientInfo(c).Version, code)
 	if !reviewNodeEnabled {
-		node, err = model.GetAvailableNode(code)
+		trialUser := isWithinRegistrationTrial(user.CreateTime, configValueInt(model.ConfigNewUserFreeSeconds, 3600), chinaNow())
+		node, err = model.GetAvailableNode(code, trialUser)
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				JsonReturn(c, CodeError, "line is preparing", nil)
@@ -152,6 +153,13 @@ func getNodeForCode(c *gin.Context, code string) (model.Node, bool) {
 		return model.Node{}, false
 	}
 	return node, true
+}
+
+func isWithinRegistrationTrial(registerTime time.Time, trialSeconds int, now time.Time) bool {
+	if trialSeconds <= 0 || registerTime.IsZero() || now.Before(registerTime) {
+		return false
+	}
+	return now.Before(registerTime.Add(time.Duration(trialSeconds) * time.Second))
 }
 
 func encryptedNodeLinkURL(linkUrl string) (string, error) {
