@@ -102,7 +102,8 @@ func TestParseNodeSubscriptionResponseFromDispatch(t *testing.T) {
       "code": "HK",
       "code_name": "香港",
       "node_type": "vmess",
-      "include_auto": 1
+	  "include_auto": 1,
+	  "is_trial": 1
     }]
   }
 }`))
@@ -110,7 +111,7 @@ func TestParseNodeSubscriptionResponseFromDispatch(t *testing.T) {
 		t.Fatalf("parseNodeSubscriptionResponse() = %#v, %v", nodes, err)
 	}
 	got := nodes[0]
-	if got.IP != "47.245.116.113" || got.Content != "vmess://example" || got.Code != "HK" || got.CodeName != "香港" || got.NodeType != "vmess" || got.IncludeAuto != 1 {
+	if got.IP != "47.245.116.113" || got.Content != "vmess://example" || got.Code != "HK" || got.CodeName != "香港" || got.NodeType != "vmess" || got.IncludeAuto != 1 || got.IsTrial == nil || *got.IsTrial != 1 {
 		t.Fatalf("unexpected node: %#v", got)
 	}
 }

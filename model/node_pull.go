@@ -35,6 +35,7 @@ type nodeSubscriptionItem struct {
 	Code        string `json:"code"`
 	CodeName    string `json:"code_name"`
 	IncludeAuto int    `json:"include_auto"`
+	IsTrial     *int   `json:"is_trial"`
 	NodeType    string `json:"node_type"`
 }
 
@@ -276,6 +277,7 @@ func buildNodeSubscriptionSyncPlan(nodes []nodeSubscriptionItem, existing []Node
 				Code:        item.Code,
 				CodeName:    item.CodeName,
 				IncludeAuto: item.IncludeAuto,
+				IsTrial:     nodeSubscriptionTrialValue(item.IsTrial, 0),
 				Name:        name,
 				NodeType:    item.NodeType,
 				LinkUrl:     item.Content,
@@ -285,29 +287,46 @@ func buildNodeSubscriptionSyncPlan(nodes []nodeSubscriptionItem, existing []Node
 			continue
 		}
 		plan.ActivateIDs = append(plan.ActivateIDs, node.Id)
+		isTrial := nodeSubscriptionTrialValue(item.IsTrial, node.IsTrial)
+		isTrialChanged := item.IsTrial != nil && node.IsTrial != isTrial
 		if node.Code == item.Code &&
 			node.CodeName == item.CodeName &&
 			node.IncludeAuto == item.IncludeAuto &&
+			!isTrialChanged &&
 			node.NodeType == item.NodeType &&
 			node.Address == item.IP &&
 			node.Name == name &&
 			node.LinkUrl == item.Content {
 			continue
 		}
-		plan.Updates = append(plan.Updates, nodeSubscriptionUpdate{
-			ID: node.Id,
-			Fields: map[string]interface{}{
-				"code":         item.Code,
-				"code_name":    item.CodeName,
-				"include_auto": item.IncludeAuto,
-				"node_type":    item.NodeType,
-				"link_url":     item.Content,
-				"address":      item.IP,
-				"name":         name,
-			},
-		})
+		fields := map[string]interface{}{
+			"code":         item.Code,
+			"code_name":    item.CodeName,
+			"include_auto": item.IncludeAuto,
+			"node_type":    item.NodeType,
+			"link_url":     item.Content,
+			"address":      item.IP,
+			"name":         name,
+		}
+		if item.IsTrial != nil {
+			fields["is_trial"] = isTrial
+		}
+		plan.Updates = append(plan.Updates, nodeSubscriptionUpdate{ID: node.Id, Fields: fields})
 	}
 	return plan
+}
+
+func nodeSubscriptionTrialValue(value *int, fallback int) int {
+	if value == nil {
+		if fallback == 1 {
+			return 1
+		}
+		return 0
+	}
+	if *value == 1 {
+		return 1
+	}
+	return 0
 }
 
 func shouldReplacePulledNodes(nodeCount int) bool {
