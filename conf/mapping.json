@@ -684,6 +684,21 @@
         }
       }
     },
+    "/api/v1/node_outbounds": {
+      "path": "/api/v1/node_outbounds",
+      "request": {
+        "code": "code"
+      },
+      "response": {
+        "code": "code",
+        "msg": "msg",
+        "result": {
+          "$field": "result",
+          "link_url": "link_url",
+          "outbounds": "outbounds"
+        }
+      }
+    },
     "/api/v1/node_config": {
       "path": "/api/v1/node_config",
       "request": {

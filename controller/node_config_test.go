@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"encoding/base64"
 	"encoding/json"
+	"just-vpn/pkg/mapping"
 	"reflect"
 	"testing"
 )
@@ -103,6 +105,92 @@ func TestBuildNodeClientConfigAddsSkipProxyDomains(t *testing.T) {
 	routeRules := result["route"].(map[string]interface{})["rules"].([]interface{})
 	if !reflect.DeepEqual(routeRules[2].(map[string]interface{})["domain"], want) {
 		t.Fatalf("unexpected route domains: %#v", routeRules[2])
+	}
+}
+
+func TestBuildNodeConfigOutboundsMatchesFullConfig(t *testing.T) {
+	_, outbounds, err := buildNodeConfigOutbounds(nodeConfigVLESSTestURL)
+	if err != nil {
+		t.Fatalf("buildNodeConfigOutbounds returned error: %v", err)
+	}
+	config, err := buildNodeClientConfig(nodeConfigVLESSTestURL, nodeConfigTypeFast)
+	if err != nil {
+		t.Fatalf("buildNodeClientConfig returned error: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(config), &result); err != nil {
+		t.Fatalf("unmarshal config: %v", err)
+	}
+	normalizedOutbounds, err := json.Marshal(outbounds)
+	if err != nil {
+		t.Fatalf("marshal outbounds: %v", err)
+	}
+	var normalized interface{}
+	if err := json.Unmarshal(normalizedOutbounds, &normalized); err != nil {
+		t.Fatalf("unmarshal outbounds: %v", err)
+	}
+	if !reflect.DeepEqual(normalized, result["outbounds"]) {
+		t.Fatalf("outbounds differ\ngot:  %#v\nwant: %#v", normalized, result["outbounds"])
+	}
+}
+
+func TestEncryptedNodeConfigOutboundsUsesNodeEncryption(t *testing.T) {
+	encrypt := func(value string) (string, error) {
+		return encryptedNodeLinkURLWithKey(value, defaultNodeLinkAESKey)
+	}
+
+	_, outbounds, err := buildNodeConfigOutbounds(nodeConfigVLESSTestURL)
+	if err != nil {
+		t.Fatalf("buildNodeConfigOutbounds returned error: %v", err)
+	}
+	encrypted, err := encryptedNodeConfigOutboundsWith(outbounds, encrypt)
+	if err != nil {
+		t.Fatalf("encryptedNodeConfigOutbounds returned error: %v", err)
+	}
+	decrypted := decryptNodeLinkForTest(t, encrypted)
+	decoded, err := base64.StdEncoding.DecodeString(decrypted)
+	if err != nil {
+		t.Fatalf("base64 decode decrypted outbounds failed: %v", err)
+	}
+
+	var got interface{}
+	if err := json.Unmarshal(decoded, &got); err != nil {
+		t.Fatalf("unmarshal decrypted outbounds: %v", err)
+	}
+	normalizedOutbounds, err := json.Marshal(outbounds)
+	if err != nil {
+		t.Fatalf("marshal expected outbounds: %v", err)
+	}
+	var want interface{}
+	if err := json.Unmarshal(normalizedOutbounds, &want); err != nil {
+		t.Fatalf("unmarshal expected outbounds: %v", err)
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("decrypted outbounds differ\ngot:  %#v\nwant: %#v", got, want)
+	}
+}
+
+func TestNodeOutboundsDefaultMapping(t *testing.T) {
+	route, ok := mapping.RouteConfig.Routes["/api/v1/node_outbounds"]
+	if !ok {
+		t.Fatal("node_outbounds mapping is missing")
+	}
+	if route.Path != "/api/v1/node_outbounds" || route.Request["code"] != "code" {
+		t.Fatalf("unexpected node_outbounds route: %#v", route)
+	}
+
+	mapped := mapping.MapResponse("/api/v1/node_outbounds", map[string]interface{}{
+		"code": 200,
+		"msg":  "success",
+		"result": NodeOutboundsResponse{
+			LinkUrl:   "encrypted-link",
+			Outbounds: "encrypted-outbounds",
+		},
+	})
+	result, ok := mapped["result"].(map[string]interface{})
+	if !ok || result["link_url"] != "encrypted-link" || result["outbounds"] != "encrypted-outbounds" {
+		t.Fatalf("unexpected mapped response: %#v", mapped)
 	}
 }
 

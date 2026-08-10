@@ -29,10 +29,68 @@ type NodeConfigResponse struct {
 	Config string `json:"config" example:"x/k5A0v9kiJjL0r3m6X9dA=="` // 加密后的完整JSON节点配置
 }
 
+type NodeOutboundsResponse struct {
+	LinkUrl   string `json:"link_url" example:"x/k5A0v9kiJjL0r3m6X9dA=="`  // AES加密后的节点连接数据
+	Outbounds string `json:"outbounds" example:"x/k5A0v9kiJjL0r3m6X9dA=="` // AES加密后的outbounds JSON数组
+}
+
 type nodeConfigOutbound struct {
 	Value  map[string]interface{}
 	Host   string
 	Domain string
+}
+
+// NodeOutboundsHandler 获取节点链接和outbounds
+// @Summary 获取节点链接和outbounds
+// @Description 根据线路代码获取加密节点链接和加密outbounds JSON数组
+// @Tags 线路
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body NodeRequest true "获取节点链接和outbounds请求"
+// @Success 200 {object} Response{result=NodeOutboundsResponse}
+// @Router /node_outbounds [post]
+func NodeOutboundsHandler(c *gin.Context) {
+	var req NodeRequest
+	if err := BindMappedJSON(c, &req); err != nil {
+		if strings.Contains(err.Error(), "NodeRequest.Code") || strings.Contains(err.Error(), "'Code'") {
+			JsonReturn(c, CodeError, "code is required", nil)
+			return
+		}
+		JsonReturn(c, CodeError, "invalid json body", nil)
+		return
+	}
+
+	code := strings.ToUpper(strings.TrimSpace(req.Code))
+	if code == "" {
+		JsonReturn(c, CodeError, "code is required", nil)
+		return
+	}
+
+	node, ok := getNodeForCode(c, code)
+	if !ok {
+		return
+	}
+
+	linkURL, err := encryptedNodeLinkURL(node.LinkUrl)
+	if err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return
+	}
+	_, outbounds, err := buildNodeConfigOutbounds(node.LinkUrl)
+	if err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return
+	}
+	encryptedOutbounds, err := encryptedNodeConfigOutbounds(outbounds)
+	if err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return
+	}
+	JsonReturn(c, CodeSuccess, "success", NodeOutboundsResponse{
+		LinkUrl:   linkURL,
+		Outbounds: encryptedOutbounds,
+	})
 }
 
 // NodeConfigHandler 获取客户端 JSON 节点配置
@@ -101,7 +159,7 @@ func normalizeNodeConfigType(value string) (string, error) {
 }
 
 func buildNodeClientConfig(link, configType string, skipProxyDomains ...string) (string, error) {
-	outbound, err := parseNodeConfigOutbound(link)
+	outbound, outbounds, err := buildNodeConfigOutbounds(link)
 	if err != nil {
 		return "", err
 	}
@@ -121,7 +179,7 @@ func buildNodeClientConfig(link, configType string, skipProxyDomains ...string) 
 		}},
 		"dns":       buildNodeConfigDNS(domains, configType),
 		"log":       map[string]interface{}{"level": "debug", "timestamp": true, "output": "singboxlog.log"},
-		"outbounds": []interface{}{outbound.Value, fixedNodeOutbound("direct"), fixedNodeOutbound("block"), fixedNodeOutbound("dns")},
+		"outbounds": outbounds,
 		"route":     buildNodeConfigRoute(outbound.Host, domains, configType),
 	}
 
@@ -130,6 +188,26 @@ func buildNodeClientConfig(link, configType string, skipProxyDomains ...string) 
 		return "", err
 	}
 	return string(data), nil
+}
+
+func buildNodeConfigOutbounds(link string) (nodeConfigOutbound, []interface{}, error) {
+	outbound, err := parseNodeConfigOutbound(link)
+	if err != nil {
+		return nodeConfigOutbound{}, nil, err
+	}
+	return outbound, []interface{}{outbound.Value, fixedNodeOutbound("direct"), fixedNodeOutbound("block"), fixedNodeOutbound("dns")}, nil
+}
+
+func encryptedNodeConfigOutbounds(outbounds []interface{}) (string, error) {
+	return encryptedNodeConfigOutboundsWith(outbounds, encryptedNodeLinkURL)
+}
+
+func encryptedNodeConfigOutboundsWith(outbounds []interface{}, encrypt func(string) (string, error)) (string, error) {
+	data, err := json.Marshal(outbounds)
+	if err != nil {
+		return "", err
+	}
+	return encrypt(string(data))
 }
 
 func buildNodeConfigDNS(domains []string, configType string) map[string]interface{} {

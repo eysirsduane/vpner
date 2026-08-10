@@ -30,9 +30,9 @@
 | --- | --- | --- | --- |
 | 节点 URL | `POST /api/v1/node` | 加密节点 URL | 母版和现有 VPN 项目已实现 |
 | 完整 JSON | `POST /api/v1/node_config` | 加密的完整 JSON 配置 | 母版和大部分项目已实现，少数老项目尚无 |
-| URL + outbounds | `POST /api/v1/node_outbounds` | 分别加密的节点 URL 和 `outbounds` JSON | 可选兼容模式，当前 594 项目已实现 |
+| URL + outbounds | `POST /api/v1/node_outbounds` | 分别加密的节点 URL 和 `outbounds` JSON | 母版和 594 项目已实现 |
 
-三种模式的详细规则见 `docs/新产品创建规范.md`。不得只在文档中声明第三种模式；只有产品代码和映射都存在对应路由时，才能交付给前端。
+三种模式的详细规则见 `docs/新产品创建规范.md`。从当前母版创建的新项目必须为三个接口分别生成独立映射，现有项目不会因母版更新而自动增加第三个接口。
 
 ## 本地运行
 

@@ -843,6 +843,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/node_outbounds": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据线路代码获取加密节点链接和加密outbounds JSON数组",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "获取节点链接和outbounds",
+                "parameters": [
+                    {
+                        "description": "获取节点链接和outbounds请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.NodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.NodeOutboundsResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/notice": {
             "get": {
                 "security": [
@@ -2133,6 +2184,21 @@ const docTemplate = `{
             "properties": {
                 "config": {
                     "description": "加密后的完整JSON节点配置",
+                    "type": "string",
+                    "example": "x/k5A0v9kiJjL0r3m6X9dA=="
+                }
+            }
+        },
+        "controller.NodeOutboundsResponse": {
+            "type": "object",
+            "properties": {
+                "link_url": {
+                    "description": "AES加密后的节点连接数据",
+                    "type": "string",
+                    "example": "x/k5A0v9kiJjL0r3m6X9dA=="
+                },
+                "outbounds": {
+                    "description": "AES加密后的outbounds JSON数组",
                     "type": "string",
                     "example": "x/k5A0v9kiJjL0r3m6X9dA=="
                 }
