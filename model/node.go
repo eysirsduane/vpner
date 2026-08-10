@@ -131,18 +131,35 @@ func SelectNodeByOnlineCount(nodes []Node) (Node, bool) {
 
 func GetAvailableNode(code string, trialUser bool) (Node, error) {
 	code = strings.ToUpper(strings.TrimSpace(code))
-	nodes, err := GetAvailableNodesByCode(code)
+	requestedNodes, err := GetAvailableNodesByCode(code)
 	if err != nil {
 		return Node{}, err
 	}
-	nodes = preferredNodesForTrialStatus(nodes, trialUser)
-	if len(nodes) == 0 && code != "AUTO" {
-		nodes, err = GetAvailableNodesByCode("AUTO")
-		if err != nil {
-			return Node{}, err
+
+	var nodes []Node
+	if trialUser {
+		nodes = nodesForTrialStatus(requestedNodes, true)
+		if len(nodes) == 0 {
+			var automaticNodes []Node
+			if code != nodeSubscriptionCode {
+				automaticNodes, err = GetAvailableNodesByCode(nodeSubscriptionCode)
+				if err != nil {
+					return Node{}, err
+				}
+			}
+			nodes = preferredNodesForTrialUser(requestedNodes, automaticNodes)
 		}
-		nodes = preferredNodesForTrialStatus(nodes, trialUser)
+	} else {
+		nodes = nodesForTrialStatus(requestedNodes, false)
+		if len(nodes) == 0 && code != nodeSubscriptionCode {
+			automaticNodes, err := GetAvailableNodesByCode(nodeSubscriptionCode)
+			if err != nil {
+				return Node{}, err
+			}
+			nodes = nodesForTrialStatus(automaticNodes, false)
+		}
 	}
+
 	node, ok := SelectNodeByOnlineCount(nodes)
 	if !ok {
 		return Node{}, gorm.ErrRecordNotFound
@@ -150,20 +167,29 @@ func GetAvailableNode(code string, trialUser bool) (Node, error) {
 	return nodeForRequestedCode(node, code), nil
 }
 
-func preferredNodesForTrialStatus(nodes []Node, trialUser bool) []Node {
-	normalNodes := make([]Node, 0, len(nodes))
-	trialNodes := make([]Node, 0, len(nodes))
-	for _, node := range nodes {
-		if node.IsTrial == 1 {
-			trialNodes = append(trialNodes, node)
-			continue
+func preferredNodesForTrialUser(requestedNodes, automaticNodes []Node) []Node {
+	groups := [][]Node{
+		nodesForTrialStatus(requestedNodes, true),
+		nodesForTrialStatus(automaticNodes, true),
+		nodesForTrialStatus(requestedNodes, false),
+		nodesForTrialStatus(automaticNodes, false),
+	}
+	for _, group := range groups {
+		if len(group) > 0 {
+			return group
 		}
-		normalNodes = append(normalNodes, node)
 	}
-	if trialUser && len(trialNodes) > 0 {
-		return trialNodes
+	return nil
+}
+
+func nodesForTrialStatus(nodes []Node, trial bool) []Node {
+	filtered := make([]Node, 0, len(nodes))
+	for _, node := range nodes {
+		if (node.IsTrial == 1) == trial {
+			filtered = append(filtered, node)
+		}
 	}
-	return normalNodes
+	return filtered
 }
 
 func nodeForRequestedCode(node Node, requestedCode string) Node {

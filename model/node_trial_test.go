@@ -2,40 +2,45 @@ package model
 
 import "testing"
 
-func TestPreferredNodesForTrialStatus(t *testing.T) {
-	nodes := []Node{
+func TestPreferredNodesForTrialUserUsesRequiredRouteOrder(t *testing.T) {
+	requested := []Node{
 		{BaseModel: BaseModel{Id: 1}, IsTrial: 0},
 		{BaseModel: BaseModel{Id: 2}, IsTrial: 1},
+	}
+	automatic := []Node{
 		{BaseModel: BaseModel{Id: 3}, IsTrial: 0},
+		{BaseModel: BaseModel{Id: 4}, IsTrial: 1},
 	}
 
-	trialNodes := preferredNodesForTrialStatus(nodes, true)
-	if len(trialNodes) != 1 || trialNodes[0].Id != 2 {
-		t.Fatalf("trial nodes = %#v, want node 2", trialNodes)
+	tests := []struct {
+		name      string
+		requested []Node
+		automatic []Node
+		wantID    int
+	}{
+		{name: "trial requested country first", requested: requested, automatic: automatic, wantID: 2},
+		{name: "trial automatic before normal requested country", requested: requested[:1], automatic: automatic, wantID: 4},
+		{name: "normal requested after all trial routes", requested: requested[:1], automatic: automatic[:1], wantID: 1},
+		{name: "normal automatic last", automatic: automatic[:1], wantID: 3},
 	}
-
-	normalNodes := preferredNodesForTrialStatus(nodes, false)
-	if len(normalNodes) != 2 || normalNodes[0].Id != 1 || normalNodes[1].Id != 3 {
-		t.Fatalf("normal nodes = %#v, want nodes 1 and 3", normalNodes)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := preferredNodesForTrialUser(test.requested, test.automatic)
+			if len(got) == 0 || got[0].Id != test.wantID {
+				t.Fatalf("preferred nodes = %#v, want node %d", got, test.wantID)
+			}
+		})
 	}
 }
 
-func TestPreferredNodesForTrialStatusFallsBackToNormal(t *testing.T) {
+func TestNodesForTrialStatusNeverReturnsTrialToNormalUser(t *testing.T) {
 	nodes := []Node{
-		{BaseModel: BaseModel{Id: 1}, IsTrial: 0},
+		{BaseModel: BaseModel{Id: 1}, IsTrial: 1},
 		{BaseModel: BaseModel{Id: 2}, IsTrial: 0},
 	}
-
-	got := preferredNodesForTrialStatus(nodes, true)
-	if len(got) != 2 || got[0].Id != 1 || got[1].Id != 2 {
-		t.Fatalf("fallback nodes = %#v, want normal nodes 1 and 2", got)
-	}
-}
-
-func TestPreferredNodesForTrialStatusNeverReturnsTrialToNormalUser(t *testing.T) {
-	nodes := []Node{{BaseModel: BaseModel{Id: 1}, IsTrial: 1}}
-	if got := preferredNodesForTrialStatus(nodes, false); len(got) != 0 {
-		t.Fatalf("normal user nodes = %#v, want empty", got)
+	got := nodesForTrialStatus(nodes, false)
+	if len(got) != 1 || got[0].Id != 2 {
+		t.Fatalf("normal user nodes = %#v, want node 2", got)
 	}
 }
 
