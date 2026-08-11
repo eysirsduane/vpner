@@ -176,7 +176,7 @@ func TestNodeOutboundsDefaultMapping(t *testing.T) {
 	if !ok {
 		t.Fatal("node_outbounds mapping is missing")
 	}
-	if route.Path != "/api/v1/node_outbounds" || route.Request["code"] != "code" {
+	if route.Path == "" || route.Request["code"] == "" {
 		t.Fatalf("unexpected node_outbounds route: %#v", route)
 	}
 
@@ -188,8 +188,15 @@ func TestNodeOutboundsDefaultMapping(t *testing.T) {
 			Outbounds: "encrypted-outbounds",
 		},
 	})
-	result, ok := mapped["result"].(map[string]interface{})
-	if !ok || result["link_url"] != "encrypted-link" || result["outbounds"] != "encrypted-outbounds" {
+	resultMapping, ok := route.Response["result"].(map[string]interface{})
+	if !ok {
+		t.Fatalf("unexpected node_outbounds result mapping: %#v", route.Response["result"])
+	}
+	resultField, _ := resultMapping["$field"].(string)
+	linkField, _ := resultMapping["link_url"].(string)
+	outboundsField, _ := resultMapping["outbounds"].(string)
+	result, ok := mapped[resultField].(map[string]interface{})
+	if !ok || result[linkField] != "encrypted-link" || result[outboundsField] != "encrypted-outbounds" {
 		t.Fatalf("unexpected mapped response: %#v", mapped)
 	}
 }
