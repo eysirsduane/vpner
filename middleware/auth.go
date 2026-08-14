@@ -16,15 +16,37 @@ import (
 )
 
 const (
-	CodeError      = 500
-	ContextUserKey = "current_user"
+	CodeUnauthorized = 401
+	CodeError        = 500
+	ContextUserKey   = "current_user"
 )
+
+type authFailure struct {
+	code int
+	err  error
+}
+
+func (e *authFailure) Error() string { return e.err.Error() }
+
+func (e *authFailure) Unwrap() error { return e.err }
+
+func newAuthFailure(code int, err error) error {
+	return &authFailure{code: code, err: err}
+}
+
+func authFailureCode(err error) int {
+	var failure *authFailure
+	if errors.As(err, &failure) {
+		return failure.code
+	}
+	return CodeError
+}
 
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user, err := authUser(c)
 		if err != nil {
-			jsonReturn(c, CodeError, err.Error(), nil)
+			jsonReturn(c, authFailureCode(err), err.Error(), nil)
 			c.Abort()
 			return
 		}
@@ -50,11 +72,11 @@ func CurrentUser(c *gin.Context) (model.User, error) {
 func authUser(c *gin.Context) (model.User, error) {
 	token := bearerToken(c)
 	if token == "" {
-		return model.User{}, fmt.Errorf("authorization token is required")
+		return model.User{}, newAuthFailure(CodeUnauthorized, fmt.Errorf("authorization token is required"))
 	}
 	claims, err := jwt.Parse(token)
 	if err != nil {
-		return model.User{}, err
+		return model.User{}, newAuthFailure(CodeUnauthorized, err)
 	}
 	banned, err := model.IsUserBannedInCache(claims.UserId, claims.DeviceNo)
 	if err != nil {
@@ -66,12 +88,12 @@ func authUser(c *gin.Context) (model.User, error) {
 	user, err := model.GetUserByID(claims.UserId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return model.User{}, fmt.Errorf("login user not found")
+			return model.User{}, newAuthFailure(CodeUnauthorized, fmt.Errorf("login user not found"))
 		}
 		return model.User{}, err
 	}
 	if user.DeviceNo != claims.DeviceNo {
-		return model.User{}, fmt.Errorf("token device invalid")
+		return model.User{}, newAuthFailure(CodeUnauthorized, fmt.Errorf("token device invalid"))
 	}
 	if user.Status == model.UserStatusBanned {
 		return model.User{}, fmt.Errorf("user is banned")
