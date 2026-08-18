@@ -33,6 +33,7 @@ type User struct {
 	InvitedAt          *time.Time `json:"invited_at" gorm:"column:invited_at;type:datetime;comment:被邀请时间"`
 	Platform           string     `json:"platform" gorm:"column:platform;type:varchar(32);comment:设备平台"`
 	Version            string     `json:"version" gorm:"column:version;type:varchar(64);comment:版本号"`
+	AppStoreRegion     string     `json:"app_store_region" gorm:"column:app_store_region;type:varchar(64);comment:苹果 App Store 地区"`
 	LoginTimes         int        `json:"login_times" gorm:"column:login_times;type:int;comment:登录次数"`
 	LastIp             string     `json:"last_ip" gorm:"column:last_ip;type:varchar(64);comment:最后登录IP"`
 	LastIpRegion       string     `json:"last_ip_region" gorm:"column:last_ip_region;type:varchar(255);comment:最后登录地区"`

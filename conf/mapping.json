@@ -7,7 +7,8 @@
     "build": "X-Build",
     "device_no": "X-Device-No",
     "client_time": "X-Client-Time",
-    "time_zone": "X-Time-Zone"
+    "time_zone": "X-Time-Zone",
+    "app_store_region": "X-App-Store-Region"
   },
   "field_affix": {
     "prefix": "",

@@ -1,12 +1,32 @@
 package controller
 
 import (
+	"net/http/httptest"
 	"testing"
 	"time"
 
+	"just-vpn/middleware"
 	"just-vpn/model"
 	"just-vpn/pkg/mapping"
+
+	"github.com/gin-gonic/gin"
 )
+
+func TestApplyClientInfoToAutoLoginParamsIncludesAppStoreRegion(t *testing.T) {
+	context, _ := gin.CreateTestContext(httptest.NewRecorder())
+	context.Set(middleware.ContextClientInfoKey, middleware.ClientInfo{
+		Version:        "1.2.3",
+		AppStoreRegion: "CHN",
+	})
+
+	params := applyClientInfoToAutoLoginParams(context, autoLoginParams{})
+	if params.Version != "1.2.3" {
+		t.Fatalf("Version = %q, want %q", params.Version, "1.2.3")
+	}
+	if params.AppStoreRegion != "CHN" {
+		t.Fatalf("AppStoreRegion = %q, want %q", params.AppStoreRegion, "CHN")
+	}
+}
 
 func TestGetChangePasswordParamsOnlyUsesNewPassword(t *testing.T) {
 	const originalPath = "/api/v1/change_password"

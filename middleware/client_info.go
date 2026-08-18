@@ -13,12 +13,13 @@ import (
 const ContextClientInfoKey = "client_info"
 
 type ClientInfo struct {
-	Platform   string
-	Version    string
-	Build      int
-	DeviceNo   string
-	ClientTime time.Time
-	TimeZone   string
+	Platform       string
+	Version        string
+	Build          int
+	DeviceNo       string
+	ClientTime     time.Time
+	TimeZone       string
+	AppStoreRegion string
 }
 
 func ClientInfoMiddleware() gin.HandlerFunc {
@@ -26,12 +27,13 @@ func ClientInfoMiddleware() gin.HandlerFunc {
 		clientTime := strings.TrimSpace(headerValue(c, "client_time"))
 		timeZone := strings.TrimSpace(headerValue(c, "time_zone"))
 		info := ClientInfo{
-			Platform:   normalizePlatform(headerValue(c, "platform")),
-			Version:    strings.TrimSpace(headerValue(c, "version")),
-			Build:      headerIntValue(c, "build"),
-			DeviceNo:   strings.TrimSpace(headerValue(c, "device_no")),
-			ClientTime: parseClientTime(clientTime),
-			TimeZone:   timeZone,
+			Platform:       normalizePlatform(headerValue(c, "platform")),
+			Version:        strings.TrimSpace(headerValue(c, "version")),
+			Build:          headerIntValue(c, "build"),
+			DeviceNo:       strings.TrimSpace(headerValue(c, "device_no")),
+			ClientTime:     parseClientTime(clientTime),
+			TimeZone:       timeZone,
+			AppStoreRegion: normalizeAppStoreRegion(headerValue(c, "app_store_region")),
 		}
 		c.Set(ContextClientInfoKey, info)
 		c.Next()
@@ -88,4 +90,13 @@ func normalizePlatform(platform string) string {
 	default:
 		return platform
 	}
+}
+
+func normalizeAppStoreRegion(region string) string {
+	region = strings.TrimSpace(region)
+	runes := []rune(region)
+	if len(runes) > 64 {
+		region = string(runes[:64])
+	}
+	return region
 }

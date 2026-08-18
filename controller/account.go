@@ -29,6 +29,7 @@ type autoLoginParams struct {
 	DeviceNo        string
 	Platform        string
 	Version         string
+	AppStoreRegion  string
 	MobileName      string
 	MobileVersion   string
 	MobileModelName string
@@ -242,6 +243,9 @@ func applyClientInfoToAutoLoginParams(c *gin.Context, params autoLoginParams) au
 	client := middleware.CurrentClientInfo(c)
 	if client.Version != "" {
 		params.Version = client.Version
+	}
+	if client.AppStoreRegion != "" {
+		params.AppStoreRegion = client.AppStoreRegion
 	}
 	return params
 }
@@ -670,6 +674,7 @@ func buildGuestUser(c *gin.Context, params autoLoginParams, vipTime *time.Time, 
 		VipTime:         vipTime,
 		Platform:        params.Platform,
 		Version:         params.Version,
+		AppStoreRegion:  params.AppStoreRegion,
 		IsPay:           -1,
 		RegIp:           ip,
 		RegIpRegion:     ipRegion,
@@ -731,6 +736,7 @@ func updateLogin(user model.User, ip string, params autoLoginParams) error {
 		IsTodayActive:   1,
 		Platform:        platform,
 		Version:         params.Version,
+		AppStoreRegion:  params.AppStoreRegion,
 		MobileName:      params.MobileName,
 		MobileVersion:   params.MobileVersion,
 		MobileModelName: params.MobileModelName,
@@ -1720,6 +1726,14 @@ func UserInfoHandler(c *gin.Context) {
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
+	}
+	appStoreRegion := middleware.CurrentClientInfo(c).AppStoreRegion
+	if appStoreRegion != "" && appStoreRegion != user.AppStoreRegion {
+		if err := model.UpdateUserFieldsByID(user.Id, map[string]interface{}{"app_store_region": appStoreRegion}); err != nil {
+			JsonReturn(c, CodeError, err.Error(), nil)
+			return
+		}
+		user.AppStoreRegion = appStoreRegion
 	}
 	returnUserInfo(c, user, 0)
 }

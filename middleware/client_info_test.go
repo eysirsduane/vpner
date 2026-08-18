@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -31,10 +32,39 @@ func TestClientInfoMiddlewareReadsMappedClientTime(t *testing.T) {
 		if info.TimeZone != "Asia/Shanghai" {
 			t.Fatalf("time zone = %q, want %q", info.TimeZone, "Asia/Shanghai")
 		}
+		if info.AppStoreRegion != "CHN" {
+			t.Fatalf("app store region = %q, want %q", info.AppStoreRegion, "CHN")
+		}
 	})
 
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	req.Header.Set(mapping.HeaderField("client_time"), "2026-07-11T20:30:15.123+08:00")
 	req.Header.Set(mapping.HeaderField("time_zone"), "Asia/Shanghai")
+	req.Header.Set(mapping.HeaderField("app_store_region"), " CHN ")
 	router.ServeHTTP(httptest.NewRecorder(), req)
+}
+
+func TestNormalizeAppStoreRegionLimitsLength(t *testing.T) {
+	if got := normalizeAppStoreRegion(" USA "); got != "USA" {
+		t.Fatalf("normalizeAppStoreRegion() = %q, want %q", got, "USA")
+	}
+	if got := []rune(normalizeAppStoreRegion(strings.Repeat("界", 65))); len(got) != 64 {
+		t.Fatalf("normalized app store region length = %d, want 64", len(got))
+	}
+}
+
+func TestCORSAllowsMappedAppStoreRegionHeader(t *testing.T) {
+	router := gin.New()
+	router.Use(CORSMiddleware())
+	router.OPTIONS("/", func(c *gin.Context) {})
+
+	req := httptest.NewRequest(http.MethodOptions, "/", nil)
+	response := httptest.NewRecorder()
+	router.ServeHTTP(response, req)
+
+	allowedHeaders := response.Header().Get("Access-Control-Allow-Headers")
+	want := mapping.HeaderField("app_store_region")
+	if !strings.Contains(allowedHeaders, want) {
+		t.Fatalf("allowed headers = %q, want mapped header %q", allowedHeaders, want)
+	}
 }

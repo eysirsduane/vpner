@@ -30,6 +30,7 @@ func CORSMiddleware() gin.HandlerFunc {
 			mapping.HeaderField("device_no"),
 			mapping.HeaderField("client_time"),
 			mapping.HeaderField("time_zone"),
+			mapping.HeaderField("app_store_region"),
 		}, ", "))
 		c.Header("Access-Control-Expose-Headers", "Content-Length, Content-Type")
 		c.Header("Access-Control-Max-Age", "86400")
