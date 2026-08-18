@@ -638,7 +638,7 @@ func TestMapSwaggerCurrentDocsUsesConfiguredMapping(t *testing.T) {
 	versionPost := versionPath["post"].(map[string]interface{})
 	versionParameters := versionPost["parameters"].([]interface{})
 	mappedHeaders := map[string]bool{}
-	for _, field := range []string{"platform", "version", "build", "client_time", "time_zone", "app_store_region"} {
+	for _, field := range []string{"platform", "version", "build", "client_time", "time_zone", "app_store_region", "language"} {
 		mappedHeaders[HeaderField(field)] = false
 	}
 	for _, parameter := range versionParameters {

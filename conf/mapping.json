@@ -8,7 +8,8 @@
     "device_no": "X-Device-No",
     "client_time": "X-Client-Time",
     "time_zone": "X-Time-Zone",
-    "app_store_region": "X-App-Store-Region"
+    "app_store_region": "X-App-Store-Region",
+    "language": "X-Language"
   },
   "field_affix": {
     "prefix": "",

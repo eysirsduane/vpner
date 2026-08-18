@@ -19,6 +19,7 @@ var swaggerHeaderDefaults = []struct {
 	{field: "client_time", value: "2026-07-11T20:30:15.123+08:00"},
 	{field: "time_zone", value: "Asia/Shanghai"},
 	{field: "app_store_region", value: "CHN"},
+	{field: "language", value: "zh-Hans"},
 }
 
 // SwaggerGlobalHeaders returns Swagger-only public request headers from the active mapping
@@ -208,6 +209,8 @@ func originalSwaggerHeaderName(field string) string {
 		return "X-Time-Zone"
 	case "app_store_region":
 		return "X-App-Store-Region"
+	case "language":
+		return "X-Language"
 	default:
 		return field
 	}

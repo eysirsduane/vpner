@@ -35,12 +35,16 @@ func TestClientInfoMiddlewareReadsMappedClientTime(t *testing.T) {
 		if info.AppStoreRegion != "CHN" {
 			t.Fatalf("app store region = %q, want %q", info.AppStoreRegion, "CHN")
 		}
+		if info.Language != "zh-Hans" {
+			t.Fatalf("language = %q, want %q", info.Language, "zh-Hans")
+		}
 	})
 
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	req.Header.Set(mapping.HeaderField("client_time"), "2026-07-11T20:30:15.123+08:00")
 	req.Header.Set(mapping.HeaderField("time_zone"), "Asia/Shanghai")
 	req.Header.Set(mapping.HeaderField("app_store_region"), " CHN ")
+	req.Header.Set(mapping.HeaderField("language"), " ZH-HANS ")
 	router.ServeHTTP(httptest.NewRecorder(), req)
 }
 
@@ -50,6 +54,22 @@ func TestNormalizeAppStoreRegionLimitsLength(t *testing.T) {
 	}
 	if got := []rune(normalizeAppStoreRegion(strings.Repeat("界", 65))); len(got) != 64 {
 		t.Fatalf("normalized app store region length = %d, want 64", len(got))
+	}
+}
+
+func TestNormalizeLanguage(t *testing.T) {
+	tests := map[string]string{
+		" zh-Hans ": "zh-Hans",
+		"ZH-HANS":   "zh-Hans",
+		"EN":        "en",
+		"zh":        "",
+		"zh-CN":     "",
+		"":          "",
+	}
+	for input, want := range tests {
+		if got := normalizeLanguage(input); got != want {
+			t.Fatalf("normalizeLanguage(%q) = %q, want %q", input, got, want)
+		}
 	}
 }
 
@@ -63,8 +83,10 @@ func TestCORSAllowsMappedAppStoreRegionHeader(t *testing.T) {
 	router.ServeHTTP(response, req)
 
 	allowedHeaders := response.Header().Get("Access-Control-Allow-Headers")
-	want := mapping.HeaderField("app_store_region")
-	if !strings.Contains(allowedHeaders, want) {
-		t.Fatalf("allowed headers = %q, want mapped header %q", allowedHeaders, want)
+	for _, field := range []string{"app_store_region", "language"} {
+		want := mapping.HeaderField(field)
+		if !strings.Contains(allowedHeaders, want) {
+			t.Fatalf("allowed headers = %q, want mapped header %q", allowedHeaders, want)
+		}
 	}
 }

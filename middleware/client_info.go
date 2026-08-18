@@ -20,6 +20,7 @@ type ClientInfo struct {
 	ClientTime     time.Time
 	TimeZone       string
 	AppStoreRegion string
+	Language       string
 }
 
 func ClientInfoMiddleware() gin.HandlerFunc {
@@ -34,6 +35,7 @@ func ClientInfoMiddleware() gin.HandlerFunc {
 			ClientTime:     parseClientTime(clientTime),
 			TimeZone:       timeZone,
 			AppStoreRegion: normalizeAppStoreRegion(headerValue(c, "app_store_region")),
+			Language:       normalizeLanguage(headerValue(c, "language")),
 		}
 		c.Set(ContextClientInfoKey, info)
 		c.Next()
@@ -99,4 +101,15 @@ func normalizeAppStoreRegion(region string) string {
 		region = string(runes[:64])
 	}
 	return region
+}
+
+func normalizeLanguage(language string) string {
+	switch strings.ToLower(strings.TrimSpace(language)) {
+	case "zh-hans":
+		return "zh-Hans"
+	case "en":
+		return "en"
+	default:
+		return ""
+	}
 }

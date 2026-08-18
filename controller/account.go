@@ -30,6 +30,7 @@ type autoLoginParams struct {
 	Platform        string
 	Version         string
 	AppStoreRegion  string
+	Language        string
 	MobileName      string
 	MobileVersion   string
 	MobileModelName string
@@ -246,6 +247,9 @@ func applyClientInfoToAutoLoginParams(c *gin.Context, params autoLoginParams) au
 	}
 	if client.AppStoreRegion != "" {
 		params.AppStoreRegion = client.AppStoreRegion
+	}
+	if client.Language != "" {
+		params.Language = client.Language
 	}
 	return params
 }
@@ -675,6 +679,7 @@ func buildGuestUser(c *gin.Context, params autoLoginParams, vipTime *time.Time, 
 		Platform:        params.Platform,
 		Version:         params.Version,
 		AppStoreRegion:  params.AppStoreRegion,
+		Language:        params.Language,
 		IsPay:           -1,
 		RegIp:           ip,
 		RegIpRegion:     ipRegion,
@@ -737,6 +742,7 @@ func updateLogin(user model.User, ip string, params autoLoginParams) error {
 		Platform:        platform,
 		Version:         params.Version,
 		AppStoreRegion:  params.AppStoreRegion,
+		Language:        params.Language,
 		MobileName:      params.MobileName,
 		MobileVersion:   params.MobileVersion,
 		MobileModelName: params.MobileModelName,
@@ -1734,6 +1740,14 @@ func UserInfoHandler(c *gin.Context) {
 			return
 		}
 		user.AppStoreRegion = appStoreRegion
+	}
+	language := middleware.CurrentClientInfo(c).Language
+	if language != "" && language != user.Language {
+		if err := model.UpdateUserFieldsByID(user.Id, map[string]interface{}{"language": language}); err != nil {
+			JsonReturn(c, CodeError, err.Error(), nil)
+			return
+		}
+		user.Language = language
 	}
 	returnUserInfo(c, user, 0)
 }

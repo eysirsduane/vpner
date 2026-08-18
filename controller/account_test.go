@@ -17,6 +17,7 @@ func TestApplyClientInfoToAutoLoginParamsIncludesAppStoreRegion(t *testing.T) {
 	context.Set(middleware.ContextClientInfoKey, middleware.ClientInfo{
 		Version:        "1.2.3",
 		AppStoreRegion: "CHN",
+		Language:       "zh-Hans",
 	})
 
 	params := applyClientInfoToAutoLoginParams(context, autoLoginParams{})
@@ -25,6 +26,9 @@ func TestApplyClientInfoToAutoLoginParamsIncludesAppStoreRegion(t *testing.T) {
 	}
 	if params.AppStoreRegion != "CHN" {
 		t.Fatalf("AppStoreRegion = %q, want %q", params.AppStoreRegion, "CHN")
+	}
+	if params.Language != "zh-Hans" {
+		t.Fatalf("Language = %q, want %q", params.Language, "zh-Hans")
 	}
 }
 
