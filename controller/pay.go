@@ -34,7 +34,7 @@ const (
 )
 
 type PayLaunchRequest struct {
-	PackageId int `json:"package_id" example:"1"` // 套餐ID
+	PackageId int `json:"package_id" binding:"required" example:"1"` // 套餐ID
 }
 
 type PayLaunchResponse struct {
@@ -44,7 +44,7 @@ type PayLaunchResponse struct {
 }
 
 type AppleVerifyRequest struct {
-	TransactionId string `json:"transaction_id" example:"1000000000000000"` // 苹果交易号
+	TransactionId string `json:"transaction_id" binding:"required" example:"1000000000000000"` // 苹果交易号
 }
 
 type AppleVerifyResponse struct {
@@ -88,6 +88,10 @@ type payContext struct {
 func PayLaunchHandler(c *gin.Context) {
 	var req PayLaunchRequest
 	if err := BindMappedJSON(c, &req); err != nil {
+		if strings.Contains(err.Error(), "'PackageId' failed on the 'required' tag") {
+			JsonReturn(c, CodeError, "package_id is required", nil)
+			return
+		}
 		JsonReturn(c, CodeError, "invalid json body", nil)
 		return
 	}
@@ -174,6 +178,10 @@ func PayLaunchHandler(c *gin.Context) {
 func AppleVerifyHandler(c *gin.Context) {
 	var req AppleVerifyRequest
 	if err := BindMappedJSON(c, &req); err != nil {
+		if strings.Contains(err.Error(), "'TransactionId' failed on the 'required' tag") {
+			JsonReturn(c, CodeError, "transaction_id is required", nil)
+			return
+		}
 		JsonReturn(c, CodeError, "invalid json body", nil)
 		return
 	}

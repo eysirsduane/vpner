@@ -1551,6 +1551,9 @@ const docTemplate = `{
         },
         "controller.AppleVerifyRequest": {
             "type": "object",
+            "required": [
+                "transaction_id"
+            ],
             "properties": {
                 "transaction_id": {
                     "description": "苹果交易号",
@@ -2348,6 +2351,9 @@ const docTemplate = `{
         },
         "controller.PayLaunchRequest": {
             "type": "object",
+            "required": [
+                "package_id"
+            ],
             "properties": {
                 "package_id": {
                     "description": "套餐ID",
