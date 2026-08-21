@@ -27,6 +27,8 @@ const (
 	ConfigSkipProxyDomains           = "skip_proxy_domains"
 	ConfigRealLogoffVersions         = "account.real_logoff_versions"
 	ConfigMaxLoginDevices            = "account.max_login_devices"
+	ConfigRequestResponseDebug       = "debug.request_response_enabled"
+	ConfigRequestResponseDebugUsers  = "debug.request_response_user_ids"
 )
 
 // Config 系统配置表
@@ -177,6 +179,18 @@ func InitConfigs() error {
 			Code:      ConfigMaxLoginDevices,
 			Value:     "2",
 			Remark:    "每个账号允许同时登录的最大设备数",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigRequestResponseDebug,
+			Value:     "off",
+			Remark:    "指定用户请求响应调试日志开关，on开启，off关闭",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigRequestResponseDebugUsers,
+			Value:     "",
+			Remark:    "请求响应调试用户ID列表，多个用英文逗号分隔",
 		},
 	}
 

@@ -16,6 +16,7 @@ func InitRouter() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Use(middleware.CORSMiddleware())
 	router.Use(middleware.ClientInfoMiddleware())
+	router.Use(middleware.RequestResponseDebugMiddleware())
 
 	// 公开路由
 	public := router.Group("")
