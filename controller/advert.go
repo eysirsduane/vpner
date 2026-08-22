@@ -67,8 +67,8 @@ func AdvertHandler(c *gin.Context) {
 		result = append(result, AdvertResponse{
 			Id:           advert.Id,
 			Position:     advert.Position,
-			Title:        advert.Title,
-			Content:      advert.Content,
+			Title:        localizedTextValue(advert.Title, clientInfo.Language),
+			Content:      localizedTextValue(advert.Content, clientInfo.Language),
 			ImageUrl:     advert.ImageUrl,
 			LinkUrl:      advert.LinkUrl,
 			ShowTimes:    record.ShowTimes,

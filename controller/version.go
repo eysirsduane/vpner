@@ -75,14 +75,14 @@ func VersionHandler(c *gin.Context) {
 	force := version.Force
 	JsonReturn(c, CodeSuccess, "success", VersionResponse{
 		HasUpdate: true,
-		Name:      version.Name,
+		Name:      localizedTextValue(version.Name, client.Language),
 		Platform:  version.Platform,
 		Version:   version.Version,
 		Build:     version.Build,
 		Force:     &force,
 		Url:       version.Url,
 		Size:      version.Size,
-		Content:   version.Content,
+		Content:   localizedTextValue(version.Content, client.Language),
 	})
 }
 

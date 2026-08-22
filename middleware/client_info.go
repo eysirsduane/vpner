@@ -104,12 +104,12 @@ func normalizeAppStoreRegion(region string) string {
 }
 
 func normalizeLanguage(language string) string {
-	switch strings.ToLower(strings.TrimSpace(language)) {
-	case "zh-hans":
-		return "zh-Hans"
-	case "en":
-		return "en"
-	default:
+	language = strings.ToLower(strings.TrimSpace(language))
+	if language == "" {
 		return ""
 	}
+	if language == "zh" || strings.HasPrefix(language, "zh-") || strings.HasPrefix(language, "zh_") {
+		return "zh-Hans"
+	}
+	return "en"
 }

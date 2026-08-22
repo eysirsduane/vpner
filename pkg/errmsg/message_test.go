@@ -26,3 +26,42 @@ func TestFriendly(t *testing.T) {
 		})
 	}
 }
+
+func TestFriendlyForLanguage(t *testing.T) {
+	if got := FriendlyForLanguage("package not found", "EN"); got != "The selected plan is unavailable." {
+		t.Fatalf("FriendlyForLanguage() = %q", got)
+	}
+	if got := FriendlyForLanguage("package not found", "Zh-CN"); got != "套餐不存在或已下架" {
+		t.Fatalf("FriendlyForLanguage() = %q", got)
+	}
+	if got := FriendlyForLanguage("some internal error", "fr"); got != "System error. Please try again later." {
+		t.Fatalf("FriendlyForLanguage() = %q", got)
+	}
+	if got := Localize("会员已过期，请断开连接", "EN-us"); got != "Membership has expired. Please disconnect." {
+		t.Fatalf("Localize() = %q", got)
+	}
+}
+
+func TestEnglishMessagesCoverFriendlyMessages(t *testing.T) {
+	messages := map[string]bool{defaultErrorMessage: true}
+	for _, message := range exactMessages {
+		messages[message] = true
+	}
+	for _, item := range containsMessages {
+		messages[item.msg] = true
+	}
+	for field := range map[string]bool{
+		"platform": true, "version": true, "build": true, "device_no": true,
+		"X-Platform": true, "X-Version": true, "X-Build": true,
+		"username": true, "password": true, "old_password": true, "new_password": true,
+		"package_id": true, "transaction_id": true, "code": true, "flow": true,
+		"invite_code": true, "id": true, "unknown": true,
+	} {
+		messages[requiredMessage(field+" is required")] = true
+	}
+	for message := range messages {
+		if _, ok := englishMessages[message]; !ok {
+			t.Errorf("missing English translation for %q", message)
+		}
+	}
+}

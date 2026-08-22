@@ -50,8 +50,8 @@ func PopupHandler(c *gin.Context) {
 	}
 	JsonReturn(c, CodeSuccess, "success", PopupResponse{
 		Id:           popup.Id,
-		Title:        popup.Title,
-		Content:      popup.Content,
+		Title:        localizedTextValue(popup.Title, clientInfo.Language),
+		Content:      localizedTextValue(popup.Content, clientInfo.Language),
 		ImageUrl:     popupImageResponseValue(popup.ImageUrl),
 		JumpType:     popup.JumpType,
 		JumpTarget:   popup.JumpTarget,

@@ -11,6 +11,7 @@ import (
 
 	"just-vpn/middleware"
 	"just-vpn/model"
+	"just-vpn/pkg/errmsg"
 	"just-vpn/pkg/jwt"
 	"just-vpn/pkg/mapping"
 	"just-vpn/pkg/setting"
@@ -542,23 +543,39 @@ func limitInviteRewardByMaxReward(currentRewardTime int, rewardSeconds int) int 
 	return rewardSeconds
 }
 
-func rewardText(seconds int) string {
+func rewardText(seconds int, language string) string {
+	english := language != simplifiedChineseLanguage && language != ""
 	if seconds%(30*24*60*60) == 0 {
+		if english {
+			return strconv.Itoa(seconds/(30*24*60*60)) + "-month membership"
+		}
 		return strconv.Itoa(seconds/(30*24*60*60)) + "个月会员"
 	}
 	if seconds%(24*60*60) == 0 {
+		if english {
+			return strconv.Itoa(seconds/(24*60*60)) + "-day membership"
+		}
 		return strconv.Itoa(seconds/(24*60*60)) + "天会员"
 	}
 	if seconds%(60*60) == 0 {
+		if english {
+			return strconv.Itoa(seconds/(60*60)) + "-hour membership"
+		}
 		return strconv.Itoa(seconds/(60*60)) + "小时会员"
 	}
 	if seconds%60 == 0 {
+		if english {
+			return strconv.Itoa(seconds/60) + "-minute membership"
+		}
 		return strconv.Itoa(seconds/60) + "分钟会员"
+	}
+	if english {
+		return strconv.Itoa(seconds) + "-second membership"
 	}
 	return strconv.Itoa(seconds) + "秒会员"
 }
 
-func inviteRewardDetail() (inviteRewardConfig, []InviteMilestoneResponse, error) {
+func inviteRewardDetail(language string) (inviteRewardConfig, []InviteMilestoneResponse, error) {
 	config, err := inviteRewardConfigValue()
 	if err != nil {
 		return inviteRewardConfig{}, nil, err
@@ -568,7 +585,7 @@ func inviteRewardDetail() (inviteRewardConfig, []InviteMilestoneResponse, error)
 		responses = append(responses, InviteMilestoneResponse{
 			Count:         milestone.Count,
 			RewardSeconds: milestone.RewardSeconds,
-			RewardText:    rewardText(milestone.RewardSeconds),
+			RewardText:    rewardText(milestone.RewardSeconds, language),
 		})
 	}
 	return config, responses, nil
@@ -618,14 +635,14 @@ func ensureLoginAllowed(userId int, deviceNo string) error {
 	return nil
 }
 
-func buildDeviceResponse(user model.User, isLocal bool) DeviceResponse {
+func buildDeviceResponse(user model.User, isLocal bool, language string) DeviceResponse {
 	lastLoginTime := ""
 	if user.LastLoginTime != nil {
 		lastLoginTime = formatVipTime(user.LastLoginTime)
 	}
 	mobileName := user.MobileName
 	if mobileName == "" && isLocal {
-		mobileName = "本机设备"
+		mobileName = errmsg.Localize("本机设备", language)
 	}
 	return DeviceResponse{
 		Id:              user.Id,
@@ -639,9 +656,9 @@ func buildDeviceResponse(user model.User, isLocal bool) DeviceResponse {
 	}
 }
 
-func buildDeviceInfo(user model.User) (DeviceInfoResponse, error) {
+func buildDeviceInfo(user model.User, language string) (DeviceInfoResponse, error) {
 	deviceInfo := DeviceInfoResponse{
-		LocalDevice: buildDeviceResponse(user, true),
+		LocalDevice: buildDeviceResponse(user, true, language),
 		Devices:     make([]DeviceResponse, 0),
 	}
 	if user.Type == 1 || user.Username == "" {
@@ -655,7 +672,7 @@ func buildDeviceInfo(user model.User) (DeviceInfoResponse, error) {
 		if item.Id == user.Id {
 			continue
 		}
-		device := buildDeviceResponse(item, false)
+		device := buildDeviceResponse(item, false, language)
 		if deviceInfo.TwoDevice.Id == 0 {
 			deviceInfo.TwoDevice = device
 		}
@@ -711,9 +728,12 @@ func createDeviceUser(c *gin.Context, params autoLoginParams) (model.User, error
 			return nil
 		}
 		return tx.Create(&model.UserNotice{
-			UserId:   user.Id,
-			Title:    "欢迎使用",
-			Content:  "欢迎使用，已为你免费赠送" + rewardText(freeSeconds) + "时长，可立即体验高速线路",
+			UserId: user.Id,
+			Title:  multilingualTextValue("欢迎使用", "Welcome"),
+			Content: multilingualTextValue(
+				"欢迎使用，已为你免费赠送"+rewardText(freeSeconds, simplifiedChineseLanguage)+"时长，可立即体验高速线路",
+				"Welcome! You have received a free "+rewardText(freeSeconds, "en")+" and can start using high-speed servers now.",
+			),
 			Priority: 100,
 			Status:   model.UserNoticeStatusUnread,
 		}).Error
@@ -1434,7 +1454,7 @@ func DeviceInfoHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	deviceInfo, err := buildDeviceInfo(user)
+	deviceInfo, err := buildDeviceInfo(user, middleware.CurrentClientInfo(c).Language)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -1515,7 +1535,7 @@ func DeviceLogoutHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	deviceInfo, err := buildDeviceInfo(user)
+	deviceInfo, err := buildDeviceInfo(user, middleware.CurrentClientInfo(c).Language)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -1702,7 +1722,8 @@ func InviteDetailHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	rewardConfig, milestones, err := inviteRewardDetail()
+	language := middleware.CurrentClientInfo(c).Language
+	rewardConfig, milestones, err := inviteRewardDetail(language)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -1713,7 +1734,7 @@ func InviteDetailHandler(c *gin.Context) {
 		ShareCount:       user.ShareCount,
 		RewardTime:       user.RewardTime,
 		PerInviteSeconds: rewardConfig.PerInviteSeconds,
-		PerInviteText:    rewardText(rewardConfig.PerInviteSeconds),
+		PerInviteText:    rewardText(rewardConfig.PerInviteSeconds, language),
 		Milestones:       milestones,
 	})
 }

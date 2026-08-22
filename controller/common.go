@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"just-vpn/middleware"
 	"just-vpn/pkg/errmsg"
 	"just-vpn/pkg/mapping"
 	"net/http"
@@ -25,8 +26,11 @@ func JsonReturn(c *gin.Context, code int, msg string, result interface{}) {
 	if result == nil {
 		result = gin.H{}
 	}
+	language := middleware.CurrentClientInfo(c).Language
 	if code != CodeSuccess {
-		msg = errmsg.Friendly(msg)
+		msg = errmsg.FriendlyForLanguage(msg, language)
+	} else {
+		msg = errmsg.Localize(msg, language)
 	}
 	originalPath := mapping.OriginalEndpoint(c.FullPath())
 	response := map[string]interface{}{

@@ -141,10 +141,10 @@ func configStringJSONList(code string) []string {
 	return result
 }
 
-func buildInitInvite() InitInviteResponse {
+func buildInitInvite(language string) InitInviteResponse {
 	validHours := inviteConfigValueInt(model.InviteConfigValidHours, 72)
 	maxRewardDays := inviteConfigValueInt(model.InviteConfigMaxRewardDays, 300)
-	config, milestones, err := inviteRewardDetail()
+	config, milestones, err := inviteRewardDetail(language)
 	if err != nil {
 		config = inviteRewardConfig{
 			PerInviteSeconds: 3600,
@@ -153,7 +153,7 @@ func buildInitInvite() InitInviteResponse {
 			{
 				Count:         24,
 				RewardSeconds: 2592000,
-				RewardText:    rewardText(2592000),
+				RewardText:    rewardText(2592000, language),
 			},
 		}
 	}
@@ -170,7 +170,7 @@ func buildInitInvite() InitInviteResponse {
 	return InitInviteResponse{
 		ValidHours:       validHours,
 		PerInviteSeconds: config.PerInviteSeconds,
-		PerInviteText:    rewardText(config.PerInviteSeconds),
+		PerInviteText:    rewardText(config.PerInviteSeconds, language),
 		MaxRewardDays:    maxRewardDays,
 		Milestones:       initMilestones,
 	}
@@ -184,7 +184,7 @@ func buildCustomerServiceURL(user model.User) string {
 	return strings.ReplaceAll(link, "#ID", strconv.Itoa(user.Id))
 }
 
-func buildInitResponse(user model.User) InitResponse {
+func buildInitResponse(user model.User, language string) InitResponse {
 	return InitResponse{
 		Agreements: InitAgreementsResponse{
 			UserAgreement:    model.ConfigValue(model.ConfigUserAgreement, ""),
@@ -194,7 +194,7 @@ func buildInitResponse(user model.User) InitResponse {
 			Qrcode: model.ConfigValue(model.ConfigShareQrcode, ""),
 			Links:  configStringJSONList(model.ConfigShareLinks),
 		},
-		Invite: buildInitInvite(),
+		Invite: buildInitInvite(language),
 		App: InitAppResponse{
 			Website:            model.ConfigValue(model.ConfigWebsite, ""),
 			NewUserFreeSeconds: configInt(model.ConfigNewUserFreeSeconds, 3600),
@@ -225,5 +225,6 @@ func InitHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	JsonReturn(c, CodeSuccess, "success", buildInitResponse(user))
+	language := middleware.CurrentClientInfo(c).Language
+	JsonReturn(c, CodeSuccess, "success", buildInitResponse(user, language))
 }

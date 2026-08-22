@@ -336,8 +336,8 @@ func queryInternalMemberOrders(userID int) ([]InternalMemberOrderResult, error) 
 		item := InternalMemberOrderResult{
 			ID:       order.Id,
 			OrderNo:  order.OrderNo,
-			PakName:  order.PakName,
-			Name:     order.Name,
+			PakName:  localizedTextValue(order.PakName, simplifiedChineseLanguage),
+			Name:     localizedTextValue(order.Name, simplifiedChineseLanguage),
 			PayType:  order.PayType,
 			Money:    centsToYuan(int64(order.Money)),
 			Price:    centsToYuan(int64(order.Price)),

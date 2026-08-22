@@ -55,7 +55,8 @@ func NoticeHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := buildNoticeResponse(user.Id, currentNoticePlatform(c), false)
+	clientInfo := middleware.CurrentClientInfo(c)
+	result, err := buildNoticeResponse(user.Id, currentNoticePlatform(c), clientInfo.Language, false)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -79,7 +80,8 @@ func UnreadNoticeHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := buildNoticeResponse(user.Id, currentNoticePlatform(c), true)
+	clientInfo := middleware.CurrentClientInfo(c)
+	result, err := buildNoticeResponse(user.Id, currentNoticePlatform(c), clientInfo.Language, true)
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
@@ -128,12 +130,12 @@ func ReadNoticeHandler(c *gin.Context) {
 	JsonReturn(c, CodeSuccess, "success", nil)
 }
 
-func buildNoticeResponse(userId int, platform string, onlyUnread bool) (NoticeResponse, error) {
-	systemNotices, err := noticeSystemRows(userId, platform, onlyUnread)
+func buildNoticeResponse(userId int, platform string, language string, onlyUnread bool) (NoticeResponse, error) {
+	systemNotices, err := noticeSystemRows(userId, platform, language, onlyUnread)
 	if err != nil {
 		return NoticeResponse{}, err
 	}
-	userNotices, err := noticeUserRows(userId, onlyUnread)
+	userNotices, err := noticeUserRows(userId, language, onlyUnread)
 	if err != nil {
 		return NoticeResponse{}, err
 	}
@@ -160,7 +162,7 @@ func buildNoticeResponse(userId int, platform string, onlyUnread bool) (NoticeRe
 	}, nil
 }
 
-func noticeSystemRows(userId int, platform string, onlyUnread bool) ([]NoticeItemResponse, error) {
+func noticeSystemRows(userId int, platform string, language string, onlyUnread bool) ([]NoticeItemResponse, error) {
 	var notices []model.SystemNotice
 	var err error
 	if onlyUnread {
@@ -189,8 +191,8 @@ func noticeSystemRows(userId int, platform string, onlyUnread bool) ([]NoticeIte
 		items = append(items, sortableNoticeItem{
 			NoticeItemResponse: NoticeItemResponse{
 				Id:         notice.Id,
-				Title:      notice.Title,
-				Content:    notice.Content,
+				Title:      localizedTextValue(notice.Title, language),
+				Content:    localizedTextValue(notice.Content, language),
 				IsRead:     isRead,
 				CreateTime: notice.CreateTime.Format("2006-01-02 15:04:05"),
 			},
@@ -201,7 +203,7 @@ func noticeSystemRows(userId int, platform string, onlyUnread bool) ([]NoticeIte
 	return sortNoticeItems(items), nil
 }
 
-func noticeUserRows(userId int, onlyUnread bool) ([]NoticeItemResponse, error) {
+func noticeUserRows(userId int, language string, onlyUnread bool) ([]NoticeItemResponse, error) {
 	var notices []model.UserNotice
 	var err error
 	if onlyUnread {
@@ -222,8 +224,8 @@ func noticeUserRows(userId int, onlyUnread bool) ([]NoticeItemResponse, error) {
 		items = append(items, sortableNoticeItem{
 			NoticeItemResponse: NoticeItemResponse{
 				Id:         notice.Id,
-				Title:      notice.Title,
-				Content:    notice.Content,
+				Title:      localizedTextValue(notice.Title, language),
+				Content:    localizedTextValue(notice.Content, language),
 				IsRead:     isRead,
 				CreateTime: notice.CreateTime.Format("2006-01-02 15:04:05"),
 			},

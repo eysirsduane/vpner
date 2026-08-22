@@ -55,6 +55,7 @@ type HeartbeatResponse struct {
 // @Success 200 {object} Response{result=[]LineAreaResponse}
 // @Router /lines_list [post]
 func LinesListHandler(c *gin.Context) {
+	language := middleware.CurrentClientInfo(c).Language
 	areas, err := model.GetAvailableNodeAreas()
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
@@ -64,7 +65,7 @@ func LinesListHandler(c *gin.Context) {
 	result := make([]LineAreaResponse, 0, len(areas))
 	for _, area := range areas {
 		result = append(result, LineAreaResponse{
-			Country:     area.Name,
+			Country:     localizedTextValue(area.Name, language),
 			Code:        area.Code,
 			MinConnTime: area.MinConnTime,
 			MaxConnTime: area.MaxConnTime,

@@ -118,7 +118,7 @@ func jsonReturn(c *gin.Context, code int, msg string, result interface{}) {
 		result = gin.H{}
 	}
 	if code != http.StatusOK {
-		msg = errmsg.Friendly(msg)
+		msg = errmsg.FriendlyForLanguage(msg, CurrentClientInfo(c).Language)
 	}
 	originalPath := mapping.OriginalEndpoint(c.FullPath())
 	response := map[string]interface{}{

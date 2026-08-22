@@ -527,6 +527,7 @@ func buildLaunchOrder(user model.User, pack model.Package, decision payLaunchDec
 }
 
 func createXXPayOrder(c *gin.Context, user model.User, pack model.Package, order model.Order) (xxpay.PayInfo, error) {
+	packageName := localizedTextValue(pack.Name, middleware.CurrentClientInfo(c).Language)
 	req := xxpay.CreateOrderRequest{
 		APIURL:     strings.TrimSpace(model.PayConfigValue(model.PayConfigXXPayAPIURL, "")),
 		MchId:      strings.TrimSpace(model.PayConfigValue(model.PayConfigXXPayMchId, "")),
@@ -538,8 +539,8 @@ func createXXPayOrder(c *gin.Context, user model.User, pack model.Package, order
 		Device:     xxpayDevice(middleware.CurrentClientInfo(c).Platform),
 		NotifyURL:  strings.TrimSpace(model.PayConfigValue(model.PayConfigXXPayNotifyURL, "")),
 		ReturnURL:  strings.TrimSpace(model.PayConfigValue(model.PayConfigXXPayReturnURL, "")),
-		Subject:    pack.Name,
-		Body:       fmt.Sprintf("%s-%s", pack.Name, order.OrderNo),
+		Subject:    packageName,
+		Body:       fmt.Sprintf("%s-%s", packageName, order.OrderNo),
 		Key:        strings.TrimSpace(model.PayConfigValue(model.PayConfigXXPayKey, "")),
 	}
 	if req.ProductId == "" {
@@ -706,9 +707,12 @@ func completeXXPayOrder(params map[string]string) error {
 			}
 		}
 		return tx.Create(&model.UserNotice{
-			UserId:   user.Id,
-			Title:    "会员开通成功",
-			Content:  fmt.Sprintf("您已成功开通%s，会员有效期至%s", order.PakName, formatVipTime(vipTime)),
+			UserId: user.Id,
+			Title:  multilingualTextValue("会员开通成功", "Membership activated"),
+			Content: multilingualTextValue(
+				fmt.Sprintf("您已成功开通%s，会员有效期至%s", localizedTextValue(order.PakName, simplifiedChineseLanguage), formatVipTime(vipTime)),
+				fmt.Sprintf("Your %s is active until %s.", localizedTextValue(order.PakName, "en"), formatVipTime(vipTime)),
+			),
 			Priority: 100,
 			Status:   model.UserNoticeStatusUnread,
 		}).Error
@@ -875,9 +879,12 @@ func completeAppleOrder(tx *gorm.DB, c *gin.Context, userId int, pack model.Pack
 		}
 	}
 	if err := tx.Create(&model.UserNotice{
-		UserId:   user.Id,
-		Title:    "会员开通成功",
-		Content:  fmt.Sprintf("您已成功开通%s，会员有效期至%s", pack.Name, formatVipTime(vipTime)),
+		UserId: user.Id,
+		Title:  multilingualTextValue("会员开通成功", "Membership activated"),
+		Content: multilingualTextValue(
+			fmt.Sprintf("您已成功开通%s，会员有效期至%s", localizedTextValue(pack.Name, simplifiedChineseLanguage), formatVipTime(vipTime)),
+			fmt.Sprintf("Your %s is active until %s.", localizedTextValue(pack.Name, "en"), formatVipTime(vipTime)),
+		),
 		Priority: 100,
 		Status:   model.UserNoticeStatusUnread,
 	}).Error; err != nil {
@@ -1001,9 +1008,12 @@ func processAppleRefundNotification(transaction *apple.TransactionInfo) error {
 			}
 		}
 		return tx.Create(&model.UserNotice{
-			UserId:   user.Id,
-			Title:    "会员权益已调整",
-			Content:  fmt.Sprintf("苹果订单%s已退款或撤销，会员有效期已调整", lockedOrder.OrderNo),
+			UserId: user.Id,
+			Title:  multilingualTextValue("会员权益已调整", "Membership updated"),
+			Content: multilingualTextValue(
+				fmt.Sprintf("苹果订单%s已退款或撤销，会员有效期已调整", lockedOrder.OrderNo),
+				fmt.Sprintf("Apple order %s was refunded or revoked. Your membership expiry has been updated.", lockedOrder.OrderNo),
+			),
 			Priority: 100,
 			Status:   model.UserNoticeStatusUnread,
 		}).Error

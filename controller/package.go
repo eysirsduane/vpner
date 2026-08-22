@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"just-vpn/middleware"
 	"just-vpn/model"
 
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,7 @@ type PackageResponse struct {
 // @Success 200 {object} Response{result=[]PackageResponse}
 // @Router /packages [get]
 func PackagesHandler(c *gin.Context) {
+	language := middleware.CurrentClientInfo(c).Language
 	packages, err := model.GetEnabledPackages()
 	if err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
@@ -42,15 +44,15 @@ func PackagesHandler(c *gin.Context) {
 		result = append(result, PackageResponse{
 			Id:          item.Id,
 			AppleId:     item.AppleId,
-			Name:        item.Name,
-			SubName:     item.SubName,
+			Name:        localizedTextValue(item.Name, language),
+			SubName:     localizedTextValue(item.SubName, language),
 			Selected:    item.Selected,
-			Corner:      item.Corner,
+			Corner:      localizedTextValue(item.Corner, language),
 			Price:       item.Price,
-			PriceText:   item.PakTips,
+			PriceText:   localizedTextValue(item.PakTips, language),
 			OriginPrice: item.OriginPrice,
-			Value:       item.Value,
-			Remark:      item.Remark,
+			Value:       localizedTextValue(item.Value, language),
+			Remark:      localizedTextValue(item.Remark, language),
 			Day:         item.Day,
 		})
 	}

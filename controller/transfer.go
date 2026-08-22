@@ -54,8 +54,8 @@ func DelayedPopupHandler(c *gin.Context) {
 
 	JsonReturn(c, CodeSuccess, "success", DelayedPopupResponse{
 		Id:           popup.Id,
-		Title:        popup.Title,
-		Content:      popup.Content,
+		Title:        localizedTextValue(popup.Title, clientInfo.Language),
+		Content:      localizedTextValue(popup.Content, clientInfo.Language),
 		ImageUrl:     popupImageResponseValue(popup.ImageUrl),
 		LinkUrl:      popup.LinkUrl,
 		CanClose:     popup.CanClose,

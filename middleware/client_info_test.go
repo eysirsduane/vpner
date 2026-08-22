@@ -62,8 +62,14 @@ func TestNormalizeLanguage(t *testing.T) {
 		" zh-Hans ": "zh-Hans",
 		"ZH-HANS":   "zh-Hans",
 		"EN":        "en",
-		"zh":        "",
-		"zh-CN":     "",
+		"zh":        "zh-Hans",
+		"zh-CN":     "zh-Hans",
+		"Zh-Cn":     "zh-Hans",
+		"zh_Hant":   "zh-Hans",
+		"zh-TW":     "zh-Hans",
+		"zh-HK":     "zh-Hans",
+		"fr":        "en",
+		"ja-JP":     "en",
 		"":          "",
 	}
 	for input, want := range tests {
