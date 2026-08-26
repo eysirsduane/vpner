@@ -274,6 +274,7 @@ func queryInternalReportStats(start, end time.Time) (InternalReportStatsResult, 
 			return result, err
 		}
 	}
+	result.ConnectBaseUsers = result.NewUsers
 
 	if err := queryInternalReportPaymentStats(start, end, &result); err != nil {
 		return result, err
