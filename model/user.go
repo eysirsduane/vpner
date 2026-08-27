@@ -17,7 +17,7 @@ const (
 	randomUserIDRetries = 20
 	transferCodeLength  = 6
 	transferCodeRetries = 20
-	transferCodeChars   = "0123456789abcdefghijklmnopqrstuvwxyz"
+	transferCodeChars   = "123456789abcdefghjkmnpqrstuvwxyz"
 )
 
 // User 用户表

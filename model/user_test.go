@@ -17,6 +17,12 @@ func TestGenerateRandomUserID(t *testing.T) {
 	}
 }
 
+func TestTransferCodeCharsExcludeAmbiguousCharacters(t *testing.T) {
+	if strings.ContainsAny(transferCodeChars, "0ilo") {
+		t.Fatalf("transferCodeChars contains ambiguous characters: %q", transferCodeChars)
+	}
+}
+
 func TestGenerateRandomTransferCode(t *testing.T) {
 	code, err := GenerateRandomTransferCode("app")
 	if err != nil {
