@@ -2,11 +2,15 @@ package model
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
 
 	"just-vpn/pkg/setting"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
@@ -19,7 +23,16 @@ func Init() error {
 		setting.DatabaseConfig.DbName,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	dbLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		logger.Config{
+			SlowThreshold:             200 * time.Millisecond,
+			LogLevel:                  logger.Warn,
+			IgnoreRecordNotFoundError: true,
+			Colorful:                  false,
+		},
+	)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: dbLogger})
 	if err != nil {
 		return err
 	}
