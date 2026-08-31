@@ -34,6 +34,7 @@ func main() {
 	model.StartNodeOnlineCleaner()
 	task.StartLogCleanupTask()
 	task.StartDailyStatTask()
+	task.StartPayDailyLimitTask()
 	task.StartShowRecordFlushTask()
 	task.StartNodePullTask()
 

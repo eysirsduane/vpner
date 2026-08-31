@@ -77,7 +77,7 @@ type payContext struct {
 
 // PayLaunchHandler 发起支付
 // @Summary 发起支付
-// @Description 非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐 apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带
+// @Description 非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和每日动态内购限额判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐 apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带
 // @Tags 支付
 // @Accept json
 // @Produce json
@@ -442,21 +442,27 @@ func shouldForceAppleByVersion(ctx payContext) (bool, string) {
 	return false, "only_apple_version_not_matched"
 }
 
-// shouldForceAppleByTodayAmount 判断今日苹果内购收款是否未达到开放H5的金额
+// shouldForceAppleByTodayAmount 判断今日苹果内购收款是否未达到当天动态限额
 func shouldForceAppleByTodayAmount(ctx payContext) (bool, string, error) {
-	threshold := payH5AppleAmountThreshold()
+	threshold, err := payTodayH5AppleLimit(ctx.now)
+	if err != nil {
+		return true, "daily_h5_apple_limit_query_error", err
+	}
 	if threshold <= 0 {
 		return false, "h5_threshold_disabled", nil
 	}
-	total, err := model.TodayApplePaidAmount(ctx.now)
+	total, err := payTodayApplePaidAmount(ctx.now)
 	if err != nil {
 		return true, "today_apple_amount_query_error", err
 	}
-	if total < threshold {
+	if int64(total) < threshold {
 		return true, fmt.Sprintf("today_apple_amount_not_reached:%d/%d", total, threshold), nil
 	}
 	return false, fmt.Sprintf("today_apple_amount_reached:%d/%d", total, threshold), nil
 }
+
+var payTodayH5AppleLimit = model.TodayH5AppleLimit
+var payTodayApplePaidAmount = model.TodayApplePaidAmount
 
 func appleIAPDecision(pack model.Package, reason string) payLaunchDecision {
 	return payLaunchDecision{
@@ -472,15 +478,6 @@ func h5PayDecision(reason string) payLaunchDecision {
 		target:  model.PayConfigValue(model.PayConfigH5Target, "https://www.baidu.com"),
 		reason:  reason,
 	}
-}
-
-func payH5AppleAmountThreshold() int {
-	value := strings.TrimSpace(model.PayConfigValue(model.PayConfigH5AppleAmount, "0"))
-	threshold, err := strconv.Atoi(value)
-	if err != nil || threshold < 0 {
-		return 0
-	}
-	return threshold
 }
 
 func splitCommaConfig(value string) []string {

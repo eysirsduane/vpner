@@ -11,6 +11,7 @@ const (
 	PayConfigOnlyAppleRegions          = "only_apple_regions"
 	PayConfigOnlyAppleVersions         = "only_apple_versions"
 	PayConfigH5AppleAmount             = "h5_apple_amount"
+	PayConfigH5AppleAmountPercent      = "h5_apple_amount_percent"
 	PayConfigH5Target                  = "h5_target"
 	PayConfigPaidThirdDirectH5         = "paid_third_direct_h5"
 	PayConfigOverseasAppleOnly         = "overseas_apple_only"
@@ -84,7 +85,13 @@ func InitPayConfigs() error {
 			BaseModel: BaseModel{CreateTime: now},
 			Code:      PayConfigH5AppleAmount,
 			Value:     "0",
-			Remark:    "今日苹果内购收款达到多少分后开放H5支付，0表示不限制",
+			Remark:    "每日苹果内购最低限额，单位分；动态限额不足该金额时使用该金额，0表示不设置最低限额",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      PayConfigH5AppleAmountPercent,
+			Value:     "0",
+			Remark:    "每日苹果内购限额占前一日总收入的百分比，范围0-100；0表示仅使用最低限额",
 		},
 		{
 			BaseModel: BaseModel{CreateTime: now},
@@ -201,6 +208,12 @@ func InitPayConfigs() error {
 		var existing PayConfig
 		err := DB.Where("code = ?", config.Code).First(&existing).Error
 		if err == nil {
+			if config.Code == PayConfigH5AppleAmount && existing.Remark != config.Remark {
+				if err := DB.Model(&PayConfig{}).Where("id = ?", existing.Id).Update("remark", config.Remark).Error; err != nil {
+					return err
+				}
+				continue
+			}
 			if existing.Remark == "" && config.Remark != "" {
 				if err := DB.Model(&PayConfig{}).Where("id = ?", existing.Id).Update("remark", config.Remark).Error; err != nil {
 					return err
