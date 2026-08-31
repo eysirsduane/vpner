@@ -140,11 +140,8 @@ func ComputeDailyH5AppleLimit(totalRevenue, minimumAmount int64, percent int) in
 	if minimumAmount < 0 {
 		minimumAmount = 0
 	}
-	if percent < 0 {
+	if percent < 0 || percent > 100 {
 		percent = 0
-	}
-	if percent > 100 {
-		percent = 100
 	}
 	dynamicAmount := totalRevenue/100*int64(percent) + totalRevenue%100*int64(percent)/100
 	if dynamicAmount < minimumAmount {
@@ -164,12 +161,13 @@ func h5AppleMinimumAmount() int64 {
 
 func h5AppleAmountPercent() int {
 	value := strings.TrimSpace(PayConfigValue(PayConfigH5AppleAmountPercent, "0"))
+	return parseH5AppleAmountPercent(value)
+}
+
+func parseH5AppleAmountPercent(value string) int {
 	percent, err := strconv.Atoi(value)
-	if err != nil || percent < 0 {
+	if err != nil || percent <= 0 || percent > 100 {
 		return 0
-	}
-	if percent > 100 {
-		return 100
 	}
 	return percent
 }

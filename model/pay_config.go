@@ -90,7 +90,7 @@ func InitPayConfigs() error {
 		{
 			BaseModel: BaseModel{CreateTime: now},
 			Code:      PayConfigH5AppleAmountPercent,
-			Value:     "0",
+			Value:     "7",
 			Remark:    "每日苹果内购限额占前一日总收入的百分比，范围0-100；0表示仅使用最低限额",
 		},
 		{
