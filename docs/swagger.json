@@ -1,0 +1,2682 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Just VPN 后端接口文档",
+        "title": "Just VPN API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/advert": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取当前用户当前平台和版本可展示的广告位列表，并记录展示次数",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "广告"
+                ],
+                "summary": "获取广告位列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/controller.AdvertResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/auto_login": {
+            "post": {
+                "description": "通过设备号登录，设备不存在时自动创建普通用户，新用户会按配置赠送会员时长并生成欢迎通知",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "自动登录",
+                "parameters": [
+                    {
+                        "description": "自动登录请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.AutoLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.UserInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/change_password": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "当前登录账号无需提交旧密码，直接设置新密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "修改密码",
+                "parameters": [
+                    {
+                        "description": "修改密码请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.ChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/connected": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "客户端成功连接节点后上报，用于记录当前连接和连接历史",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "确认 VPN 已连接",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/delayed_popup": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取客户端断网后本地延迟展示的迁移弹窗，并返回当前用户转移码",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "获取延迟弹窗",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.DelayedPopupResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/device_info": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取当前设备和当前账号下其它已登录设备",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "获取设备信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.DeviceInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/device_logout": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "将当前账号下指定的其它设备移除登录并清空设备会员",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "移除设备",
+                "parameters": [
+                    {
+                        "description": "移除设备请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.DeviceLogoutRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.DeviceInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/disconnect": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "客户端主动断开 VPN 时上报，未上报时由心跳超时兜底",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "VPN 断开连接",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/draw_invite_code": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取当前用户长期有效的邀请码，没有则自动生成",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "获取邀请码",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.InviteCodeResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/error": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "客户端上报 App 或 VPN 运行错误，msg_type 允许 app 或 vpn，默认 app",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "上报"
+                ],
+                "summary": "错误信息上报",
+                "parameters": [
+                    {
+                        "description": "错误信息上报请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.ErrorReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "检查 API 服务是否正常运行",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "健康检查",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/heartbeat": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "客户端连接中定时上报，用于刷新当前连接在线时间",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "VPN 心跳",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.HeartbeatResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/init": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取客户端启动所需的协议、分享、邀请、应用、工具入口和代理配置",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "初始化配置",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.InitAPIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/invite_code": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "新用户在有效期内填写邀请码，给邀请人叠加会员奖励",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "填写邀请码",
+                "parameters": [
+                    {
+                        "description": "填写邀请码请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.InviteCodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/invite_detail": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取当前用户的邀请码、填写资格和邀请奖励规则",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "邀请详情",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.InviteDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/lines_list": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取可用的 VPN 国家或区域线路入口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "获取国家线路列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/controller.LineAreaResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "当前设备登录账号，会员以账号表为主并和当前设备会员合并",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "账号登录",
+                "parameters": [
+                    {
+                        "description": "登录请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.UserInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/logoff": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "配置命中的版本会真实注销账号，删除当前设备用户；已登录账号时会删除账号并让该账号所有设备下线，未命中版本只返回成功",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "账号注销",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.LogoffResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "当前设备退出账号并清空设备会员，账号表会员保持不变",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "退出登录",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.UserInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/node": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据国家或区域代码获取本次 VPN 连接节点",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "获取连接节点信息",
+                "parameters": [
+                    {
+                        "description": "获取连接节点请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.NodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.NodeResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/node_config": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据线路代码和连接模式获取加密后的完整 JSON 节点配置",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "获取 JSON 节点配置",
+                "parameters": [
+                    {
+                        "description": "获取 JSON 节点配置请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.NodeConfigRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.NodeConfigResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/node_outbounds": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据线路代码获取加密节点链接和加密outbounds JSON数组",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "获取节点链接和outbounds",
+                "parameters": [
+                    {
+                        "description": "获取节点链接和outbounds请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.NodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.NodeOutboundsResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/notice": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "全量获取当前用户可见的系统通知和个人通知",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "通知"
+                ],
+                "summary": "获取通知列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.NoticeResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/notice/unread": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "增量获取当前用户未读的系统通知和个人通知",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "通知"
+                ],
+                "summary": "获取未读通知列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.NoticeResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/packages": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取当前启用的会员套餐列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "套餐"
+                ],
+                "summary": "获取套餐列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/controller.PackageResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/pay/apple_callback": {
+            "post": {
+                "description": "接收 App Store Server Notifications V2，用于苹果内购补单、退款和撤销处理；接口固定返回 HTTP 200，业务结果写入 apple_notification 表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付"
+                ],
+                "summary": "苹果支付服务端通知",
+                "parameters": [
+                    {
+                        "description": "苹果服务端通知请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.AppleCallbackRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/pay/apple_verify": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "客户端完成苹果内购后提交苹果交易号，后端通过苹果交易信息中的 productId 和 appAccountToken 匹配发起支付时创建的订单，验证成功后更新订单并发放会员权益",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付"
+                ],
+                "summary": "苹果订单验证",
+                "parameters": [
+                    {
+                        "description": "苹果订单验证请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.AppleVerifyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.AppleVerifyResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/pay/launch": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐 apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付"
+                ],
+                "summary": "发起支付",
+                "parameters": [
+                    {
+                        "description": "发起支付请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.PayLaunchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.PayLaunchResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/pay/xx_callback": {
+            "post": {
+                "description": "接收 XX 支付异步回调，验签、验金额并发放会员权益；处理成功返回纯字符串 success",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "支付"
+                ],
+                "summary": "XX支付回调",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/popup": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "获取当前用户当前平台和版本应该展示的弹窗，并记录展示次数",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "获取统一弹窗",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.PopupResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/public_apple_id": {
+            "get": {
+                "description": "获取可用的公共 Apple ID 列表，每个 IP 24 小时内返回同一组账号",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "支付"
+                ],
+                "summary": "获取公共 Apple ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/controller.PublicAppleIdResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/read_notice": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据 system_ids 和 user_ids 批量标记通知已读",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "通知"
+                ],
+                "summary": "批量标记通知已读",
+                "parameters": [
+                    {
+                        "description": "批量标记通知已读请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.ReadNoticeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "将当前设备用户绑定为账号用户，注册成功后返回 token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "注册账号",
+                "parameters": [
+                    {
+                        "description": "注册请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.UserInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/upload/{filepath}": {
+            "get": {
+                "description": "从 upload 目录读取图片或其他静态资源",
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "获取上传静态资源",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "资源相对路径",
+                        "name": "filepath",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
+        "/user_info": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "通过 Authorization Bearer Token 获取当前用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "账号"
+                ],
+                "summary": "用户信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.UserInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/version": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据请求头中的平台和数字版本号检测是否存在新版本",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "版本检测",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "设备平台，支持 iphone/android/ios/ipad",
+                        "name": "X-Platform",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "展示版本号",
+                        "name": "X-Version",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "数字版本号，用于比较",
+                        "name": "X-Build",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.VersionAPIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/vpn_flow": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "客户端上报 VPN 使用流量，单位为 K，用于累加用户总流量和今日流量",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "线路"
+                ],
+                "summary": "VPN 使用流量上报",
+                "parameters": [
+                    {
+                        "description": "VPN 使用流量上报请求",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.VpnFlowRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.AdvertResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "广告内容",
+                    "type": "string",
+                    "example": "限时开通会员享优惠"
+                },
+                "id": {
+                    "description": "广告ID",
+                    "type": "integer",
+                    "example": 1
+                },
+                "image_url": {
+                    "description": "广告图片地址",
+                    "type": "string",
+                    "example": "https://example.com/advert.png"
+                },
+                "link_url": {
+                    "description": "广告点击后使用浏览器打开的链接地址",
+                    "type": "string",
+                    "example": "https://example.com"
+                },
+                "max_show_times": {
+                    "description": "每个用户最大展示次数，0表示不限次数",
+                    "type": "integer",
+                    "example": 3
+                },
+                "position": {
+                    "description": "广告位标识(splash=启动页广告,home_popup=首页弹窗广告,banner=banner广告)",
+                    "type": "string",
+                    "example": "banner"
+                },
+                "show_times": {
+                    "description": "当前用户已展示次数",
+                    "type": "integer",
+                    "example": 1
+                },
+                "sorter": {
+                    "description": "排序值，越大越优先",
+                    "type": "integer",
+                    "example": 100
+                },
+                "title": {
+                    "description": "广告标题",
+                    "type": "string",
+                    "example": "会员优惠"
+                }
+            }
+        },
+        "controller.AppleCallbackRequest": {
+            "type": "object",
+            "required": [
+                "signedPayload"
+            ],
+            "properties": {
+                "signedPayload": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJFUzI1NiIsIng1YyI6Wy..."
+                }
+            }
+        },
+        "controller.AppleVerifyRequest": {
+            "type": "object",
+            "required": [
+                "transaction_id"
+            ],
+            "properties": {
+                "transaction_id": {
+                    "description": "苹果交易号",
+                    "type": "string",
+                    "example": "1000000000000000"
+                }
+            }
+        },
+        "controller.AppleVerifyResponse": {
+            "type": "object",
+            "properties": {
+                "order_no": {
+                    "description": "订单号",
+                    "type": "string",
+                    "example": "20260707120000123456"
+                },
+                "pay_status": {
+                    "description": "支付状态(1=未支付,3=已支付)",
+                    "type": "integer",
+                    "example": 3
+                },
+                "pay_type": {
+                    "description": "支付方式",
+                    "type": "string",
+                    "example": "apple_iap"
+                },
+                "transaction_id": {
+                    "description": "苹果交易号",
+                    "type": "string",
+                    "example": "1000000000000000"
+                },
+                "vip_time": {
+                    "description": "会员到期时间",
+                    "type": "string",
+                    "example": "2026-08-06 12:00:00"
+                }
+            }
+        },
+        "controller.AutoLoginRequest": {
+            "type": "object",
+            "required": [
+                "device_no"
+            ],
+            "properties": {
+                "device_no": {
+                    "type": "string",
+                    "example": "device-001"
+                },
+                "mobile_model_name": {
+                    "type": "string",
+                    "example": "iPhone 15"
+                },
+                "mobile_name": {
+                    "type": "string",
+                    "example": "iPhone"
+                },
+                "mobile_version": {
+                    "type": "string",
+                    "example": "iOS 17.5"
+                },
+                "platform": {
+                    "type": "string",
+                    "example": "iphone"
+                },
+                "source_channel": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1.0.0"
+                }
+            }
+        },
+        "controller.ChangePasswordRequest": {
+            "type": "object",
+            "required": [
+                "new_password"
+            ],
+            "properties": {
+                "new_password": {
+                    "type": "string",
+                    "example": "pass002"
+                }
+            }
+        },
+        "controller.DelayedPopupResponse": {
+            "type": "object",
+            "properties": {
+                "can_close": {
+                    "description": "是否可关闭(0=不可关闭,1=可关闭)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "content": {
+                    "description": "弹窗内容",
+                    "type": "string",
+                    "example": "如当前软件无法使用，请转移到新软件"
+                },
+                "delay_days": {
+                    "description": "断网后延迟展示天数",
+                    "type": "integer",
+                    "example": 3
+                },
+                "id": {
+                    "description": "弹窗ID",
+                    "type": "integer",
+                    "example": 1
+                },
+                "image_url": {
+                    "description": "弹窗图片地址数组",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "/api/v1/upload/pop.png"
+                    ]
+                },
+                "link_url": {
+                    "description": "弹窗跳转链接",
+                    "type": "string",
+                    "example": "https://example.com/download"
+                },
+                "title": {
+                    "description": "弹窗标题",
+                    "type": "string",
+                    "example": "服务迁移提醒"
+                },
+                "transfer_code": {
+                    "description": "当前用户转移码",
+                    "type": "string",
+                    "example": "origin8f3k9q"
+                }
+            }
+        },
+        "controller.DeviceInfoResponse": {
+            "type": "object",
+            "properties": {
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.DeviceResponse"
+                    }
+                },
+                "local_device": {
+                    "$ref": "#/definitions/controller.DeviceResponse"
+                },
+                "two_device": {
+                    "$ref": "#/definitions/controller.DeviceResponse"
+                }
+            }
+        },
+        "controller.DeviceLogoutRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
+        "controller.DeviceResponse": {
+            "type": "object",
+            "properties": {
+                "device_no": {
+                    "type": "string",
+                    "example": "device-001"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "last_login_time": {
+                    "type": "string",
+                    "example": "2026-06-29 12:00:00"
+                },
+                "mobile_model_name": {
+                    "type": "string",
+                    "example": "iPhone 15"
+                },
+                "mobile_name": {
+                    "type": "string",
+                    "example": "iPhone"
+                },
+                "mobile_version": {
+                    "type": "string",
+                    "example": "iOS 17.5"
+                },
+                "platform": {
+                    "type": "string",
+                    "example": "iphone"
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1.0.0"
+                }
+            }
+        },
+        "controller.ErrorReportRequest": {
+            "type": "object",
+            "required": [
+                "mobile_model_name",
+                "mobile_version",
+                "msg"
+            ],
+            "properties": {
+                "mobile_model_name": {
+                    "type": "string",
+                    "example": "iPhone 15"
+                },
+                "mobile_version": {
+                    "type": "string",
+                    "example": "iOS 17.5"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "vpn connect timeout"
+                },
+                "msg_type": {
+                    "type": "string",
+                    "example": "vpn"
+                }
+            }
+        },
+        "controller.HeartbeatResponse": {
+            "type": "object",
+            "properties": {
+                "connect_status": {
+                    "description": "连接状态(1=继续连接,0=断开连接)",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controller.InitAPIResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应状态码",
+                    "type": "integer",
+                    "example": 200
+                },
+                "msg": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "success"
+                },
+                "result": {
+                    "description": "初始化配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.InitResponse"
+                        }
+                    ]
+                }
+            }
+        },
+        "controller.InitAgreementsResponse": {
+            "type": "object",
+            "properties": {
+                "privacy_agreement": {
+                    "description": "隐私协议地址",
+                    "type": "string",
+                    "example": "https://example.com/privacy-policy"
+                },
+                "user_agreement": {
+                    "description": "用户服务协议地址",
+                    "type": "string",
+                    "example": "https://example.com/user-agreement"
+                }
+            }
+        },
+        "controller.InitAppResponse": {
+            "type": "object",
+            "properties": {
+                "new_user_free_seconds": {
+                    "description": "新用户默认赠送会员秒数",
+                    "type": "integer",
+                    "example": 3600
+                },
+                "website": {
+                    "description": "官网地址",
+                    "type": "string",
+                    "example": "https://example.com"
+                }
+            }
+        },
+        "controller.InitInviteMilestoneResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "description": "达到邀请人数",
+                    "type": "integer",
+                    "example": 24
+                },
+                "reward_seconds": {
+                    "description": "额外奖励会员秒数",
+                    "type": "integer",
+                    "example": 2592000
+                },
+                "reward_text": {
+                    "description": "额外奖励会员时长文案",
+                    "type": "string",
+                    "example": "1个月会员"
+                }
+            }
+        },
+        "controller.InitInviteResponse": {
+            "type": "object",
+            "properties": {
+                "max_reward_days": {
+                    "description": "邀请累计最大奖励天数",
+                    "type": "integer",
+                    "example": 300
+                },
+                "milestones": {
+                    "description": "邀请人数阶梯奖励列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.InitInviteMilestoneResponse"
+                    }
+                },
+                "per_invite_seconds": {
+                    "description": "每邀请一个用户奖励的会员秒数",
+                    "type": "integer",
+                    "example": 3600
+                },
+                "per_invite_text": {
+                    "description": "每邀请一个用户奖励的会员时长文案",
+                    "type": "string",
+                    "example": "1小时会员"
+                },
+                "valid_hours": {
+                    "description": "新用户注册后可填写邀请码的小时数",
+                    "type": "integer",
+                    "example": 72
+                }
+            }
+        },
+        "controller.InitProxyResponse": {
+            "type": "object",
+            "properties": {
+                "skip_domains": {
+                    "description": "不走代理的域名列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "example.com"
+                    ]
+                }
+            }
+        },
+        "controller.InitResponse": {
+            "type": "object",
+            "properties": {
+                "agreements": {
+                    "description": "协议配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.InitAgreementsResponse"
+                        }
+                    ]
+                },
+                "app": {
+                    "description": "应用配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.InitAppResponse"
+                        }
+                    ]
+                },
+                "invite": {
+                    "description": "邀请配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.InitInviteResponse"
+                        }
+                    ]
+                },
+                "proxy": {
+                    "description": "代理配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.InitProxyResponse"
+                        }
+                    ]
+                },
+                "share": {
+                    "description": "分享配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.InitShareResponse"
+                        }
+                    ]
+                },
+                "tools": {
+                    "description": "工具入口配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.InitToolsResponse"
+                        }
+                    ]
+                }
+            }
+        },
+        "controller.InitShareResponse": {
+            "type": "object",
+            "properties": {
+                "links": {
+                    "description": "分享链接列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "https://example.com/a"
+                    ]
+                },
+                "qrcode": {
+                    "description": "分享二维码图片地址",
+                    "type": "string",
+                    "example": "https://example.com/share.png"
+                }
+            }
+        },
+        "controller.InitToolsResponse": {
+            "type": "object",
+            "properties": {
+                "clean_memory_enabled": {
+                    "description": "清理内存入口开关(on=开启,off=关闭)",
+                    "type": "string",
+                    "example": "on"
+                },
+                "customer_service_enabled": {
+                    "description": "在线客服入口开关(on=开启,off=关闭)",
+                    "type": "string",
+                    "example": "on"
+                },
+                "customer_service_url": {
+                    "description": "在线客服地址，配置模板中的#ID会替换为当前用户ID",
+                    "type": "string",
+                    "example": "https://example.com/chat"
+                },
+                "message_enabled": {
+                    "description": "消息通知入口开关(on=开启,off=关闭)",
+                    "type": "string",
+                    "example": "on"
+                }
+            }
+        },
+        "controller.InviteCodeRequest": {
+            "type": "object",
+            "required": [
+                "invite_code"
+            ],
+            "properties": {
+                "invite_code": {
+                    "type": "string",
+                    "example": "A8K29QXZ"
+                }
+            }
+        },
+        "controller.InviteCodeResponse": {
+            "type": "object",
+            "properties": {
+                "invite_code": {
+                    "type": "string",
+                    "example": "A8K29QXZ"
+                }
+            }
+        },
+        "controller.InviteDetailResponse": {
+            "type": "object",
+            "properties": {
+                "invite_code": {
+                    "type": "string",
+                    "example": "A8K29QXZ"
+                },
+                "invite_valid": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "milestones": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.InviteMilestoneResponse"
+                    }
+                },
+                "per_invite_seconds": {
+                    "type": "integer",
+                    "example": 3600
+                },
+                "per_invite_text": {
+                    "type": "string",
+                    "example": "1小时会员"
+                },
+                "reward_time": {
+                    "type": "integer",
+                    "example": 10800
+                },
+                "share_count": {
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "controller.InviteMilestoneResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 24
+                },
+                "reward_seconds": {
+                    "type": "integer",
+                    "example": 2592000
+                },
+                "reward_text": {
+                    "type": "string",
+                    "example": "1个月会员"
+                }
+            }
+        },
+        "controller.LineAreaResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "HK"
+                },
+                "country": {
+                    "type": "string",
+                    "example": "香港"
+                },
+                "img_url": {
+                    "type": "string",
+                    "example": "https://example.com/hk.png"
+                },
+                "max_conn_time": {
+                    "type": "integer",
+                    "example": 300
+                },
+                "min_conn_time": {
+                    "type": "integer",
+                    "example": 100
+                }
+            }
+        },
+        "controller.LoginRequest": {
+            "type": "object",
+            "required": [
+                "device_no",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "device_no": {
+                    "type": "string",
+                    "example": "device-001"
+                },
+                "mobile_model_name": {
+                    "type": "string",
+                    "example": "iPhone 15"
+                },
+                "mobile_name": {
+                    "type": "string",
+                    "example": "iPhone"
+                },
+                "mobile_version": {
+                    "type": "string",
+                    "example": "iOS 17.5"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "pass001"
+                },
+                "platform": {
+                    "type": "string",
+                    "example": "iphone"
+                },
+                "source_channel": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "user001"
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1.0.0"
+                }
+            }
+        },
+        "controller.LogoffResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+            }
+        },
+        "controller.NodeConfigRequest": {
+            "type": "object",
+            "required": [
+                "code",
+                "type"
+            ],
+            "properties": {
+                "code": {
+                    "description": "线路代码",
+                    "type": "string",
+                    "example": "HK"
+                },
+                "type": {
+                    "description": "连接模式(fast=极速,global=全局)",
+                    "type": "string",
+                    "example": "fast"
+                }
+            }
+        },
+        "controller.NodeConfigResponse": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "description": "加密后的完整JSON节点配置",
+                    "type": "string",
+                    "example": "x/k5A0v9kiJjL0r3m6X9dA=="
+                }
+            }
+        },
+        "controller.NodeOutboundsResponse": {
+            "type": "object",
+            "properties": {
+                "link_url": {
+                    "description": "AES加密后的节点连接数据",
+                    "type": "string",
+                    "example": "x/k5A0v9kiJjL0r3m6X9dA=="
+                },
+                "outbounds": {
+                    "description": "AES加密后的outbounds JSON数组",
+                    "type": "string",
+                    "example": "x/k5A0v9kiJjL0r3m6X9dA=="
+                }
+            }
+        },
+        "controller.NodeRequest": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "HK"
+                }
+            }
+        },
+        "controller.NodeResponse": {
+            "type": "object",
+            "properties": {
+                "link_url": {
+                    "description": "AES加密后的节点连接数据，解密后需要先base64解码再使用",
+                    "type": "string",
+                    "example": "x/k5A0v9kiJjL0r3m6X9dA=="
+                }
+            }
+        },
+        "controller.NoticeGroupResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.NoticeItemResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "unread_count": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controller.NoticeItemResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "example": "今晚 02:00-03:00 进行维护"
+                },
+                "create_time": {
+                    "type": "string",
+                    "example": "2026-07-05 18:30:00"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "is_read": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "title": {
+                    "type": "string",
+                    "example": "系统维护通知"
+                }
+            }
+        },
+        "controller.NoticeResponse": {
+            "type": "object",
+            "properties": {
+                "system": {
+                    "$ref": "#/definitions/controller.NoticeGroupResponse"
+                },
+                "user": {
+                    "$ref": "#/definitions/controller.NoticeGroupResponse"
+                }
+            }
+        },
+        "controller.PackageResponse": {
+            "type": "object",
+            "properties": {
+                "apple_id": {
+                    "description": "苹果内购产品ID",
+                    "type": "string",
+                    "example": "vip_month"
+                },
+                "corner": {
+                    "description": "角标文案",
+                    "type": "string",
+                    "example": "推荐"
+                },
+                "day": {
+                    "description": "套餐天数",
+                    "type": "integer",
+                    "example": 30
+                },
+                "id": {
+                    "description": "套餐ID",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "套餐名称",
+                    "type": "string",
+                    "example": "月度会员"
+                },
+                "origin_price": {
+                    "description": "原价文案",
+                    "type": "string",
+                    "example": "¥29.9"
+                },
+                "price": {
+                    "description": "真实价格，单位分",
+                    "type": "integer",
+                    "example": 1990
+                },
+                "price_text": {
+                    "description": "展示价格文案",
+                    "type": "string",
+                    "example": "¥19.9"
+                },
+                "remark": {
+                    "description": "套餐描述",
+                    "type": "string",
+                    "example": "适合短期使用"
+                },
+                "selected": {
+                    "description": "是否默认选中(1=选中,0=未选中)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "sub_name": {
+                    "description": "套餐副标题",
+                    "type": "string",
+                    "example": "连续30天高速线路"
+                },
+                "value": {
+                    "description": "底部描述内容",
+                    "type": "string",
+                    "example": "畅享全部会员线路"
+                }
+            }
+        },
+        "controller.PayLaunchRequest": {
+            "type": "object",
+            "required": [
+                "package_id"
+            ],
+            "properties": {
+                "package_id": {
+                    "description": "套餐ID",
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controller.PayLaunchResponse": {
+            "type": "object",
+            "properties": {
+                "app_account_token": {
+                    "description": "苹果内购订单标识，内购时前端作为appAccountToken传给StoreKit",
+                    "type": "string",
+                    "example": "C56A4180-65AA-42EC-A945-5FD21DEC0538"
+                },
+                "target": {
+                    "description": "支付目标，内购返回apple_id，H5返回支付页面地址",
+                    "type": "string",
+                    "example": "vip_month"
+                },
+                "type": {
+                    "description": "支付方式(apple_iap=苹果内购,h5=H5支付)",
+                    "type": "string",
+                    "example": "apple_iap"
+                }
+            }
+        },
+        "controller.PopupResponse": {
+            "type": "object",
+            "properties": {
+                "can_close": {
+                    "description": "是否可关闭(0=不可关闭,1=可关闭)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "content": {
+                    "description": "弹窗内容",
+                    "type": "string",
+                    "example": "限时开通会员享优惠"
+                },
+                "id": {
+                    "description": "弹窗ID",
+                    "type": "integer",
+                    "example": 1
+                },
+                "image_url": {
+                    "description": "弹窗图片地址数组",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "https://example.com/popup.png"
+                    ]
+                },
+                "jump_target": {
+                    "description": "跳转目标，内部跳转填业务code，外部跳转填URL",
+                    "type": "string",
+                    "example": "purchase"
+                },
+                "jump_type": {
+                    "description": "跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)",
+                    "type": "string",
+                    "example": "internal"
+                },
+                "max_show_times": {
+                    "description": "每个用户最大展示次数，0表示不限次数",
+                    "type": "integer",
+                    "example": 3
+                },
+                "show_times": {
+                    "description": "当前用户已展示次数",
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "description": "弹窗标题",
+                    "type": "string",
+                    "example": "会员活动"
+                }
+            }
+        },
+        "controller.PublicAppleIdResponse": {
+            "type": "object",
+            "properties": {
+                "appid": {
+                    "description": "Apple ID账号",
+                    "type": "string",
+                    "example": "apple@example.com"
+                },
+                "id": {
+                    "description": "记录ID",
+                    "type": "integer",
+                    "example": 1
+                },
+                "pwd": {
+                    "description": "Apple ID密码",
+                    "type": "string",
+                    "example": "apple-password"
+                }
+            }
+        },
+        "controller.ReadNoticeRequest": {
+            "type": "object",
+            "properties": {
+                "system_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "example": [
+                        1,
+                        2
+                    ]
+                },
+                "user_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "example": [
+                        3,
+                        4
+                    ]
+                }
+            }
+        },
+        "controller.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "device_no",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "device_no": {
+                    "type": "string",
+                    "example": "device-001"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "pass001"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "user001"
+                }
+            }
+        },
+        "controller.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "success"
+                },
+                "result": {}
+            }
+        },
+        "controller.UserInfoResponse": {
+            "type": "object",
+            "properties": {
+                "create_time": {
+                    "description": "用户创建时间",
+                    "type": "string",
+                    "example": "2026-06-29 12:00:00"
+                },
+                "device_no": {
+                    "description": "设备唯一标识",
+                    "type": "string",
+                    "example": "device-001"
+                },
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer",
+                    "example": 1
+                },
+                "is_new_user": {
+                    "description": "是否新用户(0=否,1=是)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "is_vip": {
+                    "description": "会员状态(0=非会员,1=会员有效)",
+                    "type": "integer",
+                    "example": 0
+                },
+                "last_login_time": {
+                    "description": "本次登录时间",
+                    "type": "string",
+                    "example": "2026-06-29 12:00:00"
+                },
+                "login_times": {
+                    "description": "登录次数",
+                    "type": "integer",
+                    "example": 1
+                },
+                "password": {
+                    "description": "绑定账号的明文密码，游客为空",
+                    "type": "string",
+                    "example": "pass001"
+                },
+                "platform": {
+                    "description": "客户端平台",
+                    "type": "string",
+                    "example": "iphone"
+                },
+                "token": {
+                    "description": "JWT登录凭证",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                },
+                "type": {
+                    "description": "用户类型(1=游客,2=账号用户)",
+                    "type": "integer",
+                    "example": 1
+                },
+                "username": {
+                    "description": "账号名，游客为空",
+                    "type": "string",
+                    "example": ""
+                },
+                "version": {
+                    "description": "客户端版本号",
+                    "type": "string",
+                    "example": "1.0.0"
+                },
+                "vip_time": {
+                    "description": "会员到期时间，格式yyyy-MM-dd HH:mm:ss",
+                    "type": "string",
+                    "example": "2026-07-30 23:59:59"
+                }
+            }
+        },
+        "controller.VersionAPIResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应状态码",
+                    "type": "integer",
+                    "example": 200
+                },
+                "msg": {
+                    "description": "响应消息",
+                    "type": "string",
+                    "example": "success"
+                },
+                "result": {
+                    "description": "版本检测结果",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controller.VersionResponse"
+                        }
+                    ]
+                }
+            }
+        },
+        "controller.VersionResponse": {
+            "type": "object",
+            "properties": {
+                "build": {
+                    "description": "数字版本号",
+                    "type": "integer",
+                    "example": 102
+                },
+                "content": {
+                    "description": "更新内容",
+                    "type": "string",
+                    "example": "修复已知问题"
+                },
+                "force": {
+                    "description": "是否强制更新",
+                    "type": "boolean",
+                    "example": false
+                },
+                "has_update": {
+                    "description": "是否有新版本",
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "description": "版本名称",
+                    "type": "string",
+                    "example": "iOS 1.0.2"
+                },
+                "platform": {
+                    "description": "设备平台(iphone=苹果,android=安卓)",
+                    "type": "string",
+                    "example": "iphone"
+                },
+                "size": {
+                    "description": "安装包大小",
+                    "type": "string",
+                    "example": "23.5MB"
+                },
+                "url": {
+                    "description": "下载地址",
+                    "type": "string",
+                    "example": "https://example.com/app"
+                },
+                "version": {
+                    "description": "展示版本号",
+                    "type": "string",
+                    "example": "1.0.2"
+                }
+            }
+        },
+        "controller.VpnFlowRequest": {
+            "type": "object",
+            "required": [
+                "flow"
+            ],
+            "properties": {
+                "flow": {
+                    "type": "integer",
+                    "example": 1024
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
