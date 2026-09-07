@@ -8,6 +8,9 @@ func TestFriendly(t *testing.T) {
 		msg  string
 		want string
 	}{
+		{name: "sspay pid missing", msg: "sspay pid is required", want: "支付配置异常，请稍后再试"},
+		{name: "sspay callback missing", msg: "sspay notify_url is required", want: "支付回调配置异常，请稍后再试"},
+		{name: "sspay order missing", msg: "sspay order_no is required", want: "订单信息异常，请重新发起支付"},
 		{name: "invalid body", msg: "invalid json body", want: "请求参数格式不正确"},
 		{name: "auth missing", msg: "authorization token is required", want: "请先登录后再操作"},
 		{name: "auth user missing", msg: "login user not found", want: "登录状态已失效，请重新登录"},

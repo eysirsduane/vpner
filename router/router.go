@@ -27,6 +27,7 @@ func InitRouter() *gin.Engine {
 		public.POST("/api/v1/internal/member/lookup", controller.InternalMemberLookupHandler)        // 内部会员查询
 		public.POST(mapping.Endpoint("/api/v1/pay/apple_callback"), controller.AppleCallbackHandler) // 苹果支付服务端通知
 		public.GET(mapping.Endpoint("/api/v1/pay/xx_callback"), controller.XXPayCallbackHandler)     // XX支付回调
+		public.GET(mapping.Endpoint("/api/v1/pay/ss_callback"), controller.SSPayCallbackHandler)     // XX支付回调
 		public.POST(mapping.Endpoint("/api/v1/pay/xx_callback"), controller.XXPayCallbackHandler)    // XX支付回调
 		public.GET(mapping.Endpoint("/api/v1/public_apple_id"), controller.PublicAppleIdHandler)     // 获取公共 Apple ID
 		public.GET(mapping.Endpoint("/api/v1/upload/*filepath"), controller.UploadFileHandler)       // 获取上传静态资源

@@ -12,6 +12,12 @@ import (
 const defaultErrorMessage = "系统错误，请稍后再试"
 
 var exactMessages = map[string]string{
+	"sspay api url is required":                              "支付配置异常，请稍后再试",
+	"sspay pid is required":                                  "支付配置异常，请稍后再试",
+	"sspay key is required":                                  "支付配置异常，请稍后再试",
+	"sspay notify_url is required":                           "支付回调配置异常，请稍后再试",
+	"sspay order_no is required":                             "订单信息异常，请重新发起支付",
+	"sspay money is required":                                "支付配置异常，请稍后再试",
 	"invalid json body":                                      "请求参数格式不正确",
 	"record not found":                                       "数据不存在",
 	"login user not found":                                   "登录状态已失效，请重新登录",

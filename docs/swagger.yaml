@@ -1,0 +1,1725 @@
+basePath: /api/v1
+definitions:
+  controller.AdvertResponse:
+    properties:
+      content:
+        description: 广告内容
+        example: 限时开通会员享优惠
+        type: string
+      id:
+        description: 广告ID
+        example: 1
+        type: integer
+      image_url:
+        description: 广告图片地址
+        example: https://example.com/advert.png
+        type: string
+      link_url:
+        description: 广告点击后使用浏览器打开的链接地址
+        example: https://example.com
+        type: string
+      max_show_times:
+        description: 每个用户最大展示次数，0表示不限次数
+        example: 3
+        type: integer
+      position:
+        description: 广告位标识(splash=启动页广告,home_popup=首页弹窗广告,banner=banner广告)
+        example: banner
+        type: string
+      show_times:
+        description: 当前用户已展示次数
+        example: 1
+        type: integer
+      sorter:
+        description: 排序值，越大越优先
+        example: 100
+        type: integer
+      title:
+        description: 广告标题
+        example: 会员优惠
+        type: string
+    type: object
+  controller.AppleCallbackRequest:
+    properties:
+      signedPayload:
+        example: eyJhbGciOiJFUzI1NiIsIng1YyI6Wy...
+        type: string
+    required:
+    - signedPayload
+    type: object
+  controller.AppleVerifyRequest:
+    properties:
+      transaction_id:
+        description: 苹果交易号
+        example: "1000000000000000"
+        type: string
+    required:
+    - transaction_id
+    type: object
+  controller.AppleVerifyResponse:
+    properties:
+      order_no:
+        description: 订单号
+        example: "20260707120000123456"
+        type: string
+      pay_status:
+        description: 支付状态(1=未支付,3=已支付)
+        example: 3
+        type: integer
+      pay_type:
+        description: 支付方式
+        example: apple_iap
+        type: string
+      transaction_id:
+        description: 苹果交易号
+        example: "1000000000000000"
+        type: string
+      vip_time:
+        description: 会员到期时间
+        example: "2026-08-06 12:00:00"
+        type: string
+    type: object
+  controller.AutoLoginRequest:
+    properties:
+      device_no:
+        example: device-001
+        type: string
+      mobile_model_name:
+        example: iPhone 15
+        type: string
+      mobile_name:
+        example: iPhone
+        type: string
+      mobile_version:
+        example: iOS 17.5
+        type: string
+      platform:
+        example: iphone
+        type: string
+      source_channel:
+        example: default
+        type: string
+      version:
+        example: 1.0.0
+        type: string
+    required:
+    - device_no
+    type: object
+  controller.ChangePasswordRequest:
+    properties:
+      new_password:
+        example: pass002
+        type: string
+    required:
+    - new_password
+    type: object
+  controller.DelayedPopupResponse:
+    properties:
+      can_close:
+        description: 是否可关闭(0=不可关闭,1=可关闭)
+        example: 1
+        type: integer
+      content:
+        description: 弹窗内容
+        example: 如当前软件无法使用，请转移到新软件
+        type: string
+      delay_days:
+        description: 断网后延迟展示天数
+        example: 3
+        type: integer
+      id:
+        description: 弹窗ID
+        example: 1
+        type: integer
+      image_url:
+        description: 弹窗图片地址数组
+        example:
+        - /api/v1/upload/pop.png
+        items:
+          type: string
+        type: array
+      link_url:
+        description: 弹窗跳转链接
+        example: https://example.com/download
+        type: string
+      title:
+        description: 弹窗标题
+        example: 服务迁移提醒
+        type: string
+      transfer_code:
+        description: 当前用户转移码
+        example: origin8f3k9q
+        type: string
+    type: object
+  controller.DeviceInfoResponse:
+    properties:
+      devices:
+        items:
+          $ref: '#/definitions/controller.DeviceResponse'
+        type: array
+      local_device:
+        $ref: '#/definitions/controller.DeviceResponse'
+      two_device:
+        $ref: '#/definitions/controller.DeviceResponse'
+    type: object
+  controller.DeviceLogoutRequest:
+    properties:
+      id:
+        example: 2
+        type: integer
+    required:
+    - id
+    type: object
+  controller.DeviceResponse:
+    properties:
+      device_no:
+        example: device-001
+        type: string
+      id:
+        example: 1
+        type: integer
+      last_login_time:
+        example: "2026-06-29 12:00:00"
+        type: string
+      mobile_model_name:
+        example: iPhone 15
+        type: string
+      mobile_name:
+        example: iPhone
+        type: string
+      mobile_version:
+        example: iOS 17.5
+        type: string
+      platform:
+        example: iphone
+        type: string
+      version:
+        example: 1.0.0
+        type: string
+    type: object
+  controller.ErrorReportRequest:
+    properties:
+      mobile_model_name:
+        example: iPhone 15
+        type: string
+      mobile_version:
+        example: iOS 17.5
+        type: string
+      msg:
+        example: vpn connect timeout
+        type: string
+      msg_type:
+        example: vpn
+        type: string
+    required:
+    - mobile_model_name
+    - mobile_version
+    - msg
+    type: object
+  controller.HeartbeatResponse:
+    properties:
+      connect_status:
+        description: 连接状态(1=继续连接,0=断开连接)
+        example: 1
+        type: integer
+    type: object
+  controller.InitAPIResponse:
+    properties:
+      code:
+        description: 响应状态码
+        example: 200
+        type: integer
+      msg:
+        description: 响应消息
+        example: success
+        type: string
+      result:
+        allOf:
+        - $ref: '#/definitions/controller.InitResponse'
+        description: 初始化配置
+    type: object
+  controller.InitAgreementsResponse:
+    properties:
+      privacy_agreement:
+        description: 隐私协议地址
+        example: https://example.com/privacy-policy
+        type: string
+      user_agreement:
+        description: 用户服务协议地址
+        example: https://example.com/user-agreement
+        type: string
+    type: object
+  controller.InitAppResponse:
+    properties:
+      new_user_free_seconds:
+        description: 新用户默认赠送会员秒数
+        example: 3600
+        type: integer
+      website:
+        description: 官网地址
+        example: https://example.com
+        type: string
+    type: object
+  controller.InitInviteMilestoneResponse:
+    properties:
+      count:
+        description: 达到邀请人数
+        example: 24
+        type: integer
+      reward_seconds:
+        description: 额外奖励会员秒数
+        example: 2592000
+        type: integer
+      reward_text:
+        description: 额外奖励会员时长文案
+        example: 1个月会员
+        type: string
+    type: object
+  controller.InitInviteResponse:
+    properties:
+      max_reward_days:
+        description: 邀请累计最大奖励天数
+        example: 300
+        type: integer
+      milestones:
+        description: 邀请人数阶梯奖励列表
+        items:
+          $ref: '#/definitions/controller.InitInviteMilestoneResponse'
+        type: array
+      per_invite_seconds:
+        description: 每邀请一个用户奖励的会员秒数
+        example: 3600
+        type: integer
+      per_invite_text:
+        description: 每邀请一个用户奖励的会员时长文案
+        example: 1小时会员
+        type: string
+      valid_hours:
+        description: 新用户注册后可填写邀请码的小时数
+        example: 72
+        type: integer
+    type: object
+  controller.InitProxyResponse:
+    properties:
+      skip_domains:
+        description: 不走代理的域名列表
+        example:
+        - example.com
+        items:
+          type: string
+        type: array
+    type: object
+  controller.InitResponse:
+    properties:
+      agreements:
+        allOf:
+        - $ref: '#/definitions/controller.InitAgreementsResponse'
+        description: 协议配置
+      app:
+        allOf:
+        - $ref: '#/definitions/controller.InitAppResponse'
+        description: 应用配置
+      invite:
+        allOf:
+        - $ref: '#/definitions/controller.InitInviteResponse'
+        description: 邀请配置
+      proxy:
+        allOf:
+        - $ref: '#/definitions/controller.InitProxyResponse'
+        description: 代理配置
+      share:
+        allOf:
+        - $ref: '#/definitions/controller.InitShareResponse'
+        description: 分享配置
+      tools:
+        allOf:
+        - $ref: '#/definitions/controller.InitToolsResponse'
+        description: 工具入口配置
+    type: object
+  controller.InitShareResponse:
+    properties:
+      links:
+        description: 分享链接列表
+        example:
+        - https://example.com/a
+        items:
+          type: string
+        type: array
+      qrcode:
+        description: 分享二维码图片地址
+        example: https://example.com/share.png
+        type: string
+    type: object
+  controller.InitToolsResponse:
+    properties:
+      clean_memory_enabled:
+        description: 清理内存入口开关(on=开启,off=关闭)
+        example: "on"
+        type: string
+      customer_service_enabled:
+        description: 在线客服入口开关(on=开启,off=关闭)
+        example: "on"
+        type: string
+      customer_service_url:
+        description: 在线客服地址，配置模板中的#ID会替换为当前用户ID
+        example: https://example.com/chat
+        type: string
+      message_enabled:
+        description: 消息通知入口开关(on=开启,off=关闭)
+        example: "on"
+        type: string
+    type: object
+  controller.InviteCodeRequest:
+    properties:
+      invite_code:
+        example: A8K29QXZ
+        type: string
+    required:
+    - invite_code
+    type: object
+  controller.InviteCodeResponse:
+    properties:
+      invite_code:
+        example: A8K29QXZ
+        type: string
+    type: object
+  controller.InviteDetailResponse:
+    properties:
+      invite_code:
+        example: A8K29QXZ
+        type: string
+      invite_valid:
+        example: true
+        type: boolean
+      milestones:
+        items:
+          $ref: '#/definitions/controller.InviteMilestoneResponse'
+        type: array
+      per_invite_seconds:
+        example: 3600
+        type: integer
+      per_invite_text:
+        example: 1小时会员
+        type: string
+      reward_time:
+        example: 10800
+        type: integer
+      share_count:
+        example: 3
+        type: integer
+    type: object
+  controller.InviteMilestoneResponse:
+    properties:
+      count:
+        example: 24
+        type: integer
+      reward_seconds:
+        example: 2592000
+        type: integer
+      reward_text:
+        example: 1个月会员
+        type: string
+    type: object
+  controller.LineAreaResponse:
+    properties:
+      code:
+        example: HK
+        type: string
+      country:
+        example: 香港
+        type: string
+      img_url:
+        example: https://example.com/hk.png
+        type: string
+      max_conn_time:
+        example: 300
+        type: integer
+      min_conn_time:
+        example: 100
+        type: integer
+    type: object
+  controller.LoginRequest:
+    properties:
+      device_no:
+        example: device-001
+        type: string
+      mobile_model_name:
+        example: iPhone 15
+        type: string
+      mobile_name:
+        example: iPhone
+        type: string
+      mobile_version:
+        example: iOS 17.5
+        type: string
+      password:
+        example: pass001
+        type: string
+      platform:
+        example: iphone
+        type: string
+      source_channel:
+        example: default
+        type: string
+      username:
+        example: user001
+        type: string
+      version:
+        example: 1.0.0
+        type: string
+    required:
+    - device_no
+    - password
+    - username
+    type: object
+  controller.LogoffResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  controller.NodeConfigRequest:
+    properties:
+      code:
+        description: 线路代码
+        example: HK
+        type: string
+      type:
+        description: 连接模式(fast=极速,global=全局)
+        example: fast
+        type: string
+    required:
+    - code
+    - type
+    type: object
+  controller.NodeConfigResponse:
+    properties:
+      config:
+        description: 加密后的完整JSON节点配置
+        example: x/k5A0v9kiJjL0r3m6X9dA==
+        type: string
+    type: object
+  controller.NodeOutboundsResponse:
+    properties:
+      link_url:
+        description: AES加密后的节点连接数据
+        example: x/k5A0v9kiJjL0r3m6X9dA==
+        type: string
+      outbounds:
+        description: AES加密后的outbounds JSON数组
+        example: x/k5A0v9kiJjL0r3m6X9dA==
+        type: string
+    type: object
+  controller.NodeRequest:
+    properties:
+      code:
+        example: HK
+        type: string
+    required:
+    - code
+    type: object
+  controller.NodeResponse:
+    properties:
+      link_url:
+        description: AES加密后的节点连接数据，解密后需要先base64解码再使用
+        example: x/k5A0v9kiJjL0r3m6X9dA==
+        type: string
+    type: object
+  controller.NoticeGroupResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/controller.NoticeItemResponse'
+        type: array
+      total:
+        example: 1
+        type: integer
+      unread_count:
+        example: 1
+        type: integer
+    type: object
+  controller.NoticeItemResponse:
+    properties:
+      content:
+        example: 今晚 02:00-03:00 进行维护
+        type: string
+      create_time:
+        example: "2026-07-05 18:30:00"
+        type: string
+      id:
+        example: 1
+        type: integer
+      is_read:
+        example: 0
+        type: integer
+      title:
+        example: 系统维护通知
+        type: string
+    type: object
+  controller.NoticeResponse:
+    properties:
+      system:
+        $ref: '#/definitions/controller.NoticeGroupResponse'
+      user:
+        $ref: '#/definitions/controller.NoticeGroupResponse'
+    type: object
+  controller.PackageResponse:
+    properties:
+      apple_id:
+        description: 苹果内购产品ID
+        example: vip_month
+        type: string
+      corner:
+        description: 角标文案
+        example: 推荐
+        type: string
+      day:
+        description: 套餐天数
+        example: 30
+        type: integer
+      id:
+        description: 套餐ID
+        example: 1
+        type: integer
+      name:
+        description: 套餐名称
+        example: 月度会员
+        type: string
+      origin_price:
+        description: 原价文案
+        example: ¥29.9
+        type: string
+      price:
+        description: 真实价格，单位分
+        example: 1990
+        type: integer
+      price_text:
+        description: 展示价格文案
+        example: ¥19.9
+        type: string
+      remark:
+        description: 套餐描述
+        example: 适合短期使用
+        type: string
+      selected:
+        description: 是否默认选中(1=选中,0=未选中)
+        example: 1
+        type: integer
+      sub_name:
+        description: 套餐副标题
+        example: 连续30天高速线路
+        type: string
+      value:
+        description: 底部描述内容
+        example: 畅享全部会员线路
+        type: string
+    type: object
+  controller.PayLaunchRequest:
+    properties:
+      package_id:
+        description: 套餐ID
+        example: 1
+        type: integer
+    required:
+    - package_id
+    type: object
+  controller.PayLaunchResponse:
+    properties:
+      app_account_token:
+        description: 苹果内购订单标识，内购时前端作为appAccountToken传给StoreKit
+        example: C56A4180-65AA-42EC-A945-5FD21DEC0538
+        type: string
+      target:
+        description: 支付目标，内购返回apple_id，H5返回支付页面地址
+        example: vip_month
+        type: string
+      type:
+        description: 支付方式(apple_iap=苹果内购,h5=H5支付)
+        example: apple_iap
+        type: string
+    type: object
+  controller.PopupResponse:
+    properties:
+      can_close:
+        description: 是否可关闭(0=不可关闭,1=可关闭)
+        example: 1
+        type: integer
+      content:
+        description: 弹窗内容
+        example: 限时开通会员享优惠
+        type: string
+      id:
+        description: 弹窗ID
+        example: 1
+        type: integer
+      image_url:
+        description: 弹窗图片地址数组
+        example:
+        - https://example.com/popup.png
+        items:
+          type: string
+        type: array
+      jump_target:
+        description: 跳转目标，内部跳转填业务code，外部跳转填URL
+        example: purchase
+        type: string
+      jump_type:
+        description: 跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)
+        example: internal
+        type: string
+      max_show_times:
+        description: 每个用户最大展示次数，0表示不限次数
+        example: 3
+        type: integer
+      show_times:
+        description: 当前用户已展示次数
+        example: 1
+        type: integer
+      title:
+        description: 弹窗标题
+        example: 会员活动
+        type: string
+    type: object
+  controller.PublicAppleIdResponse:
+    properties:
+      appid:
+        description: Apple ID账号
+        example: apple@example.com
+        type: string
+      id:
+        description: 记录ID
+        example: 1
+        type: integer
+      pwd:
+        description: Apple ID密码
+        example: apple-password
+        type: string
+    type: object
+  controller.ReadNoticeRequest:
+    properties:
+      system_ids:
+        example:
+        - 1
+        - 2
+        items:
+          type: integer
+        type: array
+      user_ids:
+        example:
+        - 3
+        - 4
+        items:
+          type: integer
+        type: array
+    type: object
+  controller.RegisterRequest:
+    properties:
+      device_no:
+        example: device-001
+        type: string
+      password:
+        example: pass001
+        type: string
+      username:
+        example: user001
+        type: string
+    required:
+    - device_no
+    - password
+    - username
+    type: object
+  controller.Response:
+    properties:
+      code:
+        example: 200
+        type: integer
+      msg:
+        example: success
+        type: string
+      result: {}
+    type: object
+  controller.UserInfoResponse:
+    properties:
+      create_time:
+        description: 用户创建时间
+        example: "2026-06-29 12:00:00"
+        type: string
+      device_no:
+        description: 设备唯一标识
+        example: device-001
+        type: string
+      id:
+        description: 用户ID
+        example: 1
+        type: integer
+      is_new_user:
+        description: 是否新用户(0=否,1=是)
+        example: 1
+        type: integer
+      is_vip:
+        description: 会员状态(0=非会员,1=会员有效)
+        example: 0
+        type: integer
+      last_login_time:
+        description: 本次登录时间
+        example: "2026-06-29 12:00:00"
+        type: string
+      login_times:
+        description: 登录次数
+        example: 1
+        type: integer
+      password:
+        description: 绑定账号的明文密码，游客为空
+        example: pass001
+        type: string
+      platform:
+        description: 客户端平台
+        example: iphone
+        type: string
+      token:
+        description: JWT登录凭证
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      type:
+        description: 用户类型(1=游客,2=账号用户)
+        example: 1
+        type: integer
+      username:
+        description: 账号名，游客为空
+        example: ""
+        type: string
+      version:
+        description: 客户端版本号
+        example: 1.0.0
+        type: string
+      vip_time:
+        description: 会员到期时间，格式yyyy-MM-dd HH:mm:ss
+        example: "2026-07-30 23:59:59"
+        type: string
+    type: object
+  controller.VersionAPIResponse:
+    properties:
+      code:
+        description: 响应状态码
+        example: 200
+        type: integer
+      msg:
+        description: 响应消息
+        example: success
+        type: string
+      result:
+        allOf:
+        - $ref: '#/definitions/controller.VersionResponse'
+        description: 版本检测结果
+    type: object
+  controller.VersionResponse:
+    properties:
+      build:
+        description: 数字版本号
+        example: 102
+        type: integer
+      content:
+        description: 更新内容
+        example: 修复已知问题
+        type: string
+      force:
+        description: 是否强制更新
+        example: false
+        type: boolean
+      has_update:
+        description: 是否有新版本
+        example: true
+        type: boolean
+      name:
+        description: 版本名称
+        example: iOS 1.0.2
+        type: string
+      platform:
+        description: 设备平台(iphone=苹果,android=安卓)
+        example: iphone
+        type: string
+      size:
+        description: 安装包大小
+        example: 23.5MB
+        type: string
+      url:
+        description: 下载地址
+        example: https://example.com/app
+        type: string
+      version:
+        description: 展示版本号
+        example: 1.0.2
+        type: string
+    type: object
+  controller.VpnFlowRequest:
+    properties:
+      flow:
+        example: 1024
+        type: integer
+    required:
+    - flow
+    type: object
+info:
+  contact: {}
+  description: Just VPN 后端接口文档
+  title: Just VPN API
+  version: "1.0"
+paths:
+  /advert:
+    get:
+      description: 获取当前用户当前平台和版本可展示的广告位列表，并记录展示次数
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/controller.AdvertResponse'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取广告位列表
+      tags:
+      - 广告
+  /auto_login:
+    post:
+      consumes:
+      - application/json
+      description: 通过设备号登录，设备不存在时自动创建普通用户，新用户会按配置赠送会员时长并生成欢迎通知
+      parameters:
+      - description: 自动登录请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.AutoLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.UserInfoResponse'
+              type: object
+      summary: 自动登录
+      tags:
+      - 账号
+  /change_password:
+    post:
+      consumes:
+      - application/json
+      description: 当前登录账号无需提交旧密码，直接设置新密码
+      parameters:
+      - description: 修改密码请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      security:
+      - BearerAuth: []
+      summary: 修改密码
+      tags:
+      - 账号
+  /connected:
+    post:
+      consumes:
+      - application/json
+      description: 客户端成功连接节点后上报，用于记录当前连接和连接历史
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      security:
+      - BearerAuth: []
+      summary: 确认 VPN 已连接
+      tags:
+      - 线路
+  /delayed_popup:
+    get:
+      description: 获取客户端断网后本地延迟展示的迁移弹窗，并返回当前用户转移码
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.DelayedPopupResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取延迟弹窗
+      tags:
+      - 系统
+  /device_info:
+    post:
+      consumes:
+      - application/json
+      description: 获取当前设备和当前账号下其它已登录设备
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.DeviceInfoResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取设备信息
+      tags:
+      - 账号
+  /device_logout:
+    post:
+      consumes:
+      - application/json
+      description: 将当前账号下指定的其它设备移除登录并清空设备会员
+      parameters:
+      - description: 移除设备请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.DeviceLogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.DeviceInfoResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 移除设备
+      tags:
+      - 账号
+  /disconnect:
+    post:
+      consumes:
+      - application/json
+      description: 客户端主动断开 VPN 时上报，未上报时由心跳超时兜底
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      security:
+      - BearerAuth: []
+      summary: VPN 断开连接
+      tags:
+      - 线路
+  /draw_invite_code:
+    post:
+      consumes:
+      - application/json
+      description: 获取当前用户长期有效的邀请码，没有则自动生成
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.InviteCodeResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取邀请码
+      tags:
+      - 账号
+  /error:
+    post:
+      consumes:
+      - application/json
+      description: 客户端上报 App 或 VPN 运行错误，msg_type 允许 app 或 vpn，默认 app
+      parameters:
+      - description: 错误信息上报请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ErrorReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      security:
+      - BearerAuth: []
+      summary: 错误信息上报
+      tags:
+      - 上报
+  /health:
+    get:
+      description: 检查 API 服务是否正常运行
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      summary: 健康检查
+      tags:
+      - 系统
+  /heartbeat:
+    post:
+      consumes:
+      - application/json
+      description: 客户端连接中定时上报，用于刷新当前连接在线时间
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.HeartbeatResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: VPN 心跳
+      tags:
+      - 线路
+  /init:
+    post:
+      description: 获取客户端启动所需的协议、分享、邀请、应用、工具入口和代理配置
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.InitAPIResponse'
+      security:
+      - BearerAuth: []
+      summary: 初始化配置
+      tags:
+      - 系统
+  /invite_code:
+    post:
+      consumes:
+      - application/json
+      description: 新用户在有效期内填写邀请码，给邀请人叠加会员奖励
+      parameters:
+      - description: 填写邀请码请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.InviteCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      security:
+      - BearerAuth: []
+      summary: 填写邀请码
+      tags:
+      - 账号
+  /invite_detail:
+    post:
+      consumes:
+      - application/json
+      description: 获取当前用户的邀请码、填写资格和邀请奖励规则
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.InviteDetailResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 邀请详情
+      tags:
+      - 账号
+  /lines_list:
+    post:
+      consumes:
+      - application/json
+      description: 获取可用的 VPN 国家或区域线路入口
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/controller.LineAreaResponse'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取国家线路列表
+      tags:
+      - 线路
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 当前设备登录账号，会员以账号表为主并和当前设备会员合并
+      parameters:
+      - description: 登录请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.UserInfoResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 账号登录
+      tags:
+      - 账号
+  /logoff:
+    post:
+      consumes:
+      - application/json
+      description: 配置命中的版本会真实注销账号，删除当前设备用户；已登录账号时会删除账号并让该账号所有设备下线，未命中版本只返回成功
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.LogoffResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 账号注销
+      tags:
+      - 账号
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: 当前设备退出账号并清空设备会员，账号表会员保持不变
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.UserInfoResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 退出登录
+      tags:
+      - 账号
+  /node:
+    post:
+      consumes:
+      - application/json
+      description: 根据国家或区域代码获取本次 VPN 连接节点
+      parameters:
+      - description: 获取连接节点请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.NodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.NodeResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取连接节点信息
+      tags:
+      - 线路
+  /node_config:
+    post:
+      consumes:
+      - application/json
+      description: 根据线路代码和连接模式获取加密后的完整 JSON 节点配置
+      parameters:
+      - description: 获取 JSON 节点配置请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.NodeConfigRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.NodeConfigResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取 JSON 节点配置
+      tags:
+      - 线路
+  /node_outbounds:
+    post:
+      consumes:
+      - application/json
+      description: 根据线路代码获取加密节点链接和加密outbounds JSON数组
+      parameters:
+      - description: 获取节点链接和outbounds请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.NodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.NodeOutboundsResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取节点链接和outbounds
+      tags:
+      - 线路
+  /notice:
+    get:
+      description: 全量获取当前用户可见的系统通知和个人通知
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.NoticeResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取通知列表
+      tags:
+      - 通知
+  /notice/unread:
+    get:
+      description: 增量获取当前用户未读的系统通知和个人通知
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.NoticeResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取未读通知列表
+      tags:
+      - 通知
+  /packages:
+    get:
+      description: 获取当前启用的会员套餐列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/controller.PackageResponse'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取套餐列表
+      tags:
+      - 套餐
+  /pay/apple_callback:
+    post:
+      consumes:
+      - application/json
+      description: 接收 App Store Server Notifications V2，用于苹果内购补单、退款和撤销处理；接口固定返回 HTTP
+        200，业务结果写入 apple_notification 表
+      parameters:
+      - description: 苹果服务端通知请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.AppleCallbackRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 苹果支付服务端通知
+      tags:
+      - 支付
+  /pay/apple_verify:
+    post:
+      consumes:
+      - application/json
+      description: 客户端完成苹果内购后提交苹果交易号，后端通过苹果交易信息中的 productId 和 appAccountToken 匹配发起支付时创建的订单，验证成功后更新订单并发放会员权益
+      parameters:
+      - description: 苹果订单验证请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.AppleVerifyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.AppleVerifyResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 苹果订单验证
+      tags:
+      - 支付
+  /pay/launch:
+    post:
+      consumes:
+      - application/json
+      description: 非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐
+        apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带
+      parameters:
+      - description: 发起支付请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.PayLaunchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.PayLaunchResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 发起支付
+      tags:
+      - 支付
+  /pay/xx_callback:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 接收 XX 支付异步回调，验签、验金额并发放会员权益；处理成功返回纯字符串 success
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+      summary: XX支付回调
+      tags:
+      - 支付
+  /popup:
+    get:
+      description: 获取当前用户当前平台和版本应该展示的弹窗，并记录展示次数
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.PopupResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 获取统一弹窗
+      tags:
+      - 系统
+  /public_apple_id:
+    get:
+      description: 获取可用的公共 Apple ID 列表，每个 IP 24 小时内返回同一组账号
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/controller.PublicAppleIdResponse'
+                  type: array
+              type: object
+      summary: 获取公共 Apple ID
+      tags:
+      - 支付
+  /read_notice:
+    post:
+      consumes:
+      - application/json
+      description: 根据 system_ids 和 user_ids 批量标记通知已读
+      parameters:
+      - description: 批量标记通知已读请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ReadNoticeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      security:
+      - BearerAuth: []
+      summary: 批量标记通知已读
+      tags:
+      - 通知
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: 将当前设备用户绑定为账号用户，注册成功后返回 token
+      parameters:
+      - description: 注册请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.UserInfoResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 注册账号
+      tags:
+      - 账号
+  /upload/{filepath}:
+    get:
+      description: 从 upload 目录读取图片或其他静态资源
+      parameters:
+      - description: 资源相对路径
+        in: path
+        name: filepath
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+      summary: 获取上传静态资源
+      tags:
+      - 系统
+  /user_info:
+    get:
+      consumes:
+      - application/json
+      description: 通过 Authorization Bearer Token 获取当前用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controller.Response'
+            - properties:
+                result:
+                  $ref: '#/definitions/controller.UserInfoResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: 用户信息
+      tags:
+      - 账号
+  /version:
+    post:
+      description: 根据请求头中的平台和数字版本号检测是否存在新版本
+      parameters:
+      - description: 设备平台，支持 iphone/android/ios/ipad
+        in: header
+        name: X-Platform
+        required: true
+        type: string
+      - description: 展示版本号
+        in: header
+        name: X-Version
+        required: true
+        type: string
+      - description: 数字版本号，用于比较
+        in: header
+        name: X-Build
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.VersionAPIResponse'
+      security:
+      - BearerAuth: []
+      summary: 版本检测
+      tags:
+      - 系统
+  /vpn_flow:
+    post:
+      consumes:
+      - application/json
+      description: 客户端上报 VPN 使用流量，单位为 K，用于累加用户总流量和今日流量
+      parameters:
+      - description: VPN 使用流量上报请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.VpnFlowRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+      security:
+      - BearerAuth: []
+      summary: VPN 使用流量上报
+      tags:
+      - 线路
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -35,11 +35,8 @@ conf/local.ini
 conf/*.local.ini
 conf/*.secret.ini
 
-docs/swagger.json
-docs/swagger.yaml
-docs/*.md
-docs/**/*.md
-!docs/API.md
+
+
 !docs/新产品创建规范.md
 docs/*.txt
 docs/oss
@@ -49,5 +46,5 @@ docs/s3
 tools/
 
 # Project documentation (local only)
-/docs/*
+
 !/docs/docs.go

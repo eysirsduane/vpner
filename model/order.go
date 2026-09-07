@@ -15,6 +15,7 @@ const (
 	OrderPayTypeAppleIAP = "apple_iap"
 	OrderPayTypeH5       = "h5"
 	OrderPayTypeXXPay    = "xxpay"
+	OrderPayTypeSSPay    = "sspay"
 
 	OrderPaySourceLaunch       = "launch"
 	OrderPaySourceAppleVerify  = "apple_verify"
@@ -22,6 +23,8 @@ const (
 	OrderPaySourceThirdPayPage = "third_pay_page"
 	OrderPaySourceXXCallback   = "xx_callback"
 	OrderPaySourceXXQuery      = "xx_query"
+	OrderPaySourceSSCallback   = "ss_callback"
+	OrderPaySourceSSQuery      = "ss_query"
 )
 
 // Order 订单表
@@ -115,7 +118,7 @@ func UserHasPaidThirdPayOrder(userId int) (bool, error) {
 	err := DB.Select("id").
 		Where("uid = ?", userId).
 		Where("pay_status = ?", OrderPayStatusPaid).
-		Where("pay_type IN ?", []string{OrderPayTypeXXPay, OrderPayTypeH5}).
+		Where("pay_type IN ?", []string{OrderPayTypeXXPay, OrderPayTypeH5, OrderPayTypeSSPay}).
 		First(&order).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false, nil

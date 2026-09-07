@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	PayConfigThirdPayProvider          = "third_pay_provider"
 	PayConfigOnlyAppleRegions          = "only_apple_regions"
 	PayConfigOnlyAppleVersions         = "only_apple_versions"
 	PayConfigH5AppleAmount             = "h5_apple_amount"
@@ -30,6 +31,14 @@ const (
 	PayConfigXXPayReturnURL            = "xxpay.return_url"
 	PayConfigXXPayAlipayID             = "xxpay.alipay_product_id"
 	PayConfigXXPayCallbackIPs          = "xxpay.callback_ips"
+
+	PayConfigSSPayAPIURL      = "sspay.api_url"
+	PayConfigSSPayMchId       = "sspay.pid"
+	PayConfigSSPayKey         = "sspay.key"
+	PayConfigSSPayNotifyURL   = "sspay.notify_url"
+	PayConfigSSPayReturnURL   = "sspay.return_url"
+	PayConfigSSPayAlipayID    = "sspay.alipay_product_id"
+	PayConfigSSPayCallbackIPs = "sspay.callback_ips"
 
 	legacyConfigPayOnlyAppleRegions  = "pay.only_apple_regions"
 	legacyConfigPayOnlyAppleVersions = "pay.only_apple_versions"
@@ -69,6 +78,13 @@ func PayConfigValue(code string, defaultValue string) string {
 func InitPayConfigs() error {
 	now := time.Now().In(time.Local).Truncate(time.Second)
 	configs := []PayConfig{
+		{BaseModel: BaseModel{CreateTime: now}, Code: PayConfigThirdPayProvider, Value: "xxpay", Remark: "三方支付渠道：xxpay 或 sspay"},
+		{BaseModel: BaseModel{CreateTime: now}, Code: PayConfigSSPayAPIURL, Value: "https://ssvip.biz", Remark: "SS支付接口域名，不带接口路径"},
+		{BaseModel: BaseModel{CreateTime: now}, Code: PayConfigSSPayMchId, Remark: "SS支付商户ID"},
+		{BaseModel: BaseModel{CreateTime: now}, Code: PayConfigSSPayKey, Remark: "SS支付MD5签名密钥"},
+		{BaseModel: BaseModel{CreateTime: now}, Code: PayConfigSSPayNotifyURL, Remark: "SS支付公网异步通知地址，对应 /api/v1/pay/ss_callback"},
+		{BaseModel: BaseModel{CreateTime: now}, Code: PayConfigSSPayReturnURL, Remark: "SS支付完成跳转地址"},
+		{BaseModel: BaseModel{CreateTime: now}, Code: PayConfigSSPayCallbackIPs, Remark: "SS支付回调IP白名单，英文逗号分隔，空表示不限制"},
 		{
 			BaseModel: BaseModel{CreateTime: now},
 			Code:      PayConfigOnlyAppleRegions,

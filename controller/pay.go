@@ -14,6 +14,7 @@ import (
 
 	"just-vpn/middleware"
 	"just-vpn/model"
+	"just-vpn/pkg/pay/sspay"
 	"just-vpn/pkg/pay/xxpay"
 	"just-vpn/pkg/util"
 
@@ -26,7 +27,10 @@ import (
 const (
 	PayLaunchTypeAppleIAP = "apple_iap"
 	PayLaunchTypeH5       = "h5"
+	PayLaunchTypeSSPay    = "ss"
+
 	ThirdPayProviderXXPay = "xxpay"
+	ThirdPayProviderSSPay = "sspay"
 
 	appleVerifyModeMock       = "mock"
 	appleVerifyModeProduction = "production"
@@ -132,18 +136,37 @@ func PayLaunchHandler(c *gin.Context) {
 		return
 	}
 	order := buildLaunchOrder(user, pack, decision, requestIP, requestIPRegion, clientInfo)
-	if decision.payType == PayLaunchTypeAppleIAP {
+	switch decision.payType {
+	case PayLaunchTypeAppleIAP:
 		order.AppAccountToken = newAppleAccountToken()
-	} else if decision.payType == PayLaunchTypeH5 {
+	case PayLaunchTypeH5:
 		order.PayType = model.OrderPayTypeXXPay
 		order.PayProductId = strings.TrimSpace(model.PayConfigValue(model.PayConfigXXPayAlipayID, ""))
+	case PayLaunchTypeSSPay:
+		order.PayType = model.OrderPayTypeSSPay
+		order.PayProductId = strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayAlipayID, ""))
 	}
 	if err := model.CreateOrder(&order); err != nil {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	if decision.payType == PayLaunchTypeH5 {
+	switch decision.payType {
+	case PayLaunchTypeH5:
 		payInfo, err := createXXPayOrder(c, user, pack, order)
+		if err != nil {
+			JsonReturn(c, CodeError, err.Error(), nil)
+			return
+		}
+		if err := model.DB.Model(&model.Order{}).Where("id = ?", order.Id).Updates(map[string]interface{}{
+			"pay_sn":  payInfo.PayOrderId,
+			"pay_url": payInfo.PayURL,
+		}).Error; err != nil {
+			JsonReturn(c, CodeError, err.Error(), nil)
+			return
+		}
+		decision.target = payInfo.PayURL
+	case PayLaunchTypeSSPay:
+		payInfo, err := createSSPayOrder(c, user, pack, order)
 		if err != nil {
 			JsonReturn(c, CodeError, err.Error(), nil)
 			return
@@ -158,8 +181,12 @@ func PayLaunchHandler(c *gin.Context) {
 		decision.target = payInfo.PayURL
 	}
 
+	launchType := decision.payType
+	if launchType == PayLaunchTypeSSPay {
+		launchType = PayLaunchTypeH5
+	}
 	JsonReturn(c, CodeSuccess, "success", PayLaunchResponse{
-		Type:            decision.payType,
+		Type:            launchType,
 		Target:          decision.target,
 		AppAccountToken: order.AppAccountToken,
 	})
@@ -287,7 +314,7 @@ func AppleCallbackHandler(c *gin.Context) {
 // @Success 200 {string} string "success"
 // @Router /pay/xx_callback [post]
 func XXPayCallbackHandler(c *gin.Context) {
-	params := collectXXPayNotifyParams(c)
+	params := collectPayNotifyParams(c)
 	if !isXXPayCallbackIPAllowed(c.ClientIP()) {
 		log.Printf("xxpay callback ip rejected ip=%s", c.ClientIP())
 		saveThirdPayCallbackLog(ThirdPayProviderXXPay, params, c.ClientIP(), 0, model.ThirdPayCallbackStatusIgnored, "callback ip rejected")
@@ -315,6 +342,46 @@ func XXPayCallbackHandler(c *gin.Context) {
 		return
 	}
 	saveThirdPayCallbackLog(ThirdPayProviderXXPay, params, c.ClientIP(), 1, model.ThirdPayCallbackStatusDone, "success")
+	c.String(http.StatusOK, "success")
+}
+
+// SSPayCallbackHandler SS支付回调
+// @Summary SS支付回调
+// @Description 接收 SS 支付异步回调，验签、验金额并发放会员权益；处理成功返回纯字符串 success
+// @Tags 支付
+// @Accept x-www-form-urlencoded
+// @Produce plain
+// @Success 200 {string} string "success"
+// @Router /pay/ss_callback [get]
+func SSPayCallbackHandler(c *gin.Context) {
+	params := collectPayNotifyParams(c)
+	// if !isSSPayCallbackIPAllowed(c.ClientIP()) {
+	// 	log.Printf("sspay callback ip rejected ip=%s", c.ClientIP())
+	// 	saveThirdPaySSCallbackLog(ThirdPayProviderSSPay, params, c.ClientIP(), 0, model.ThirdPayCallbackStatusIgnored, "callback ip rejected")
+	// 	c.String(http.StatusOK, "")
+	// 	return
+	// }
+	key := strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayKey, ""))
+	signValid := key != "" && sspay.VerifySign(params, key)
+	if !signValid {
+		log.Printf("sspay callback sign error params=%v", params)
+		saveThirdPaySSCallbackLog(ThirdPayProviderSSPay, params, c.ClientIP(), 0, model.ThirdPayCallbackStatusFailed, "sign error")
+		c.String(http.StatusOK, "")
+		return
+	}
+	if !sspay.IsPaidStatus(params["trade_status"]) {
+		log.Printf("sspay callback unpaid status=%s order_no=%s", params["trade_status"], params["out_trade_no"])
+		saveThirdPaySSCallbackLog(ThirdPayProviderSSPay, params, c.ClientIP(), 1, model.ThirdPayCallbackStatusIgnored, "unpaid status:"+params["trade_status"])
+		c.String(http.StatusOK, "")
+		return
+	}
+	if err := completeSSPayOrder(params); err != nil {
+		log.Printf("sspay callback process error order_no=%s err=%v", params["out_trade_no"], err)
+		saveThirdPaySSCallbackLog(ThirdPayProviderSSPay, params, c.ClientIP(), 1, model.ThirdPayCallbackStatusFailed, err.Error())
+		c.String(http.StatusOK, "")
+		return
+	}
+	saveThirdPaySSCallbackLog(ThirdPayProviderSSPay, params, c.ClientIP(), 1, model.ThirdPayCallbackStatusDone, "success")
 	c.String(http.StatusOK, "success")
 }
 
@@ -473,12 +540,17 @@ func appleIAPDecision(pack model.Package, reason string) payLaunchDecision {
 }
 
 func h5PayDecision(reason string) payLaunchDecision {
+	if strings.EqualFold(strings.TrimSpace(payProviderConfigValue(model.PayConfigThirdPayProvider, ThirdPayProviderXXPay)), ThirdPayProviderSSPay) {
+		return payLaunchDecision{payType: PayLaunchTypeSSPay, reason: reason}
+	}
 	return payLaunchDecision{
 		payType: PayLaunchTypeH5,
-		target:  model.PayConfigValue(model.PayConfigH5Target, "https://www.baidu.com"),
+		target:  payProviderConfigValue(model.PayConfigH5Target, "https://www.baidu.com"),
 		reason:  reason,
 	}
 }
+
+var payProviderConfigValue = model.PayConfigValue
 
 func splitCommaConfig(value string) []string {
 	items := strings.Split(value, ",")
@@ -551,6 +623,36 @@ func createXXPayOrder(c *gin.Context, user model.User, pack model.Package, order
 	return payInfo, nil
 }
 
+func createSSPayOrder(c *gin.Context, user model.User, pack model.Package, order model.Order) (sspay.PayInfo, error) {
+	packageName := localizedTextValue(pack.Name, middleware.CurrentClientInfo(c).Language)
+	req := sspay.CreateOrderRequest{
+		APIURL:     strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayAPIURL, "")),
+		Pid:        strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayMchId, "")),
+		Type:       "alipay",
+		OutTradeNo: order.OrderNo,
+		Name:       packageName,
+		Money:      fmt.Sprintf("%d.%02d", order.Money/100, order.Money%100),
+		ClientIP:   c.ClientIP(),
+		Device:     sspayDevice(middleware.CurrentClientInfo(c).Platform),
+		NotifyURL:  strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayNotifyURL, "")),
+		ReturnURL:  strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayReturnURL, "")),
+		SignType:   "MD5",
+		Key:        strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayKey, "")),
+	}
+	if err := req.Validate(); err != nil {
+		// Log field names only; never dump payment parameters or the merchant key.
+		log.Printf("sspay order validation failed uid=%d order_no=%s err=%v", user.Id, order.OrderNo, err)
+		return sspay.PayInfo{}, err
+	}
+	payInfo, err := sspay.CreateOrder(req)
+	if err != nil {
+		log.Printf("sspay order request failed uid=%d order_no=%s err=%v", user.Id, order.OrderNo, err)
+		return sspay.PayInfo{}, err
+	}
+	log.Printf("sspay order created uid=%d order_no=%s pay_order_id=%s method=%s", user.Id, order.OrderNo, payInfo.PayOrderId, payInfo.PayMethod)
+	return payInfo, nil
+}
+
 func xxpayDevice(platform string) string {
 	switch strings.ToLower(strings.TrimSpace(platform)) {
 	case "iphone", "ios", "ipad":
@@ -562,18 +664,27 @@ func xxpayDevice(platform string) string {
 	}
 }
 
-func collectXXPayNotifyParams(c *gin.Context) map[string]string {
+func sspayDevice(platform string) string {
+	switch strings.ToLower(strings.TrimSpace(platform)) {
+	case "iphone", "ios", "ipad", "android":
+		return "mobile"
+	default:
+		return "pc"
+	}
+}
+
+func collectPayNotifyParams(c *gin.Context) map[string]string {
 	params := make(map[string]string)
 	for k, values := range c.Request.URL.Query() {
-		if len(values) > 0 && strings.TrimSpace(values[0]) != "" {
-			params[k] = strings.TrimSpace(values[0])
+		if len(values) > 0 && values[0] != "" {
+			params[k] = values[0]
 		}
 	}
 	if c.Request.Method == http.MethodPost {
 		if err := c.Request.ParseForm(); err == nil {
 			for k, values := range c.Request.PostForm {
-				if _, exists := params[k]; !exists && len(values) > 0 && strings.TrimSpace(values[0]) != "" {
-					params[k] = strings.TrimSpace(values[0])
+				if _, exists := params[k]; !exists && len(values) > 0 && values[0] != "" {
+					params[k] = values[0]
 				}
 			}
 		}
@@ -583,6 +694,19 @@ func collectXXPayNotifyParams(c *gin.Context) map[string]string {
 
 func isXXPayCallbackIPAllowed(ip string) bool {
 	whitelist := strings.TrimSpace(model.PayConfigValue(model.PayConfigXXPayCallbackIPs, ""))
+	if whitelist == "" {
+		return true
+	}
+	for _, item := range splitCommaConfig(whitelist) {
+		if item == ip {
+			return true
+		}
+	}
+	return false
+}
+
+func isSSPayCallbackIPAllowed(ip string) bool {
+	whitelist := strings.TrimSpace(model.PayConfigValue(model.PayConfigSSPayCallbackIPs, ""))
 	if whitelist == "" {
 		return true
 	}
@@ -621,6 +745,39 @@ func saveThirdPayCallbackLog(provider string, params map[string]string, clientIP
 		ProcessStatus:  status,
 		ProcessMsg:     truncateString(msg, 255),
 		RawParams:      string(rawParams),
+	}
+	if err := model.DB.Create(&callback).Error; err != nil {
+		log.Printf("third pay callback log save error provider=%s order_no=%s err=%v", provider, params["mchOrderNo"], err)
+	}
+}
+
+func saveThirdPaySSCallbackLog(provider string, params map[string]string, clientIP string, signValid int, status int, msg string) {
+	rawParams, err := json.Marshal(params)
+	if err != nil {
+		rawParams = []byte("{}")
+	}
+	amount, err := YuanToFen(params["money"])
+	if err != nil {
+		amount = 0
+	}
+	callback := model.ThirdPayCallback{
+		BaseModel: model.BaseModel{
+			CreateTime: chinaNow(),
+		},
+		Provider:      provider,
+		PayOrderId:    params["trade_no"],
+		MchOrderNo:    params["out_trade_no"],
+		MchId:         params["pid"],
+		ProductId:     params["name"],
+		Amount:        amount,
+		Status:        params["trade_status"],
+		ReqTime:       params["reqTime"],
+		ClientIp:      clientIP,
+		Sign:          params["sign"],
+		SignValid:     signValid,
+		ProcessStatus: status,
+		ProcessMsg:    truncateString(msg, 255),
+		RawParams:     string(rawParams),
 	}
 	if err := model.DB.Create(&callback).Error; err != nil {
 		log.Printf("third pay callback log save error provider=%s order_no=%s err=%v", provider, params["mchOrderNo"], err)
@@ -682,6 +839,101 @@ func completeXXPayOrder(params map[string]string) error {
 			"money":       callbackAmount,
 			"pay_sn":      paySn,
 			"pay_source":  model.OrderPaySourceXXCallback,
+			"verify_time": &now,
+			"pay_time":    &now,
+		}).Error; err != nil {
+			return err
+		}
+		if err := tx.Model(&model.User{}).Where("id = ?", user.Id).Updates(map[string]interface{}{
+			"vip_time":  vipTime,
+			"is_pay":    1,
+			"pay_times": gorm.Expr("pay_times + ?", 1),
+			"pay_all":   gorm.Expr("pay_all + ?", float64(callbackAmount)/100),
+		}).Error; err != nil {
+			return err
+		}
+		if user.Username != "" && user.Type == 2 {
+			if err := tx.Model(&model.UserAccount{}).Where("username = ?", user.Username).Update("vip_time", vipTime).Error; err != nil {
+				return err
+			}
+			if err := syncAccountVipTime(tx, user.Username, vipTime); err != nil {
+				return err
+			}
+		}
+		return tx.Create(&model.UserNotice{
+			UserId: user.Id,
+			Title:  multilingualTextValue("会员开通成功", "Membership activated"),
+			Content: multilingualTextValue(
+				fmt.Sprintf("您已成功开通%s，会员有效期至%s", localizedTextValue(order.PakName, simplifiedChineseLanguage), formatVipTime(vipTime)),
+				fmt.Sprintf("Your %s is active until %s.", localizedTextValue(order.PakName, "en"), formatVipTime(vipTime)),
+			),
+			Priority: 100,
+			Status:   model.UserNoticeStatusUnread,
+		}).Error
+	})
+}
+
+func YuanToFen(s string) (int, error) {
+	yuan, fraction, _ := strings.Cut(s, ".")
+	if yuan == "" || len(fraction) > 2 {
+		return 0, fmt.Errorf("无效金额: %q", s)
+	}
+
+	// 小数部分补齐两位：1.2 → 120 分，1 → 100 分
+	digits := yuan + fraction + strings.Repeat("0", 2-len(fraction))
+	for _, c := range digits {
+		if c < '0' || c > '9' {
+			return 0, fmt.Errorf("无效金额: %q", s)
+		}
+	}
+	return strconv.Atoi(digits)
+}
+
+func completeSSPayOrder(params map[string]string) error {
+	orderNo := strings.TrimSpace(params["out_trade_no"])
+	if orderNo == "" {
+		return fmt.Errorf("out_trade_no is required")
+	}
+	callbackAmount, err := YuanToFen(strings.TrimSpace(params["money"]))
+	if err != nil || callbackAmount <= 0 {
+		return fmt.Errorf("amount invalid")
+	}
+	paySn := strings.TrimSpace(params["trade_no"])
+
+	now := chinaNow()
+	return model.DB.Transaction(func(tx *gorm.DB) error {
+		var order model.Order
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("order_no = ?", orderNo).
+			First(&order).Error; err != nil {
+			return err
+		}
+		if order.PayType != model.OrderPayTypeSSPay {
+			return fmt.Errorf("order pay type mismatch")
+		}
+		if order.PayStatus == model.OrderPayStatusPaid {
+			return nil
+		}
+		if order.PayStatus == model.OrderPayStatusRefund {
+			return fmt.Errorf("order already refunded")
+		}
+		if callbackAmount != order.Money {
+			return fmt.Errorf("amount mismatch callback=%d expected=%d", callbackAmount, order.Money)
+		}
+
+		var user model.User
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("id = ?", order.Uid).
+			Where("status = ?", 1).
+			First(&user).Error; err != nil {
+			return err
+		}
+		vipTime := addVipSeconds(user.VipTime, order.PakTime)
+		if err := tx.Model(&model.Order{}).Where("id = ?", order.Id).Updates(map[string]interface{}{
+			"pay_status":  model.OrderPayStatusPaid,
+			"money":       callbackAmount,
+			"pay_sn":      paySn,
+			"pay_source":  model.OrderPaySourceSSCallback,
 			"verify_time": &now,
 			"pay_time":    &now,
 		}).Error; err != nil {
