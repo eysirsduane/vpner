@@ -1,0 +1,770 @@
+{
+  "product_code": "rely",
+  "swagger_path": "/relayjet/v1/documents",
+  "headers": {
+    "platform": "RelayJet-Plat-Name",
+    "version": "RelayJet-Version-Number",
+    "build": "RelayJet-Build-Version",
+    "device_no": "RelayJet-Device-Name",
+    "client_time": "RelayJet-Time",
+    "time_zone": "RelayJet-TimeZone",
+    "app_store_region": "RelayJet-Stores-Reg",
+    "language": "RelayJet-Language"
+  },
+  "field_affix": {
+    "prefix": "rely",
+    "suffix": "fly"
+  },
+  "routes": {
+    "/api/v1/health": {
+      "path": "/relayjet/v1/common/wellness",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/auto_login": {
+      "path": "/relayjet/v1/common/autolog",
+      "request": {
+        "device_no": "devid",
+        "platform": "clientos",
+        "version": "release",
+        "mobile_name": "handset",
+        "mobile_version": "osver",
+        "mobile_model_name": "modelname",
+        "source_channel": "origin"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
+        }
+      }
+    },
+    "/api/v1/register": {
+      "path": "/relayjet/v1/common/signup",
+      "request": {
+        "device_no": "devid",
+        "username": "account",
+        "password": "passcode"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
+        }
+      }
+    },
+    "/api/v1/public_apple_id": {
+      "path": "/relayjet/v1/common/pubapple",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "appid": "appkey",
+          "pwd": "pass"
+        }
+      }
+    },
+    "/api/v1/upload/*filepath": {
+      "path": "/relayjet/v1/common/asset/*filepath",
+      "request": {},
+      "response": {}
+    },
+    "/api/v1/login": {
+      "path": "/relayjet/v1/common/signin",
+      "request": {
+        "device_no": "devid",
+        "username": "account",
+        "password": "passcode",
+        "platform": "clientos",
+        "version": "release",
+        "mobile_name": "handset",
+        "mobile_version": "osver",
+        "mobile_model_name": "modelname",
+        "source_channel": "origin"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
+        }
+      }
+    },
+    "/api/v1/logout": {
+      "path": "/relayjet/v1/common/signout",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
+        }
+      }
+    },
+    "/api/v1/logoff": {
+      "path": "/relayjet/v1/common/cancelacct",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "token": "accesskey"
+        }
+      }
+    },
+    "/api/v1/change_password": {
+      "path": "/relayjet/v1/common/pwdchange",
+      "request": {
+        "new_password": "newpass"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/device_info": {
+      "path": "/relayjet/v1/common/devinfo",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "local_device": {
+            "$field": "locdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
+          },
+          "two_device": {
+            "$field": "pairdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
+          },
+          "devices": {
+            "$field": "devsets",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
+          }
+        }
+      }
+    },
+    "/api/v1/device_logout": {
+      "path": "/relayjet/v1/common/devsignout",
+      "request": {
+        "id": "ident"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "local_device": {
+            "$field": "locdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
+          },
+          "two_device": {
+            "$field": "pairdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
+          },
+          "devices": {
+            "$field": "devsets",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
+          }
+        }
+      }
+    },
+    "/api/v1/draw_invite_code": {
+      "path": "/relayjet/v1/common/invcodegen",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "invite_code": "refercode"
+        }
+      }
+    },
+    "/api/v1/invite_code": {
+      "path": "/relayjet/v1/common/refercode",
+      "request": {
+        "invite_code": "refercode"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/invite_detail": {
+      "path": "/relayjet/v1/common/invinfo",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "invite_code": "refercode",
+          "invite_valid": "validinvite",
+          "share_count": "sharetotal",
+          "reward_time": "bonusat",
+          "per_invite_seconds": "invitebonus",
+          "per_invite_text": "invitetext",
+          "milestones": {
+            "$field": "markers",
+            "count": "tally",
+            "reward_seconds": "bonussecs",
+            "reward_text": "bonustext"
+          }
+        }
+      }
+    },
+    "/api/v1/user_info": {
+      "path": "/relayjet/v1/common/usrinfo",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
+        }
+      }
+    },
+    "/api/v1/init": {
+      "path": "/relayjet/v1/common/bootstrap",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "agreements": {
+            "$field": "pacts",
+            "user_agreement": "userterms",
+            "privacy_agreement": "privacyterms"
+          },
+          "share": {
+            "$field": "distribute",
+            "qrcode": "qrimage",
+            "links": "linkset"
+          },
+          "invite": {
+            "$field": "referral",
+            "valid_hours": "validtime",
+            "per_invite_seconds": "invitebonus",
+            "per_invite_text": "invitetext",
+            "max_reward_days": "maxawarddays",
+            "milestones": {
+              "$field": "markers",
+              "count": "tally",
+              "reward_seconds": "bonussecs",
+              "reward_text": "bonustext"
+            }
+          },
+          "app": {
+            "$field": "client",
+            "website": "webaddr",
+            "new_user_free_seconds": "newfreetime"
+          },
+          "tools": {
+            "$field": "utilities",
+            "customer_service_enabled": "supporton",
+            "customer_service_url": "supporturl",
+            "clean_memory_enabled": "memclean",
+            "message_enabled": "messageon"
+          },
+          "proxy": {
+            "$field": "forwarder",
+            "skip_domains": "bypassdomains"
+          }
+        }
+      }
+    },
+    "/api/v1/version": {
+      "path": "/relayjet/v1/common/release",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "has_update": "updateyes",
+          "name": "label",
+          "platform": "clientos",
+          "version": "release",
+          "build": "revision",
+          "force": "mandatory",
+          "url": "uri",
+          "size": "measure",
+          "content": "body"
+        }
+      }
+    },
+    "/api/v1/advert": {
+      "path": "/relayjet/v1/common/promo",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "position": "placement",
+          "title": "headline",
+          "content": "body",
+          "image_url": "imageuri",
+          "link_url": "linkuri",
+          "show_times": "displaycount",
+          "max_show_times": "maxdisplay",
+          "sorter": "orderby"
+        }
+      }
+    },
+    "/api/v1/notice": {
+      "path": "/relayjet/v1/common/bulletin",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "system": {
+            "$field": "sysbox",
+            "list": {
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
+            },
+            "total": "sum",
+            "unread_count": "unreadtotal"
+          },
+          "user": {
+            "$field": "member",
+            "list": {
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
+            },
+            "total": "sum",
+            "unread_count": "unreadtotal"
+          }
+        }
+      }
+    },
+    "/api/v1/notice/unread": {
+      "path": "/relayjet/v1/common/pendingnote",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "system": {
+            "$field": "sysbox",
+            "list": {
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
+            },
+            "total": "sum",
+            "unread_count": "unreadtotal"
+          },
+          "user": {
+            "$field": "member",
+            "list": {
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
+            },
+            "total": "sum",
+            "unread_count": "unreadtotal"
+          }
+        }
+      }
+    },
+    "/api/v1/popup": {
+      "path": "/relayjet/v1/common/modal",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "title": "headline",
+          "content": "body",
+          "image_url": "imageuri",
+          "jump_type": "gotype",
+          "jump_target": "gotarget",
+          "can_close": "dismissible",
+          "show_times": "displaycount",
+          "max_show_times": "maxdisplay"
+        }
+      }
+    },
+    "/api/v1/delayed_popup": {
+      "path": "/relayjet/v1/common/delaymodal",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "title": "headline",
+          "content": "body",
+          "image_url": "imageuri",
+          "link_url": "linkuri",
+          "can_close": "dismissible",
+          "delay_days": "waitdays",
+          "transfer_code": "xfercode"
+        }
+      }
+    },
+    "/api/v1/read_notice": {
+      "path": "/relayjet/v1/common/acknote",
+      "request": {
+        "system_ids": "sysnotes",
+        "user_ids": "usernotes"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/error": {
+      "path": "/relayjet/v1/common/fault",
+      "request": {
+        "msg": "message",
+        "mobile_version": "osver",
+        "mobile_model_name": "modelname",
+        "msg_type": "errkind"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/packages": {
+      "path": "/relayjet/v1/common/bundles",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "id": "ident",
+          "apple_id": "applekey",
+          "name": "label",
+          "sub_name": "sublabel",
+          "selected": "chosen",
+          "corner": "angle",
+          "price": "amount",
+          "price_text": "pricecopy",
+          "origin_price": "baseprice",
+          "value": "datum",
+          "remark": "note",
+          "day": "date"
+        }
+      }
+    },
+    "/api/v1/pay/launch": {
+      "path": "/relayjet/v1/common/paystart",
+      "request": {
+        "package_id": "bundleid"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "type": "category",
+          "target": "destination",
+          "app_account_token": "apptoken"
+        }
+      }
+    },
+    "/api/v1/pay/apple_verify": {
+      "path": "/relayjet/v1/common/applecheck",
+      "request": {
+        "transaction_id": "tradeid"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "order_no": "orderid",
+          "pay_status": "paystate",
+          "pay_type": "paymode",
+          "transaction_id": "txnid",
+          "vip_time": "premiumuntil"
+        }
+      }
+    },
+    "/api/v1/pay/apple_callback": {
+      "path": "/relayjet/v1/common/applereply",
+      "request": {
+        "signedPayload": "signedPayload"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/pay/xx_callback": {
+      "path": "/relayjet/v1/common/xreply",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/pay/ss_callback": {
+      "path": "/relayjet/v1/common/ssreply",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/lines_list": {
+      "path": "/relayjet/v1/common/routelist",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "country": "nation",
+          "code": "rcode",
+          "min_conn_time": "minlinktime",
+          "max_conn_time": "maxlinktime",
+          "img_url": "imguri"
+        }
+      }
+    },
+    "/api/v1/node": {
+      "path": "/relayjet/v1/common/relay",
+      "request": {
+        "code": "routecode"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "link_url": "linkuri"
+        }
+      }
+    },
+    "/api/v1/node_outbounds": {
+      "path": "/relayjet/v1/common/relayexit",
+      "request": {
+        "code": "routecode"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "link_url": "linkuri",
+          "outbounds": "exits"
+        }
+      }
+    },
+    "/api/v1/node_config": {
+      "path": "/relayjet/v1/common/relaysetup",
+      "request": {
+        "code": "routecode",
+        "type": "mode"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "config": "settings"
+        }
+      }
+    },
+    "/api/v1/connected": {
+      "path": "/relayjet/v1/common/linked",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/heartbeat": {
+      "path": "/relayjet/v1/common/keepalive",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": {
+          "$field": "rresult",
+          "connect_status": "linkstate"
+        }
+      }
+    },
+    "/api/v1/disconnect": {
+      "path": "/relayjet/v1/common/unlink",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/vpn_flow": {
+      "path": "/relayjet/v1/common/trafficlog",
+      "request": {
+        "flow": "traffic"
+      },
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    }
+  }
+}
