@@ -12,12 +12,12 @@
     "language": "RelayJet-Language"
   },
   "field_affix": {
-    "prefix": "rely",
-    "suffix": "fly"
+    "prefix": "rely_",
+    "suffix": "_fly"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/relayjet/v1/common/wellness",
+      "path": "/relayjet/jetapi/wellness",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -26,7 +26,7 @@
       }
     },
     "/api/v1/auto_login": {
-      "path": "/relayjet/v1/common/autolog",
+      "path": "/relayjet/jetapi/autolog",
       "request": {
         "device_no": "devid",
         "platform": "clientos",
@@ -59,7 +59,7 @@
       }
     },
     "/api/v1/register": {
-      "path": "/relayjet/v1/common/signup",
+      "path": "/relayjet/jetapi/signup",
       "request": {
         "device_no": "devid",
         "username": "account",
@@ -88,7 +88,7 @@
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/relayjet/v1/common/pubapple",
+      "path": "/relayjet/jetapi/pubapple",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -102,12 +102,12 @@
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/relayjet/v1/common/asset/*filepath",
+      "path": "/relayjet/jetapi/asset/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/relayjet/v1/common/signin",
+      "path": "/relayjet/jetapi/signin",
       "request": {
         "device_no": "devid",
         "username": "account",
@@ -142,7 +142,7 @@
       }
     },
     "/api/v1/logout": {
-      "path": "/relayjet/v1/common/signout",
+      "path": "/relayjet/jetapi/signout",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -167,7 +167,7 @@
       }
     },
     "/api/v1/logoff": {
-      "path": "/relayjet/v1/common/cancelacct",
+      "path": "/relayjet/jetapi/cancelacct",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -179,7 +179,7 @@
       }
     },
     "/api/v1/change_password": {
-      "path": "/relayjet/v1/common/pwdchange",
+      "path": "/relayjet/jetapi/pwdchange",
       "request": {
         "new_password": "newpass"
       },
@@ -190,7 +190,7 @@
       }
     },
     "/api/v1/device_info": {
-      "path": "/relayjet/v1/common/devinfo",
+      "path": "/relayjet/jetapi/devinfo",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -234,7 +234,7 @@
       }
     },
     "/api/v1/device_logout": {
-      "path": "/relayjet/v1/common/devsignout",
+      "path": "/relayjet/jetapi/devsignout",
       "request": {
         "id": "ident"
       },
@@ -280,7 +280,7 @@
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/relayjet/v1/common/invcodegen",
+      "path": "/relayjet/jetapi/invcodegen",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -292,7 +292,7 @@
       }
     },
     "/api/v1/invite_code": {
-      "path": "/relayjet/v1/common/refercode",
+      "path": "/relayjet/jetapi/refercode",
       "request": {
         "invite_code": "refercode"
       },
@@ -303,7 +303,7 @@
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/relayjet/v1/common/invinfo",
+      "path": "/relayjet/jetapi/invinfo",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -326,7 +326,7 @@
       }
     },
     "/api/v1/user_info": {
-      "path": "/relayjet/v1/common/usrinfo",
+      "path": "/relayjet/jetapi/usrinfo",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -351,7 +351,7 @@
       }
     },
     "/api/v1/init": {
-      "path": "/relayjet/v1/common/bootstrap",
+      "path": "/relayjet/jetapi/bootstrap",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -401,7 +401,7 @@
       }
     },
     "/api/v1/version": {
-      "path": "/relayjet/v1/common/release",
+      "path": "/relayjet/jetapi/release",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -421,7 +421,7 @@
       }
     },
     "/api/v1/advert": {
-      "path": "/relayjet/v1/common/promo",
+      "path": "/relayjet/jetapi/promo",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -441,7 +441,7 @@
       }
     },
     "/api/v1/notice": {
-      "path": "/relayjet/v1/common/bulletin",
+      "path": "/relayjet/jetapi/bulletin",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -478,7 +478,7 @@
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/relayjet/v1/common/pendingnote",
+      "path": "/relayjet/jetapi/pendingnote",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -515,7 +515,7 @@
       }
     },
     "/api/v1/popup": {
-      "path": "/relayjet/v1/common/modal",
+      "path": "/relayjet/jetapi/modal",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -535,7 +535,7 @@
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/relayjet/v1/common/delaymodal",
+      "path": "/relayjet/jetapi/delaymodal",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -554,7 +554,7 @@
       }
     },
     "/api/v1/read_notice": {
-      "path": "/relayjet/v1/common/acknote",
+      "path": "/relayjet/jetapi/acknote",
       "request": {
         "system_ids": "sysnotes",
         "user_ids": "usernotes"
@@ -566,7 +566,7 @@
       }
     },
     "/api/v1/error": {
-      "path": "/relayjet/v1/common/fault",
+      "path": "/relayjet/jetapi/fault",
       "request": {
         "msg": "message",
         "mobile_version": "osver",
@@ -580,7 +580,7 @@
       }
     },
     "/api/v1/packages": {
-      "path": "/relayjet/v1/common/bundles",
+      "path": "/relayjet/jetapi/bundles",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -603,7 +603,7 @@
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/relayjet/v1/common/paystart",
+      "path": "/relayjet/jetapi/paystart",
       "request": {
         "package_id": "bundleid"
       },
@@ -619,7 +619,7 @@
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/relayjet/v1/common/applecheck",
+      "path": "/relayjet/jetapi/applecheck",
       "request": {
         "transaction_id": "tradeid"
       },
@@ -637,7 +637,7 @@
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/relayjet/v1/common/applereply",
+      "path": "/relayjet/jetapi/applereply",
       "request": {
         "signedPayload": "signedPayload"
       },
@@ -648,7 +648,7 @@
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/relayjet/v1/common/xreply",
+      "path": "/relayjet/jetapi/xreply",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -657,7 +657,7 @@
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/relayjet/v1/common/ssreply",
+      "path": "/relayjet/jetapi/ssreply",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -666,7 +666,7 @@
       }
     },
     "/api/v1/lines_list": {
-      "path": "/relayjet/v1/common/routelist",
+      "path": "/relayjet/jetapi/routelist",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -682,7 +682,7 @@
       }
     },
     "/api/v1/node": {
-      "path": "/relayjet/v1/common/relay",
+      "path": "/relayjet/jetapi/relay",
       "request": {
         "code": "routecode"
       },
@@ -696,7 +696,7 @@
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/relayjet/v1/common/relayexit",
+      "path": "/relayjet/jetapi/relayexit",
       "request": {
         "code": "routecode"
       },
@@ -711,7 +711,7 @@
       }
     },
     "/api/v1/node_config": {
-      "path": "/relayjet/v1/common/relaysetup",
+      "path": "/relayjet/jetapi/relaysetup",
       "request": {
         "code": "routecode",
         "type": "mode"
@@ -726,7 +726,7 @@
       }
     },
     "/api/v1/connected": {
-      "path": "/relayjet/v1/common/linked",
+      "path": "/relayjet/jetapi/linked",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -735,7 +735,7 @@
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/relayjet/v1/common/keepalive",
+      "path": "/relayjet/jetapi/keepalive",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -747,7 +747,7 @@
       }
     },
     "/api/v1/disconnect": {
-      "path": "/relayjet/v1/common/unlink",
+      "path": "/relayjet/jetapi/unlink",
       "request": {},
       "response": {
         "code": "rnumber",
@@ -756,7 +756,7 @@
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/relayjet/v1/common/trafficlog",
+      "path": "/relayjet/jetapi/trafficlog",
       "request": {
         "flow": "traffic"
       },
