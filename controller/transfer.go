@@ -15,7 +15,7 @@ type DelayedPopupResponse struct {
 	Title        string   `json:"title" example:"服务迁移提醒"`                          // 弹窗标题
 	Content      string   `json:"content" example:"如当前软件无法使用，请转移到新软件"`             // 弹窗内容
 	ImageUrl     []string `json:"image_url" example:"/api/v1/upload/pop.png"`      // 弹窗图片地址数组
-	LinkUrl      string   `json:"link_url" example:"https://example.com/download"` // 弹窗跳转链接
+	LinkUrl      []string `json:"link_url" example:"https://example.com/download"` // 弹窗跳转链接数组
 	CanClose     int      `json:"can_close" example:"1"`                           // 是否可关闭(0=不可关闭,1=可关闭)
 	DelayDays    int      `json:"delay_days" example:"3"`                          // 断网后延迟展示天数
 	TransferCode string   `json:"transfer_code" example:"origin8f3k9q"`            // 当前用户转移码
@@ -57,7 +57,7 @@ func DelayedPopupHandler(c *gin.Context) {
 		Title:        localizedTextValue(popup.Title, clientInfo.Language),
 		Content:      localizedTextValue(popup.Content, clientInfo.Language),
 		ImageUrl:     popupImageResponseValue(popup.ImageUrl),
-		LinkUrl:      popup.LinkUrl,
+		LinkUrl:      popupImageResponseValue(popup.LinkUrl),
 		CanClose:     popup.CanClose,
 		DelayDays:    popup.DelayDays,
 		TransferCode: user.TransferCode,

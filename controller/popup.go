@@ -17,7 +17,7 @@ type PopupResponse struct {
 	Content      string   `json:"content" example:"限时开通会员享优惠"`                       // 弹窗内容
 	ImageUrl     []string `json:"image_url" example:"https://example.com/popup.png"` // 弹窗图片地址数组
 	JumpType     string   `json:"jump_type" example:"internal"`                      // 跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)
-	JumpTarget   string   `json:"jump_target" example:"purchase"`                    // 跳转目标，内部跳转填业务code，外部跳转填URL
+	JumpTarget   []string `json:"jump_target" example:"purchase"`                    // 跳转目标数组，内部跳转填业务code，外部跳转填URL
 	CanClose     int      `json:"can_close" example:"1"`                             // 是否可关闭(0=不可关闭,1=可关闭)
 	ShowTimes    int      `json:"show_times" example:"1"`                            // 当前用户已展示次数
 	MaxShowTimes int      `json:"max_show_times" example:"3"`                        // 每个用户最大展示次数，0表示不限次数
@@ -54,7 +54,7 @@ func PopupHandler(c *gin.Context) {
 		Content:      localizedTextValue(popup.Content, clientInfo.Language),
 		ImageUrl:     popupImageResponseValue(popup.ImageUrl),
 		JumpType:     popup.JumpType,
-		JumpTarget:   popup.JumpTarget,
+		JumpTarget:   popupImageResponseValue(popup.JumpTarget),
 		CanClose:     popup.CanClose,
 		ShowTimes:    record.ShowTimes,
 		MaxShowTimes: popup.MaxShowTimes,
