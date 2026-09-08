@@ -1,760 +1,769 @@
 {
-  "product_code": "origin",
-  "swagger_path": "/api/v1/docs",
+  "product_code": "rely",
+  "swagger_path": "/relayjet/v1/documents",
   "headers": {
-    "platform": "X-Platform",
-    "version": "X-Version",
-    "build": "X-Build",
-    "device_no": "X-Device-No",
-    "client_time": "X-Client-Time",
-    "time_zone": "X-Time-Zone",
-    "app_store_region": "X-App-Store-Region",
-    "language": "X-Language"
+    "platform": "RelayJet-Plat-Name",
+    "version": "RelayJet-Version-Number",
+    "build": "RelayJet-Build-Version",
+    "device_no": "RelayJet-Device-Name",
+    "client_time": "RelayJet-Time",
+    "time_zone": "RelayJet-TimeZone",
+    "app_store_region": "RelayJet-Stores-Reg",
+    "language": "RelayJet-Language"
   },
   "field_affix": {
-    "prefix": "",
-    "suffix": ""
+    "prefix": "rely",
+    "suffix": "fly"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/api/v1/health",
+      "path": "/relayjet/v1/common/wellness",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/auto_login": {
-      "path": "/api/v1/auto_login",
+      "path": "/relayjet/v1/common/autolog",
       "request": {
-        "device_no": "device_no",
-        "platform": "platform",
-        "version": "version",
-        "mobile_name": "mobile_name",
-        "mobile_version": "mobile_version",
-        "mobile_model_name": "mobile_model_name",
-        "source_channel": "source_channel"
+        "device_no": "devid",
+        "platform": "clientos",
+        "version": "release",
+        "mobile_name": "handset",
+        "mobile_version": "osver",
+        "mobile_model_name": "modelname",
+        "source_channel": "origin"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "token": "token",
-          "device_no": "device_no",
-          "username": "username",
-          "type": "type",
-          "is_vip": "is_vip",
-          "vip_time": "vip_time",
-          "is_new_user": "is_new_user",
-          "platform": "platform",
-          "version": "version",
-          "login_times": "login_times",
-          "create_time": "create_time",
-          "last_login_time": "last_login_time",
-          "password": "password"
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
         }
       }
     },
     "/api/v1/register": {
-      "path": "/api/v1/register",
+      "path": "/relayjet/v1/common/signup",
       "request": {
-        "device_no": "device_no",
-        "username": "username",
-        "password": "password"
+        "device_no": "devid",
+        "username": "account",
+        "password": "passcode"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "token": "token",
-          "device_no": "device_no",
-          "username": "username",
-          "type": "type",
-          "is_vip": "is_vip",
-          "vip_time": "vip_time",
-          "is_new_user": "is_new_user",
-          "platform": "platform",
-          "version": "version",
-          "login_times": "login_times",
-          "create_time": "create_time",
-          "last_login_time": "last_login_time",
-          "password": "password"
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
         }
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/api/v1/public_apple_id",
+      "path": "/relayjet/v1/common/pubapple",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "appid": "appid",
-          "pwd": "pwd"
+          "$field": "rresult",
+          "id": "ident",
+          "appid": "appkey",
+          "pwd": "pass"
         }
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/api/v1/upload/*filepath",
+      "path": "/relayjet/v1/common/asset/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/api/v1/login",
+      "path": "/relayjet/v1/common/signin",
       "request": {
-        "device_no": "device_no",
-        "username": "username",
-        "password": "password",
-        "platform": "platform",
-        "version": "version",
-        "mobile_name": "mobile_name",
-        "mobile_version": "mobile_version",
-        "mobile_model_name": "mobile_model_name",
-        "source_channel": "source_channel"
+        "device_no": "devid",
+        "username": "account",
+        "password": "passcode",
+        "platform": "clientos",
+        "version": "release",
+        "mobile_name": "handset",
+        "mobile_version": "osver",
+        "mobile_model_name": "modelname",
+        "source_channel": "origin"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "token": "token",
-          "device_no": "device_no",
-          "username": "username",
-          "type": "type",
-          "is_vip": "is_vip",
-          "vip_time": "vip_time",
-          "is_new_user": "is_new_user",
-          "platform": "platform",
-          "version": "version",
-          "login_times": "login_times",
-          "create_time": "create_time",
-          "last_login_time": "last_login_time",
-          "password": "password"
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
         }
       }
     },
     "/api/v1/logout": {
-      "path": "/api/v1/logout",
+      "path": "/relayjet/v1/common/signout",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "token": "token",
-          "device_no": "device_no",
-          "username": "username",
-          "type": "type",
-          "is_vip": "is_vip",
-          "vip_time": "vip_time",
-          "is_new_user": "is_new_user",
-          "platform": "platform",
-          "version": "version",
-          "login_times": "login_times",
-          "create_time": "create_time",
-          "last_login_time": "last_login_time",
-          "password": "password"
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
         }
       }
     },
     "/api/v1/logoff": {
-      "path": "/api/v1/logoff",
+      "path": "/relayjet/v1/common/cancelacct",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "token": "token"
+          "$field": "rresult",
+          "token": "accesskey"
         }
       }
     },
     "/api/v1/change_password": {
-      "path": "/api/v1/change_password",
+      "path": "/relayjet/v1/common/pwdchange",
       "request": {
-        "new_password": "new_password"
+        "new_password": "newpass"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/device_info": {
-      "path": "/api/v1/device_info",
+      "path": "/relayjet/v1/common/devinfo",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
+          "$field": "rresult",
           "local_device": {
-            "$field": "local_device",
-            "id": "id",
-            "device_no": "device_no",
-            "mobile_name": "mobile_name",
-            "mobile_version": "mobile_version",
-            "mobile_model_name": "mobile_model_name",
-            "platform": "platform",
-            "version": "version",
-            "last_login_time": "last_login_time"
+            "$field": "locdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
           },
           "two_device": {
-            "$field": "two_device",
-            "id": "id",
-            "device_no": "device_no",
-            "mobile_name": "mobile_name",
-            "mobile_version": "mobile_version",
-            "mobile_model_name": "mobile_model_name",
-            "platform": "platform",
-            "version": "version",
-            "last_login_time": "last_login_time"
+            "$field": "pairdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
           },
           "devices": {
-            "$field": "devices",
-            "id": "id",
-            "device_no": "device_no",
-            "mobile_name": "mobile_name",
-            "mobile_version": "mobile_version",
-            "mobile_model_name": "mobile_model_name",
-            "platform": "platform",
-            "version": "version",
-            "last_login_time": "last_login_time"
+            "$field": "devsets",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
           }
         }
       }
     },
     "/api/v1/device_logout": {
-      "path": "/api/v1/device_logout",
+      "path": "/relayjet/v1/common/devsignout",
       "request": {
-        "id": "id"
+        "id": "ident"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
+          "$field": "rresult",
           "local_device": {
-            "$field": "local_device",
-            "id": "id",
-            "device_no": "device_no",
-            "mobile_name": "mobile_name",
-            "mobile_version": "mobile_version",
-            "mobile_model_name": "mobile_model_name",
-            "platform": "platform",
-            "version": "version",
-            "last_login_time": "last_login_time"
+            "$field": "locdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
           },
           "two_device": {
-            "$field": "two_device",
-            "id": "id",
-            "device_no": "device_no",
-            "mobile_name": "mobile_name",
-            "mobile_version": "mobile_version",
-            "mobile_model_name": "mobile_model_name",
-            "platform": "platform",
-            "version": "version",
-            "last_login_time": "last_login_time"
+            "$field": "pairdev",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
           },
           "devices": {
-            "$field": "devices",
-            "id": "id",
-            "device_no": "device_no",
-            "mobile_name": "mobile_name",
-            "mobile_version": "mobile_version",
-            "mobile_model_name": "mobile_model_name",
-            "platform": "platform",
-            "version": "version",
-            "last_login_time": "last_login_time"
+            "$field": "devsets",
+            "id": "ident",
+            "device_no": "deviceid",
+            "mobile_name": "handset",
+            "mobile_version": "devicever",
+            "mobile_model_name": "modelname",
+            "platform": "clientos",
+            "version": "release",
+            "last_login_time": "lastsignin"
           }
         }
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/api/v1/draw_invite_code",
+      "path": "/relayjet/v1/common/invcodegen",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "invite_code": "invite_code"
+          "$field": "rresult",
+          "invite_code": "refercode"
         }
       }
     },
     "/api/v1/invite_code": {
-      "path": "/api/v1/invite_code",
+      "path": "/relayjet/v1/common/refercode",
       "request": {
-        "invite_code": "invite_code"
+        "invite_code": "refercode"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/api/v1/invite_detail",
+      "path": "/relayjet/v1/common/invinfo",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "invite_code": "invite_code",
-          "invite_valid": "invite_valid",
-          "share_count": "share_count",
-          "reward_time": "reward_time",
-          "per_invite_seconds": "per_invite_seconds",
-          "per_invite_text": "per_invite_text",
+          "$field": "rresult",
+          "invite_code": "refercode",
+          "invite_valid": "validinvite",
+          "share_count": "sharetotal",
+          "reward_time": "bonusat",
+          "per_invite_seconds": "invitebonus",
+          "per_invite_text": "invitetext",
           "milestones": {
-            "$field": "milestones",
-            "count": "count",
-            "reward_seconds": "reward_seconds",
-            "reward_text": "reward_text"
+            "$field": "markers",
+            "count": "tally",
+            "reward_seconds": "bonussecs",
+            "reward_text": "bonustext"
           }
         }
       }
     },
     "/api/v1/user_info": {
-      "path": "/api/v1/user_info",
+      "path": "/relayjet/v1/common/usrinfo",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "token": "token",
-          "device_no": "device_no",
-          "username": "username",
-          "type": "type",
-          "is_vip": "is_vip",
-          "vip_time": "vip_time",
-          "is_new_user": "is_new_user",
-          "platform": "platform",
-          "version": "version",
-          "login_times": "login_times",
-          "create_time": "create_time",
-          "last_login_time": "last_login_time",
-          "password": "password"
+          "$field": "rresult",
+          "id": "ident",
+          "token": "accesskey",
+          "device_no": "deviceid",
+          "username": "account",
+          "type": "category",
+          "is_vip": "premium",
+          "vip_time": "premiumuntil",
+          "is_new_user": "newcomer",
+          "platform": "clientos",
+          "version": "release",
+          "login_times": "signincount",
+          "create_time": "madeat",
+          "last_login_time": "lastsignin",
+          "password": "passcode"
         }
       }
     },
     "/api/v1/init": {
-      "path": "/api/v1/init",
+      "path": "/relayjet/v1/common/bootstrap",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
+          "$field": "rresult",
           "agreements": {
-            "$field": "agreements",
-            "user_agreement": "user_agreement",
-            "privacy_agreement": "privacy_agreement"
+            "$field": "pacts",
+            "user_agreement": "userterms",
+            "privacy_agreement": "privacyterms"
           },
           "share": {
-            "$field": "share",
-            "qrcode": "qrcode",
-            "links": "links"
+            "$field": "distribute",
+            "qrcode": "qrimage",
+            "links": "linkset"
           },
           "invite": {
-            "$field": "invite",
-            "valid_hours": "valid_hours",
-            "per_invite_seconds": "per_invite_seconds",
-            "per_invite_text": "per_invite_text",
-            "max_reward_days": "max_reward_days",
+            "$field": "referral",
+            "valid_hours": "validtime",
+            "per_invite_seconds": "invitebonus",
+            "per_invite_text": "invitetext",
+            "max_reward_days": "maxawarddays",
             "milestones": {
-              "$field": "milestones",
-              "count": "count",
-              "reward_seconds": "reward_seconds",
-              "reward_text": "reward_text"
+              "$field": "markers",
+              "count": "tally",
+              "reward_seconds": "bonussecs",
+              "reward_text": "bonustext"
             }
           },
           "app": {
-            "$field": "app",
-            "website": "website",
-            "new_user_free_seconds": "new_user_free_seconds"
+            "$field": "client",
+            "website": "webaddr",
+            "new_user_free_seconds": "newfreetime"
           },
           "tools": {
-            "$field": "tools",
-            "customer_service_enabled": "customer_service_enabled",
-            "customer_service_url": "customer_service_url",
-            "clean_memory_enabled": "clean_memory_enabled",
-            "message_enabled": "message_enabled"
+            "$field": "utilities",
+            "customer_service_enabled": "supporton",
+            "customer_service_url": "supporturl",
+            "clean_memory_enabled": "memclean",
+            "message_enabled": "messageon"
           },
           "proxy": {
-            "$field": "proxy",
-            "skip_domains": "skip_domains"
+            "$field": "forwarder",
+            "skip_domains": "bypassdomains"
           }
         }
       }
     },
     "/api/v1/version": {
-      "path": "/api/v1/version",
+      "path": "/relayjet/v1/common/release",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "has_update": "has_update",
-          "name": "name",
-          "platform": "platform",
-          "version": "version",
-          "build": "build",
-          "force": "force",
-          "url": "url",
-          "size": "size",
-          "content": "content"
+          "$field": "rresult",
+          "has_update": "updateyes",
+          "name": "label",
+          "platform": "clientos",
+          "version": "release",
+          "build": "revision",
+          "force": "mandatory",
+          "url": "uri",
+          "size": "measure",
+          "content": "body"
         }
       }
     },
     "/api/v1/advert": {
-      "path": "/api/v1/advert",
+      "path": "/relayjet/v1/common/promo",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "position": "position",
-          "title": "title",
-          "content": "content",
-          "image_url": "image_url",
-          "link_url": "link_url",
-          "show_times": "show_times",
-          "max_show_times": "max_show_times",
-          "sorter": "sorter"
+          "$field": "rresult",
+          "id": "ident",
+          "position": "placement",
+          "title": "headline",
+          "content": "body",
+          "image_url": "imageuri",
+          "link_url": "linkuri",
+          "show_times": "displaycount",
+          "max_show_times": "maxdisplay",
+          "sorter": "orderby"
         }
       }
     },
     "/api/v1/notice": {
-      "path": "/api/v1/notice",
+      "path": "/relayjet/v1/common/bulletin",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
+          "$field": "rresult",
           "system": {
-            "$field": "system",
+            "$field": "sysbox",
             "list": {
-              "$field": "list",
-              "id": "id",
-              "title": "title",
-              "content": "content",
-              "is_read": "is_read",
-              "create_time": "create_time"
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
             },
-            "total": "total",
-            "unread_count": "unread_count"
+            "total": "sum",
+            "unread_count": "unreadtotal"
           },
           "user": {
-            "$field": "user",
+            "$field": "member",
             "list": {
-              "$field": "list",
-              "id": "id",
-              "title": "title",
-              "content": "content",
-              "is_read": "is_read",
-              "create_time": "create_time"
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
             },
-            "total": "total",
-            "unread_count": "unread_count"
+            "total": "sum",
+            "unread_count": "unreadtotal"
           }
         }
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/api/v1/notice/unread",
+      "path": "/relayjet/v1/common/pendingnote",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
+          "$field": "rresult",
           "system": {
-            "$field": "system",
+            "$field": "sysbox",
             "list": {
-              "$field": "list",
-              "id": "id",
-              "title": "title",
-              "content": "content",
-              "is_read": "is_read",
-              "create_time": "create_time"
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
             },
-            "total": "total",
-            "unread_count": "unread_count"
+            "total": "sum",
+            "unread_count": "unreadtotal"
           },
           "user": {
-            "$field": "user",
+            "$field": "member",
             "list": {
-              "$field": "list",
-              "id": "id",
-              "title": "title",
-              "content": "content",
-              "is_read": "is_read",
-              "create_time": "create_time"
+              "$field": "entries",
+              "id": "ident",
+              "title": "headline",
+              "content": "body",
+              "is_read": "readflag",
+              "create_time": "madeat"
             },
-            "total": "total",
-            "unread_count": "unread_count"
+            "total": "sum",
+            "unread_count": "unreadtotal"
           }
         }
       }
     },
     "/api/v1/popup": {
-      "path": "/api/v1/popup",
+      "path": "/relayjet/v1/common/modal",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "title": "title",
-          "content": "content",
-          "image_url": "image_url",
-          "jump_type": "jump_type",
-          "jump_target": "jump_target",
-          "can_close": "can_close",
-          "show_times": "show_times",
-          "max_show_times": "max_show_times"
+          "$field": "rresult",
+          "id": "ident",
+          "title": "headline",
+          "content": "body",
+          "image_url": "imageuri",
+          "jump_type": "gotype",
+          "jump_target": "gotarget",
+          "can_close": "dismissible",
+          "show_times": "displaycount",
+          "max_show_times": "maxdisplay"
         }
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/api/v1/delayed_popup",
+      "path": "/relayjet/v1/common/delaymodal",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "title": "title",
-          "content": "content",
-          "image_url": "image_url",
-          "link_url": "link_url",
-          "can_close": "can_close",
-          "delay_days": "delay_days",
-          "transfer_code": "transfer_code"
+          "$field": "rresult",
+          "id": "ident",
+          "title": "headline",
+          "content": "body",
+          "image_url": "imageuri",
+          "link_url": "linkuri",
+          "can_close": "dismissible",
+          "delay_days": "waitdays",
+          "transfer_code": "xfercode"
         }
       }
     },
     "/api/v1/read_notice": {
-      "path": "/api/v1/read_notice",
+      "path": "/relayjet/v1/common/acknote",
       "request": {
-        "system_ids": "system_ids",
-        "user_ids": "user_ids"
+        "system_ids": "sysnotes",
+        "user_ids": "usernotes"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/error": {
-      "path": "/api/v1/error",
+      "path": "/relayjet/v1/common/fault",
       "request": {
-        "msg": "msg",
-        "mobile_version": "mobile_version",
-        "mobile_model_name": "mobile_model_name",
-        "msg_type": "msg_type"
+        "msg": "message",
+        "mobile_version": "osver",
+        "mobile_model_name": "modelname",
+        "msg_type": "errkind"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/packages": {
-      "path": "/api/v1/packages",
+      "path": "/relayjet/v1/common/bundles",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "id": "id",
-          "apple_id": "apple_id",
-          "name": "name",
-          "sub_name": "sub_name",
-          "selected": "selected",
-          "corner": "corner",
-          "price": "price",
-          "price_text": "price_text",
-          "origin_price": "origin_price",
-          "value": "value",
-          "remark": "remark",
-          "day": "day"
+          "$field": "rresult",
+          "id": "ident",
+          "apple_id": "applekey",
+          "name": "label",
+          "sub_name": "sublabel",
+          "selected": "chosen",
+          "corner": "angle",
+          "price": "amount",
+          "price_text": "pricecopy",
+          "origin_price": "baseprice",
+          "value": "datum",
+          "remark": "note",
+          "day": "date"
         }
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/api/v1/pay/launch",
+      "path": "/relayjet/v1/common/paystart",
       "request": {
-        "package_id": "package_id"
+        "package_id": "bundleid"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "type": "type",
-          "target": "target",
-          "app_account_token": "app_account_token"
+          "$field": "rresult",
+          "type": "category",
+          "target": "destination",
+          "app_account_token": "apptoken"
         }
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/api/v1/pay/apple_verify",
+      "path": "/relayjet/v1/common/applecheck",
       "request": {
-        "transaction_id": "transaction_id"
+        "transaction_id": "tradeid"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "order_no": "order_no",
-          "pay_status": "pay_status",
-          "pay_type": "pay_type",
-          "transaction_id": "transaction_id",
-          "vip_time": "vip_time"
+          "$field": "rresult",
+          "order_no": "orderid",
+          "pay_status": "paystate",
+          "pay_type": "paymode",
+          "transaction_id": "txnid",
+          "vip_time": "premiumuntil"
         }
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/api/v1/pay/apple_callback",
+      "path": "/relayjet/v1/common/applereply",
       "request": {
         "signedPayload": "signedPayload"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/api/v1/pay/xx_callback",
+      "path": "/relayjet/v1/common/xreply",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
+      }
+    },
+    "/api/v1/pay/ss_callback": {
+      "path": "/relayjet/v1/common/ssreply",
+      "request": {},
+      "response": {
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/lines_list": {
-      "path": "/api/v1/lines_list",
+      "path": "/relayjet/v1/common/routelist",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "country": "country",
-          "code": "code",
-          "min_conn_time": "min_conn_time",
-          "max_conn_time": "max_conn_time",
-          "img_url": "img_url"
+          "$field": "rresult",
+          "country": "nation",
+          "code": "rcode",
+          "min_conn_time": "minlinktime",
+          "max_conn_time": "maxlinktime",
+          "img_url": "imguri"
         }
       }
     },
     "/api/v1/node": {
-      "path": "/api/v1/node",
+      "path": "/relayjet/v1/common/relay",
       "request": {
-        "code": "code"
+        "code": "routecode"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "link_url": "link_url"
+          "$field": "rresult",
+          "link_url": "linkuri"
         }
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/api/v1/node_outbounds",
+      "path": "/relayjet/v1/common/relayexit",
       "request": {
-        "code": "code"
+        "code": "routecode"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "link_url": "link_url",
-          "outbounds": "outbounds"
+          "$field": "rresult",
+          "link_url": "linkuri",
+          "outbounds": "exits"
         }
       }
     },
     "/api/v1/node_config": {
-      "path": "/api/v1/node_config",
+      "path": "/relayjet/v1/common/relaysetup",
       "request": {
-        "code": "code",
-        "type": "type"
+        "code": "routecode",
+        "type": "mode"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "config": "config"
+          "$field": "rresult",
+          "config": "settings"
         }
       }
     },
     "/api/v1/connected": {
-      "path": "/api/v1/connected",
+      "path": "/relayjet/v1/common/linked",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/api/v1/heartbeat",
+      "path": "/relayjet/v1/common/keepalive",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
+        "code": "rnumber",
+        "msg": "rmessage",
         "result": {
-          "$field": "result",
-          "connect_status": "connect_status"
+          "$field": "rresult",
+          "connect_status": "linkstate"
         }
       }
     },
     "/api/v1/disconnect": {
-      "path": "/api/v1/disconnect",
+      "path": "/relayjet/v1/common/unlink",
       "request": {},
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/api/v1/vpn_flow",
+      "path": "/relayjet/v1/common/trafficlog",
       "request": {
-        "flow": "flow"
+        "flow": "traffic"
       },
       "response": {
-        "code": "code",
-        "msg": "msg",
-        "result": "result"
+        "code": "rnumber",
+        "msg": "rmessage",
+        "result": "rresult"
       }
     }
   }

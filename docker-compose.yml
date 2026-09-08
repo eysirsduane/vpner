@@ -7,8 +7,6 @@ services:
     container_name: just-vpn-api
     restart: unless-stopped
     depends_on:
-      mysql:
-        condition: service_healthy
       redis:
         condition: service_healthy
     environment:
@@ -17,40 +15,6 @@ services:
       - "8080:8080"
     volumes:
       - upload_data:/app/upload
-    logging:
-      driver: json-file
-      options:
-        max-size: "20m"
-        max-file: "3"
-
-  mysql:
-    image: mysql:8.4
-    container_name: just-vpn-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: just_vpn.303
-      MYSQL_DATABASE: just_vpn
-      MYSQL_USER: just_vpn
-      MYSQL_PASSWORD: just_vpn.303
-      TZ: Asia/Shanghai
-    ports:
-      - "13306:3306"
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-      - --default-time-zone=+08:00
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "mysqladmin ping -h 127.0.0.1 -uroot -pjust_vpn.303 --silent",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
     logging:
       driver: json-file
       options:
@@ -91,6 +55,5 @@ services:
         max-file: "3"
 
 volumes:
-  mysql_data:
   redis_data:
   upload_data:
