@@ -12,757 +12,757 @@
     "language": "RelayJet-Language"
   },
   "field_affix": {
-    "prefix": "rely_",
-    "suffix": "_fly"
+    "prefix": "rely_field_",
+    "suffix": "_fly_suff"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/relayjet/jetapi/wellness",
+      "path": "/relayjet/jetapi/svc_pls",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/auto_login": {
-      "path": "/relayjet/jetapi/autolog",
+      "path": "/relayjet/jetapi/gst_acc",
       "request": {
-        "device_no": "devid",
-        "platform": "clientos",
-        "version": "release",
-        "mobile_name": "handset",
-        "mobile_version": "osver",
-        "mobile_model_name": "modelname",
-        "source_channel": "origin"
+        "device_no": "dev_id",
+        "platform": "cli_os",
+        "version": "rel_ver",
+        "mobile_name": "mob_nm",
+        "mobile_version": "os_ver",
+        "mobile_model_name": "mdl_nm",
+        "source_channel": "src_chn"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "token": "accesskey",
-          "device_no": "deviceid",
-          "username": "account",
-          "type": "category",
-          "is_vip": "premium",
-          "vip_time": "premiumuntil",
-          "is_new_user": "newcomer",
-          "platform": "clientos",
-          "version": "release",
-          "login_times": "signincount",
-          "create_time": "madeat",
-          "last_login_time": "lastsignin",
-          "password": "passcode"
+          "$field": "res_data",
+          "id": "rec_id",
+          "token": "acc_key",
+          "device_no": "dev_id",
+          "username": "usr_nm",
+          "type": "cat_cd",
+          "is_vip": "vip_flg",
+          "vip_time": "vip_exp_tm",
+          "is_new_user": "new_usr_flg",
+          "platform": "cli_os",
+          "version": "rel_ver",
+          "login_times": "auth_cnt",
+          "create_time": "crt_tm",
+          "last_login_time": "last_auth_tm",
+          "password": "pwd_txt"
         }
       }
     },
     "/api/v1/register": {
-      "path": "/relayjet/jetapi/signup",
+      "path": "/relayjet/jetapi/acct_enr",
       "request": {
-        "device_no": "devid",
-        "username": "account",
-        "password": "passcode"
+        "device_no": "dev_id",
+        "username": "usr_nm",
+        "password": "pwd_txt"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "token": "accesskey",
-          "device_no": "deviceid",
-          "username": "account",
-          "type": "category",
-          "is_vip": "premium",
-          "vip_time": "premiumuntil",
-          "is_new_user": "newcomer",
-          "platform": "clientos",
-          "version": "release",
-          "login_times": "signincount",
-          "create_time": "madeat",
-          "last_login_time": "lastsignin",
-          "password": "passcode"
+          "$field": "res_data",
+          "id": "rec_id",
+          "token": "acc_key",
+          "device_no": "dev_id",
+          "username": "usr_nm",
+          "type": "cat_cd",
+          "is_vip": "vip_flg",
+          "vip_time": "vip_exp_tm",
+          "is_new_user": "new_usr_flg",
+          "platform": "cli_os",
+          "version": "rel_ver",
+          "login_times": "auth_cnt",
+          "create_time": "crt_tm",
+          "last_login_time": "last_auth_tm",
+          "password": "pwd_txt"
         }
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/relayjet/jetapi/pubapple",
+      "path": "/relayjet/jetapi/shr_apl",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "appid": "appkey",
-          "pwd": "pass"
+          "$field": "res_data",
+          "id": "rec_id",
+          "appid": "app_key",
+          "pwd": "pwd_txt"
         }
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/relayjet/jetapi/asset/*filepath",
+      "path": "/relayjet/jetapi/med_sto/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/relayjet/jetapi/signin",
+      "path": "/relayjet/jetapi/mbr_acc",
       "request": {
-        "device_no": "devid",
-        "username": "account",
-        "password": "passcode",
-        "platform": "clientos",
-        "version": "release",
-        "mobile_name": "handset",
-        "mobile_version": "osver",
-        "mobile_model_name": "modelname",
-        "source_channel": "origin"
+        "device_no": "dev_id",
+        "username": "usr_nm",
+        "password": "pwd_txt",
+        "platform": "cli_os",
+        "version": "rel_ver",
+        "mobile_name": "mob_nm",
+        "mobile_version": "os_ver",
+        "mobile_model_name": "mdl_nm",
+        "source_channel": "src_chn"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "token": "accesskey",
-          "device_no": "deviceid",
-          "username": "account",
-          "type": "category",
-          "is_vip": "premium",
-          "vip_time": "premiumuntil",
-          "is_new_user": "newcomer",
-          "platform": "clientos",
-          "version": "release",
-          "login_times": "signincount",
-          "create_time": "madeat",
-          "last_login_time": "lastsignin",
-          "password": "passcode"
+          "$field": "res_data",
+          "id": "rec_id",
+          "token": "acc_key",
+          "device_no": "dev_id",
+          "username": "usr_nm",
+          "type": "cat_cd",
+          "is_vip": "vip_flg",
+          "vip_time": "vip_exp_tm",
+          "is_new_user": "new_usr_flg",
+          "platform": "cli_os",
+          "version": "rel_ver",
+          "login_times": "auth_cnt",
+          "create_time": "crt_tm",
+          "last_login_time": "last_auth_tm",
+          "password": "pwd_txt"
         }
       }
     },
     "/api/v1/logout": {
-      "path": "/relayjet/jetapi/signout",
+      "path": "/relayjet/jetapi/sess_lve",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "token": "accesskey",
-          "device_no": "deviceid",
-          "username": "account",
-          "type": "category",
-          "is_vip": "premium",
-          "vip_time": "premiumuntil",
-          "is_new_user": "newcomer",
-          "platform": "clientos",
-          "version": "release",
-          "login_times": "signincount",
-          "create_time": "madeat",
-          "last_login_time": "lastsignin",
-          "password": "passcode"
+          "$field": "res_data",
+          "id": "rec_id",
+          "token": "acc_key",
+          "device_no": "dev_id",
+          "username": "usr_nm",
+          "type": "cat_cd",
+          "is_vip": "vip_flg",
+          "vip_time": "vip_exp_tm",
+          "is_new_user": "new_usr_flg",
+          "platform": "cli_os",
+          "version": "rel_ver",
+          "login_times": "auth_cnt",
+          "create_time": "crt_tm",
+          "last_login_time": "last_auth_tm",
+          "password": "pwd_txt"
         }
       }
     },
     "/api/v1/logoff": {
-      "path": "/relayjet/jetapi/cancelacct",
+      "path": "/relayjet/jetapi/acct_ret",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "token": "accesskey"
+          "$field": "res_data",
+          "token": "acc_key"
         }
       }
     },
     "/api/v1/change_password": {
-      "path": "/relayjet/jetapi/pwdchange",
+      "path": "/relayjet/jetapi/sec_rnw",
       "request": {
-        "new_password": "newpass"
+        "new_password": "new_pwd"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/device_info": {
-      "path": "/relayjet/jetapi/devinfo",
+      "path": "/relayjet/jetapi/dev_prof",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
+          "$field": "res_data",
           "local_device": {
-            "$field": "locdev",
-            "id": "ident",
-            "device_no": "deviceid",
-            "mobile_name": "handset",
-            "mobile_version": "devicever",
-            "mobile_model_name": "modelname",
-            "platform": "clientos",
-            "version": "release",
-            "last_login_time": "lastsignin"
+            "$field": "loc_dev",
+            "id": "rec_id",
+            "device_no": "dev_id",
+            "mobile_name": "mob_nm",
+            "mobile_version": "dev_ver",
+            "mobile_model_name": "mdl_nm",
+            "platform": "cli_os",
+            "version": "rel_ver",
+            "last_login_time": "last_auth_tm"
           },
           "two_device": {
-            "$field": "pairdev",
-            "id": "ident",
-            "device_no": "deviceid",
-            "mobile_name": "handset",
-            "mobile_version": "devicever",
-            "mobile_model_name": "modelname",
-            "platform": "clientos",
-            "version": "release",
-            "last_login_time": "lastsignin"
+            "$field": "pair_dev",
+            "id": "rec_id",
+            "device_no": "dev_id",
+            "mobile_name": "mob_nm",
+            "mobile_version": "dev_ver",
+            "mobile_model_name": "mdl_nm",
+            "platform": "cli_os",
+            "version": "rel_ver",
+            "last_login_time": "last_auth_tm"
           },
           "devices": {
-            "$field": "devsets",
-            "id": "ident",
-            "device_no": "deviceid",
-            "mobile_name": "handset",
-            "mobile_version": "devicever",
-            "mobile_model_name": "modelname",
-            "platform": "clientos",
-            "version": "release",
-            "last_login_time": "lastsignin"
+            "$field": "dev_lst",
+            "id": "rec_id",
+            "device_no": "dev_id",
+            "mobile_name": "mob_nm",
+            "mobile_version": "dev_ver",
+            "mobile_model_name": "mdl_nm",
+            "platform": "cli_os",
+            "version": "rel_ver",
+            "last_login_time": "last_auth_tm"
           }
         }
       }
     },
     "/api/v1/device_logout": {
-      "path": "/relayjet/jetapi/devsignout",
+      "path": "/relayjet/jetapi/dev_rel",
       "request": {
-        "id": "ident"
+        "id": "rec_id"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
+          "$field": "res_data",
           "local_device": {
-            "$field": "locdev",
-            "id": "ident",
-            "device_no": "deviceid",
-            "mobile_name": "handset",
-            "mobile_version": "devicever",
-            "mobile_model_name": "modelname",
-            "platform": "clientos",
-            "version": "release",
-            "last_login_time": "lastsignin"
+            "$field": "loc_dev",
+            "id": "rec_id",
+            "device_no": "dev_id",
+            "mobile_name": "mob_nm",
+            "mobile_version": "dev_ver",
+            "mobile_model_name": "mdl_nm",
+            "platform": "cli_os",
+            "version": "rel_ver",
+            "last_login_time": "last_auth_tm"
           },
           "two_device": {
-            "$field": "pairdev",
-            "id": "ident",
-            "device_no": "deviceid",
-            "mobile_name": "handset",
-            "mobile_version": "devicever",
-            "mobile_model_name": "modelname",
-            "platform": "clientos",
-            "version": "release",
-            "last_login_time": "lastsignin"
+            "$field": "pair_dev",
+            "id": "rec_id",
+            "device_no": "dev_id",
+            "mobile_name": "mob_nm",
+            "mobile_version": "dev_ver",
+            "mobile_model_name": "mdl_nm",
+            "platform": "cli_os",
+            "version": "rel_ver",
+            "last_login_time": "last_auth_tm"
           },
           "devices": {
-            "$field": "devsets",
-            "id": "ident",
-            "device_no": "deviceid",
-            "mobile_name": "handset",
-            "mobile_version": "devicever",
-            "mobile_model_name": "modelname",
-            "platform": "clientos",
-            "version": "release",
-            "last_login_time": "lastsignin"
+            "$field": "dev_lst",
+            "id": "rec_id",
+            "device_no": "dev_id",
+            "mobile_name": "mob_nm",
+            "mobile_version": "dev_ver",
+            "mobile_model_name": "mdl_nm",
+            "platform": "cli_os",
+            "version": "rel_ver",
+            "last_login_time": "last_auth_tm"
           }
         }
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/relayjet/jetapi/invcodegen",
+      "path": "/relayjet/jetapi/ref_iss",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "invite_code": "refercode"
+          "$field": "res_data",
+          "invite_code": "ref_cd"
         }
       }
     },
     "/api/v1/invite_code": {
-      "path": "/relayjet/jetapi/refercode",
+      "path": "/relayjet/jetapi/ref_apl",
       "request": {
-        "invite_code": "refercode"
+        "invite_code": "ref_cd"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/relayjet/jetapi/invinfo",
+      "path": "/relayjet/jetapi/ref_dtl",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "invite_code": "refercode",
-          "invite_valid": "validinvite",
-          "share_count": "sharetotal",
-          "reward_time": "bonusat",
-          "per_invite_seconds": "invitebonus",
-          "per_invite_text": "invitetext",
+          "$field": "res_data",
+          "invite_code": "ref_cd",
+          "invite_valid": "inv_valid_flg",
+          "share_count": "shr_cnt",
+          "reward_time": "bns_tm",
+          "per_invite_seconds": "inv_bns_sec",
+          "per_invite_text": "inv_bns_txt",
           "milestones": {
-            "$field": "markers",
-            "count": "tally",
-            "reward_seconds": "bonussecs",
-            "reward_text": "bonustext"
+            "$field": "stage_lst",
+            "count": "hit_cnt",
+            "reward_seconds": "bns_sec",
+            "reward_text": "bns_txt"
           }
         }
       }
     },
     "/api/v1/user_info": {
-      "path": "/relayjet/jetapi/usrinfo",
+      "path": "/relayjet/jetapi/mbr_prof",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "token": "accesskey",
-          "device_no": "deviceid",
-          "username": "account",
-          "type": "category",
-          "is_vip": "premium",
-          "vip_time": "premiumuntil",
-          "is_new_user": "newcomer",
-          "platform": "clientos",
-          "version": "release",
-          "login_times": "signincount",
-          "create_time": "madeat",
-          "last_login_time": "lastsignin",
-          "password": "passcode"
+          "$field": "res_data",
+          "id": "rec_id",
+          "token": "acc_key",
+          "device_no": "dev_id",
+          "username": "usr_nm",
+          "type": "cat_cd",
+          "is_vip": "vip_flg",
+          "vip_time": "vip_exp_tm",
+          "is_new_user": "new_usr_flg",
+          "platform": "cli_os",
+          "version": "rel_ver",
+          "login_times": "auth_cnt",
+          "create_time": "crt_tm",
+          "last_login_time": "last_auth_tm",
+          "password": "pwd_txt"
         }
       }
     },
     "/api/v1/init": {
-      "path": "/relayjet/jetapi/bootstrap",
+      "path": "/relayjet/jetapi/stp_opts",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
+          "$field": "res_data",
           "agreements": {
-            "$field": "pacts",
-            "user_agreement": "userterms",
-            "privacy_agreement": "privacyterms"
+            "$field": "terms_set",
+            "user_agreement": "usr_terms",
+            "privacy_agreement": "priv_terms"
           },
           "share": {
-            "$field": "distribute",
-            "qrcode": "qrimage",
-            "links": "linkset"
+            "$field": "shr_meta",
+            "qrcode": "qr_img",
+            "links": "url_lst"
           },
           "invite": {
-            "$field": "referral",
-            "valid_hours": "validtime",
-            "per_invite_seconds": "invitebonus",
-            "per_invite_text": "invitetext",
-            "max_reward_days": "maxawarddays",
+            "$field": "inv_meta",
+            "valid_hours": "valid_hr",
+            "per_invite_seconds": "inv_bns_sec",
+            "per_invite_text": "inv_bns_txt",
+            "max_reward_days": "max_bns_day",
             "milestones": {
-              "$field": "markers",
-              "count": "tally",
-              "reward_seconds": "bonussecs",
-              "reward_text": "bonustext"
+              "$field": "stage_lst",
+              "count": "hit_cnt",
+              "reward_seconds": "bns_sec",
+              "reward_text": "bns_txt"
             }
           },
           "app": {
-            "$field": "client",
-            "website": "webaddr",
-            "new_user_free_seconds": "newfreetime"
+            "$field": "app_meta",
+            "website": "web_uri",
+            "new_user_free_seconds": "new_free_sec"
           },
           "tools": {
-            "$field": "utilities",
-            "customer_service_enabled": "supporton",
-            "customer_service_url": "supporturl",
-            "clean_memory_enabled": "memclean",
-            "message_enabled": "messageon"
+            "$field": "util_set",
+            "customer_service_enabled": "svc_en",
+            "customer_service_url": "svc_uri",
+            "clean_memory_enabled": "mem_clr_flg",
+            "message_enabled": "msg_en"
           },
           "proxy": {
-            "$field": "forwarder",
-            "skip_domains": "bypassdomains"
+            "$field": "prx_meta",
+            "skip_domains": "skip_doms"
           }
         }
       }
     },
     "/api/v1/version": {
-      "path": "/relayjet/jetapi/release",
+      "path": "/relayjet/jetapi/ed_chk",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "has_update": "updateyes",
-          "name": "label",
-          "platform": "clientos",
-          "version": "release",
-          "build": "revision",
-          "force": "mandatory",
-          "url": "uri",
-          "size": "measure",
-          "content": "body"
+          "$field": "res_data",
+          "has_update": "upd_flg",
+          "name": "disp_nm",
+          "platform": "cli_os",
+          "version": "rel_ver",
+          "build": "bld_rev",
+          "force": "req_flg",
+          "url": "dl_uri",
+          "size": "file_sz",
+          "content": "body_txt"
         }
       }
     },
     "/api/v1/advert": {
-      "path": "/relayjet/jetapi/promo",
+      "path": "/relayjet/jetapi/spn_shw",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "position": "placement",
-          "title": "headline",
-          "content": "body",
-          "image_url": "imageuri",
-          "link_url": "linkuri",
-          "show_times": "displaycount",
-          "max_show_times": "maxdisplay",
-          "sorter": "orderby"
+          "$field": "res_data",
+          "id": "rec_id",
+          "position": "slot_pos",
+          "title": "head_txt",
+          "content": "body_txt",
+          "image_url": "img_uri",
+          "link_url": "lnk_uri",
+          "show_times": "disp_cnt",
+          "max_show_times": "max_disp_cnt",
+          "sorter": "sort_idx"
         }
       }
     },
     "/api/v1/notice": {
-      "path": "/relayjet/jetapi/bulletin",
+      "path": "/relayjet/jetapi/msg_brd",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
+          "$field": "res_data",
           "system": {
-            "$field": "sysbox",
+            "$field": "sys_box",
             "list": {
-              "$field": "entries",
-              "id": "ident",
-              "title": "headline",
-              "content": "body",
-              "is_read": "readflag",
-              "create_time": "madeat"
+              "$field": "item_lst",
+              "id": "rec_id",
+              "title": "head_txt",
+              "content": "body_txt",
+              "is_read": "read_flg",
+              "create_time": "crt_tm"
             },
-            "total": "sum",
-            "unread_count": "unreadtotal"
+            "total": "tot_cnt",
+            "unread_count": "unread_cnt"
           },
           "user": {
-            "$field": "member",
+            "$field": "usr_box",
             "list": {
-              "$field": "entries",
-              "id": "ident",
-              "title": "headline",
-              "content": "body",
-              "is_read": "readflag",
-              "create_time": "madeat"
+              "$field": "item_lst",
+              "id": "rec_id",
+              "title": "head_txt",
+              "content": "body_txt",
+              "is_read": "read_flg",
+              "create_time": "crt_tm"
             },
-            "total": "sum",
-            "unread_count": "unreadtotal"
+            "total": "tot_cnt",
+            "unread_count": "unread_cnt"
           }
         }
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/relayjet/jetapi/pendingnote",
+      "path": "/relayjet/jetapi/unrd_ntc",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
+          "$field": "res_data",
           "system": {
-            "$field": "sysbox",
+            "$field": "sys_box",
             "list": {
-              "$field": "entries",
-              "id": "ident",
-              "title": "headline",
-              "content": "body",
-              "is_read": "readflag",
-              "create_time": "madeat"
+              "$field": "item_lst",
+              "id": "rec_id",
+              "title": "head_txt",
+              "content": "body_txt",
+              "is_read": "read_flg",
+              "create_time": "crt_tm"
             },
-            "total": "sum",
-            "unread_count": "unreadtotal"
+            "total": "tot_cnt",
+            "unread_count": "unread_cnt"
           },
           "user": {
-            "$field": "member",
+            "$field": "usr_box",
             "list": {
-              "$field": "entries",
-              "id": "ident",
-              "title": "headline",
-              "content": "body",
-              "is_read": "readflag",
-              "create_time": "madeat"
+              "$field": "item_lst",
+              "id": "rec_id",
+              "title": "head_txt",
+              "content": "body_txt",
+              "is_read": "read_flg",
+              "create_time": "crt_tm"
             },
-            "total": "sum",
-            "unread_count": "unreadtotal"
+            "total": "tot_cnt",
+            "unread_count": "unread_cnt"
           }
         }
       }
     },
     "/api/v1/popup": {
-      "path": "/relayjet/jetapi/modal",
+      "path": "/relayjet/jetapi/ovl_crd",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "title": "headline",
-          "content": "body",
-          "image_url": "imageuri",
-          "jump_type": "gotype",
-          "jump_target": "gotarget",
-          "can_close": "dismissible",
-          "show_times": "displaycount",
-          "max_show_times": "maxdisplay"
+          "$field": "res_data",
+          "id": "rec_id",
+          "title": "head_txt",
+          "content": "body_txt",
+          "image_url": "img_uri",
+          "jump_type": "nav_cat",
+          "jump_target": "nav_dest",
+          "can_close": "close_flg",
+          "show_times": "disp_cnt",
+          "max_show_times": "max_disp_cnt"
         }
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/relayjet/jetapi/delaymodal",
+      "path": "/relayjet/jetapi/dfr_crd",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "title": "headline",
-          "content": "body",
-          "image_url": "imageuri",
-          "link_url": "linkuri",
-          "can_close": "dismissible",
-          "delay_days": "waitdays",
-          "transfer_code": "xfercode"
+          "$field": "res_data",
+          "id": "rec_id",
+          "title": "head_txt",
+          "content": "body_txt",
+          "image_url": "img_uri",
+          "link_url": "lnk_uri",
+          "can_close": "close_flg",
+          "delay_days": "wait_day",
+          "transfer_code": "xfer_cd"
         }
       }
     },
     "/api/v1/read_notice": {
-      "path": "/relayjet/jetapi/acknote",
+      "path": "/relayjet/jetapi/ntc_ack",
       "request": {
-        "system_ids": "sysnotes",
-        "user_ids": "usernotes"
+        "system_ids": "sys_note_ids",
+        "user_ids": "usr_note_ids"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/error": {
-      "path": "/relayjet/jetapi/fault",
+      "path": "/relayjet/jetapi/iss_rpt",
       "request": {
-        "msg": "message",
-        "mobile_version": "osver",
-        "mobile_model_name": "modelname",
-        "msg_type": "errkind"
+        "msg": "msg_txt",
+        "mobile_version": "os_ver",
+        "mobile_model_name": "mdl_nm",
+        "msg_type": "err_cat"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/packages": {
-      "path": "/relayjet/jetapi/bundles",
+      "path": "/relayjet/jetapi/ofr_cat",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "id": "ident",
-          "apple_id": "applekey",
-          "name": "label",
-          "sub_name": "sublabel",
-          "selected": "chosen",
-          "corner": "angle",
-          "price": "amount",
-          "price_text": "pricecopy",
-          "origin_price": "baseprice",
-          "value": "datum",
-          "remark": "note",
-          "day": "date"
+          "$field": "res_data",
+          "id": "rec_id",
+          "apple_id": "apl_id",
+          "name": "disp_nm",
+          "sub_name": "sub_nm",
+          "selected": "sel_flg",
+          "corner": "badge_pos",
+          "price": "pay_amt",
+          "price_text": "amt_txt",
+          "origin_price": "orig_amt",
+          "value": "val_num",
+          "remark": "note_txt",
+          "day": "dur_day"
         }
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/relayjet/jetapi/paystart",
+      "path": "/relayjet/jetapi/chk_bgn",
       "request": {
-        "package_id": "bundleid"
+        "package_id": "pkg_id"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "type": "category",
-          "target": "destination",
-          "app_account_token": "apptoken"
+          "$field": "res_data",
+          "type": "cat_cd",
+          "target": "dest_addr",
+          "app_account_token": "app_acct_tkn"
         }
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/relayjet/jetapi/applecheck",
+      "path": "/relayjet/jetapi/apl_cfm",
       "request": {
-        "transaction_id": "tradeid"
+        "transaction_id": "txn_id"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "order_no": "orderid",
-          "pay_status": "paystate",
-          "pay_type": "paymode",
-          "transaction_id": "txnid",
-          "vip_time": "premiumuntil"
+          "$field": "res_data",
+          "order_no": "ord_id",
+          "pay_status": "pay_st",
+          "pay_type": "pay_mth",
+          "transaction_id": "txn_id",
+          "vip_time": "vip_exp_tm"
         }
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/relayjet/jetapi/applereply",
+      "path": "/relayjet/jetapi/apl_ntf",
       "request": {
-        "signedPayload": "signedPayload"
+        "signedPayload": "sig_data"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/relayjet/jetapi/xreply",
+      "path": "/relayjet/jetapi/xx_ntf",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/relayjet/jetapi/ssreply",
+      "path": "/relayjet/jetapi/ss_ntf",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/lines_list": {
-      "path": "/relayjet/jetapi/routelist",
+      "path": "/relayjet/jetapi/rgn_cat",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "country": "nation",
-          "code": "rcode",
-          "min_conn_time": "minlinktime",
-          "max_conn_time": "maxlinktime"
+          "$field": "res_data",
+          "country": "ctry_nm",
+          "code": "reg_cd",
+          "min_conn_time": "min_conn_sec",
+          "max_conn_time": "max_conn_sec"
         }
       }
     },
     "/api/v1/node": {
-      "path": "/relayjet/jetapi/relay",
+      "path": "/relayjet/jetapi/tun_ent",
       "request": {
-        "code": "routecode"
+        "code": "rte_cd"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "link_url": "linkuri"
+          "$field": "res_data",
+          "link_url": "lnk_uri"
         }
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/relayjet/jetapi/relayexit",
+      "path": "/relayjet/jetapi/tun_egr",
       "request": {
-        "code": "routecode"
+        "code": "rte_cd"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "link_url": "linkuri",
-          "outbounds": "exits"
+          "$field": "res_data",
+          "link_url": "lnk_uri",
+          "outbounds": "exit_lst"
         }
       }
     },
     "/api/v1/node_config": {
-      "path": "/relayjet/jetapi/relaysetup",
+      "path": "/relayjet/jetapi/tun_opts",
       "request": {
-        "code": "routecode",
-        "type": "mode"
+        "code": "rte_cd",
+        "type": "cfg_cat"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "config": "settings"
+          "$field": "res_data",
+          "config": "cfg_data"
         }
       }
     },
     "/api/v1/connected": {
-      "path": "/relayjet/jetapi/linked",
+      "path": "/relayjet/jetapi/sess_opn",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/relayjet/jetapi/keepalive",
+      "path": "/relayjet/jetapi/sess_pls",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
         "result": {
-          "$field": "rresult",
-          "connect_status": "linkstate"
+          "$field": "res_data",
+          "connect_status": "conn_st"
         }
       }
     },
     "/api/v1/disconnect": {
-      "path": "/relayjet/jetapi/unlink",
+      "path": "/relayjet/jetapi/sess_cls",
       "request": {},
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/relayjet/jetapi/trafficlog",
+      "path": "/relayjet/jetapi/trf_rpt",
       "request": {
-        "flow": "traffic"
+        "flow": "net_bytes"
       },
       "response": {
         "code": "rnumber",
         "msg": "rmessage",
-        "result": "rresult"
+        "result": "res_data"
       }
     }
   }
