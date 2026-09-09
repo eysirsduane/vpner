@@ -557,7 +557,7 @@ func rewardText(seconds int, language string) string {
 		}
 		return strconv.Itoa(seconds/(24*60*60)) + "天会员"
 	}
-	if seconds%(60*60) == 0 {
+	if seconds%(60*60) == 0 { 
 		if english {
 			return strconv.Itoa(seconds/(60*60)) + "-hour membership"
 		}
