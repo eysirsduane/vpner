@@ -228,3 +228,4 @@ func InitHandler(c *gin.Context) {
 	language := middleware.CurrentClientInfo(c).Language
 	JsonReturn(c, CodeSuccess, "success", buildInitResponse(user, language))
 }
+ 
