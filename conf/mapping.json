@@ -676,8 +676,7 @@
           "country": "nation",
           "code": "rcode",
           "min_conn_time": "minlinktime",
-          "max_conn_time": "maxlinktime",
-          "img_url": "imguri"
+          "max_conn_time": "maxlinktime"
         }
       }
     },

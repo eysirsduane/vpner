@@ -30,7 +30,7 @@ type LineAreaResponse struct {
 	Code        string `json:"code" example:"HK"`
 	MinConnTime int    `json:"min_conn_time" example:"100"`
 	MaxConnTime int    `json:"max_conn_time" example:"300"`
-	ImgUrl      string `json:"img_url" example:"https://example.com/hk.png"`
+	// ImgUrl      string `json:"img_url" example:"https://example.com/hk.png"`
 }
 
 type NodeResponse struct {
@@ -69,7 +69,7 @@ func LinesListHandler(c *gin.Context) {
 			Code:        area.Code,
 			MinConnTime: area.MinConnTime,
 			MaxConnTime: area.MaxConnTime,
-			ImgUrl:      area.ImgUrl,
+			// ImgUrl:      area.ImgUrl,
 		})
 	}
 
