@@ -1,768 +1,768 @@
 {
-  "product_code": "rely",
-  "swagger_path": "/relayjet/v1/documents",
+  "product_code": "newsconns",
+  "swagger_path": "/newsconns/v1/documents",
   "headers": {
-    "platform": "RelayJet-Plat-Name",
-    "version": "RelayJet-Version-Number",
-    "build": "RelayJet-Build-Version",
-    "device_no": "RelayJet-Device-Name",
-    "client_time": "RelayJet-Time",
-    "time_zone": "RelayJet-TimeZone",
-    "app_store_region": "RelayJet-Stores-Reg",
-    "language": "RelayJet-Language"
+    "platform": "NewsConn-Home-Name",
+    "version": "NewsConn-Code-Number",
+    "build": "NewsConn-Building-Code",
+    "device_no": "NewsConn-Device-ID-Number",
+    "client_time": "NewsConn-Timestamp",
+    "time_zone": "NewsConn-TimeZone-Code",
+    "app_store_region": "NewsConn-Saves-Region",
+    "language": "NewsConn-Lang"
   },
   "field_affix": {
-    "prefix": "rely_field_",
-    "suffix": "_fly_suff"
+    "prefix": "news_conn_",
+    "suffix": "_olds_conn"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/relayjet/jetapi/svc_pls",
+      "path": "/newsconns/newapis/sys_ping",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/auto_login": {
-      "path": "/relayjet/jetapi/gst_acc",
+      "path": "/newsconns/newapis/anon_lgn",
       "request": {
-        "device_no": "dev_id",
-        "platform": "cli_os",
-        "version": "rel_ver",
-        "mobile_name": "mob_nm",
-        "mobile_version": "os_ver",
-        "mobile_model_name": "mdl_nm",
-        "source_channel": "src_chn"
+        "device_no": "unit_no",
+        "platform": "plat_cd",
+        "version": "app_rev",
+        "mobile_name": "phone_lbl",
+        "mobile_version": "sys_rev",
+        "mobile_model_name": "hw_label",
+        "source_channel": "entry_src"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "token": "acc_key",
-          "device_no": "dev_id",
-          "username": "usr_nm",
-          "type": "cat_cd",
-          "is_vip": "vip_flg",
-          "vip_time": "vip_exp_tm",
-          "is_new_user": "new_usr_flg",
-          "platform": "cli_os",
-          "version": "rel_ver",
-          "login_times": "auth_cnt",
-          "create_time": "crt_tm",
-          "last_login_time": "last_auth_tm",
-          "password": "pwd_txt"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "token": "auth_tkn",
+          "device_no": "unit_no",
+          "username": "acct_lbl",
+          "type": "kind_no",
+          "is_vip": "pro_ok",
+          "vip_time": "pro_end_at",
+          "is_new_user": "fresh_acct_ok",
+          "platform": "plat_cd",
+          "version": "app_rev",
+          "login_times": "lgn_num",
+          "create_time": "born_at",
+          "last_login_time": "prev_lgn_at",
+          "password": "sec_str"
         }
       }
     },
     "/api/v1/register": {
-      "path": "/relayjet/jetapi/acct_enr",
+      "path": "/newsconns/newapis/usr_reg",
       "request": {
-        "device_no": "dev_id",
-        "username": "usr_nm",
-        "password": "pwd_txt"
+        "device_no": "unit_no",
+        "username": "acct_lbl",
+        "password": "sec_str"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "token": "acc_key",
-          "device_no": "dev_id",
-          "username": "usr_nm",
-          "type": "cat_cd",
-          "is_vip": "vip_flg",
-          "vip_time": "vip_exp_tm",
-          "is_new_user": "new_usr_flg",
-          "platform": "cli_os",
-          "version": "rel_ver",
-          "login_times": "auth_cnt",
-          "create_time": "crt_tm",
-          "last_login_time": "last_auth_tm",
-          "password": "pwd_txt"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "token": "auth_tkn",
+          "device_no": "unit_no",
+          "username": "acct_lbl",
+          "type": "kind_no",
+          "is_vip": "pro_ok",
+          "vip_time": "pro_end_at",
+          "is_new_user": "fresh_acct_ok",
+          "platform": "plat_cd",
+          "version": "app_rev",
+          "login_times": "lgn_num",
+          "create_time": "born_at",
+          "last_login_time": "prev_lgn_at",
+          "password": "sec_str"
         }
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/relayjet/jetapi/shr_apl",
+      "path": "/newsconns/newapis/pub_ios",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "appid": "app_key",
-          "pwd": "pwd_txt"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "appid": "svc_key",
+          "pwd": "sec_str"
         }
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/relayjet/jetapi/med_sto/*filepath",
+      "path": "/newsconns/newapis/file_hub/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/relayjet/jetapi/mbr_acc",
+      "path": "/newsconns/newapis/usr_lgn",
       "request": {
-        "device_no": "dev_id",
-        "username": "usr_nm",
-        "password": "pwd_txt",
-        "platform": "cli_os",
-        "version": "rel_ver",
-        "mobile_name": "mob_nm",
-        "mobile_version": "os_ver",
-        "mobile_model_name": "mdl_nm",
-        "source_channel": "src_chn"
+        "device_no": "unit_no",
+        "username": "acct_lbl",
+        "password": "sec_str",
+        "platform": "plat_cd",
+        "version": "app_rev",
+        "mobile_name": "phone_lbl",
+        "mobile_version": "sys_rev",
+        "mobile_model_name": "hw_label",
+        "source_channel": "entry_src"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "token": "acc_key",
-          "device_no": "dev_id",
-          "username": "usr_nm",
-          "type": "cat_cd",
-          "is_vip": "vip_flg",
-          "vip_time": "vip_exp_tm",
-          "is_new_user": "new_usr_flg",
-          "platform": "cli_os",
-          "version": "rel_ver",
-          "login_times": "auth_cnt",
-          "create_time": "crt_tm",
-          "last_login_time": "last_auth_tm",
-          "password": "pwd_txt"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "token": "auth_tkn",
+          "device_no": "unit_no",
+          "username": "acct_lbl",
+          "type": "kind_no",
+          "is_vip": "pro_ok",
+          "vip_time": "pro_end_at",
+          "is_new_user": "fresh_acct_ok",
+          "platform": "plat_cd",
+          "version": "app_rev",
+          "login_times": "lgn_num",
+          "create_time": "born_at",
+          "last_login_time": "prev_lgn_at",
+          "password": "sec_str"
         }
       }
     },
     "/api/v1/logout": {
-      "path": "/relayjet/jetapi/sess_lve",
+      "path": "/newsconns/newapis/auth_end",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "token": "acc_key",
-          "device_no": "dev_id",
-          "username": "usr_nm",
-          "type": "cat_cd",
-          "is_vip": "vip_flg",
-          "vip_time": "vip_exp_tm",
-          "is_new_user": "new_usr_flg",
-          "platform": "cli_os",
-          "version": "rel_ver",
-          "login_times": "auth_cnt",
-          "create_time": "crt_tm",
-          "last_login_time": "last_auth_tm",
-          "password": "pwd_txt"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "token": "auth_tkn",
+          "device_no": "unit_no",
+          "username": "acct_lbl",
+          "type": "kind_no",
+          "is_vip": "pro_ok",
+          "vip_time": "pro_end_at",
+          "is_new_user": "fresh_acct_ok",
+          "platform": "plat_cd",
+          "version": "app_rev",
+          "login_times": "lgn_num",
+          "create_time": "born_at",
+          "last_login_time": "prev_lgn_at",
+          "password": "sec_str"
         }
       }
     },
     "/api/v1/logoff": {
-      "path": "/relayjet/jetapi/acct_ret",
+      "path": "/newsconns/newapis/usr_del",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "token": "acc_key"
+          "$field": "ret_obj",
+          "token": "auth_tkn"
         }
       }
     },
     "/api/v1/change_password": {
-      "path": "/relayjet/jetapi/sec_rnw",
+      "path": "/newsconns/newapis/pwd_upd",
       "request": {
-        "new_password": "new_pwd"
+        "new_password": "fresh_sec"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/device_info": {
-      "path": "/relayjet/jetapi/dev_prof",
+      "path": "/newsconns/newapis/unit_info",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
+          "$field": "ret_obj",
           "local_device": {
-            "$field": "loc_dev",
-            "id": "rec_id",
-            "device_no": "dev_id",
-            "mobile_name": "mob_nm",
-            "mobile_version": "dev_ver",
-            "mobile_model_name": "mdl_nm",
-            "platform": "cli_os",
-            "version": "rel_ver",
-            "last_login_time": "last_auth_tm"
+            "$field": "home_unit",
+            "id": "obj_no",
+            "device_no": "unit_no",
+            "mobile_name": "phone_lbl",
+            "mobile_version": "unit_rev",
+            "mobile_model_name": "hw_label",
+            "platform": "plat_cd",
+            "version": "app_rev",
+            "last_login_time": "prev_lgn_at"
           },
           "two_device": {
-            "$field": "pair_dev",
-            "id": "rec_id",
-            "device_no": "dev_id",
-            "mobile_name": "mob_nm",
-            "mobile_version": "dev_ver",
-            "mobile_model_name": "mdl_nm",
-            "platform": "cli_os",
-            "version": "rel_ver",
-            "last_login_time": "last_auth_tm"
+            "$field": "peer_unit",
+            "id": "obj_no",
+            "device_no": "unit_no",
+            "mobile_name": "phone_lbl",
+            "mobile_version": "unit_rev",
+            "mobile_model_name": "hw_label",
+            "platform": "plat_cd",
+            "version": "app_rev",
+            "last_login_time": "prev_lgn_at"
           },
           "devices": {
-            "$field": "dev_lst",
-            "id": "rec_id",
-            "device_no": "dev_id",
-            "mobile_name": "mob_nm",
-            "mobile_version": "dev_ver",
-            "mobile_model_name": "mdl_nm",
-            "platform": "cli_os",
-            "version": "rel_ver",
-            "last_login_time": "last_auth_tm"
+            "$field": "unit_set",
+            "id": "obj_no",
+            "device_no": "unit_no",
+            "mobile_name": "phone_lbl",
+            "mobile_version": "unit_rev",
+            "mobile_model_name": "hw_label",
+            "platform": "plat_cd",
+            "version": "app_rev",
+            "last_login_time": "prev_lgn_at"
           }
         }
       }
     },
     "/api/v1/device_logout": {
-      "path": "/relayjet/jetapi/dev_rel",
+      "path": "/newsconns/newapis/unit_drop",
       "request": {
-        "id": "rec_id"
+        "id": "obj_no"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
+          "$field": "ret_obj",
           "local_device": {
-            "$field": "loc_dev",
-            "id": "rec_id",
-            "device_no": "dev_id",
-            "mobile_name": "mob_nm",
-            "mobile_version": "dev_ver",
-            "mobile_model_name": "mdl_nm",
-            "platform": "cli_os",
-            "version": "rel_ver",
-            "last_login_time": "last_auth_tm"
+            "$field": "home_unit",
+            "id": "obj_no",
+            "device_no": "unit_no",
+            "mobile_name": "phone_lbl",
+            "mobile_version": "unit_rev",
+            "mobile_model_name": "hw_label",
+            "platform": "plat_cd",
+            "version": "app_rev",
+            "last_login_time": "prev_lgn_at"
           },
           "two_device": {
-            "$field": "pair_dev",
-            "id": "rec_id",
-            "device_no": "dev_id",
-            "mobile_name": "mob_nm",
-            "mobile_version": "dev_ver",
-            "mobile_model_name": "mdl_nm",
-            "platform": "cli_os",
-            "version": "rel_ver",
-            "last_login_time": "last_auth_tm"
+            "$field": "peer_unit",
+            "id": "obj_no",
+            "device_no": "unit_no",
+            "mobile_name": "phone_lbl",
+            "mobile_version": "unit_rev",
+            "mobile_model_name": "hw_label",
+            "platform": "plat_cd",
+            "version": "app_rev",
+            "last_login_time": "prev_lgn_at"
           },
           "devices": {
-            "$field": "dev_lst",
-            "id": "rec_id",
-            "device_no": "dev_id",
-            "mobile_name": "mob_nm",
-            "mobile_version": "dev_ver",
-            "mobile_model_name": "mdl_nm",
-            "platform": "cli_os",
-            "version": "rel_ver",
-            "last_login_time": "last_auth_tm"
+            "$field": "unit_set",
+            "id": "obj_no",
+            "device_no": "unit_no",
+            "mobile_name": "phone_lbl",
+            "mobile_version": "unit_rev",
+            "mobile_model_name": "hw_label",
+            "platform": "plat_cd",
+            "version": "app_rev",
+            "last_login_time": "prev_lgn_at"
           }
         }
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/relayjet/jetapi/ref_iss",
+      "path": "/newsconns/newapis/inv_gen",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "invite_code": "ref_cd"
+          "$field": "ret_obj",
+          "invite_code": "inv_key"
         }
       }
     },
     "/api/v1/invite_code": {
-      "path": "/relayjet/jetapi/ref_apl",
+      "path": "/newsconns/newapis/inv_use",
       "request": {
-        "invite_code": "ref_cd"
+        "invite_code": "inv_key"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/relayjet/jetapi/ref_dtl",
+      "path": "/newsconns/newapis/inv_info",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "invite_code": "ref_cd",
-          "invite_valid": "inv_valid_flg",
-          "share_count": "shr_cnt",
-          "reward_time": "bns_tm",
-          "per_invite_seconds": "inv_bns_sec",
-          "per_invite_text": "inv_bns_txt",
+          "$field": "ret_obj",
+          "invite_code": "inv_key",
+          "invite_valid": "ref_ok",
+          "share_count": "send_num",
+          "reward_time": "rwd_at",
+          "per_invite_seconds": "ref_rwd_dur",
+          "per_invite_text": "ref_rwd_lbl",
           "milestones": {
-            "$field": "stage_lst",
-            "count": "hit_cnt",
-            "reward_seconds": "bns_sec",
-            "reward_text": "bns_txt"
+            "$field": "goal_set",
+            "count": "cnt_num",
+            "reward_seconds": "rwd_dur",
+            "reward_text": "rwd_lbl"
           }
         }
       }
     },
     "/api/v1/user_info": {
-      "path": "/relayjet/jetapi/mbr_prof",
+      "path": "/newsconns/newapis/usr_info",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "token": "acc_key",
-          "device_no": "dev_id",
-          "username": "usr_nm",
-          "type": "cat_cd",
-          "is_vip": "vip_flg",
-          "vip_time": "vip_exp_tm",
-          "is_new_user": "new_usr_flg",
-          "platform": "cli_os",
-          "version": "rel_ver",
-          "login_times": "auth_cnt",
-          "create_time": "crt_tm",
-          "last_login_time": "last_auth_tm",
-          "password": "pwd_txt"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "token": "auth_tkn",
+          "device_no": "unit_no",
+          "username": "acct_lbl",
+          "type": "kind_no",
+          "is_vip": "pro_ok",
+          "vip_time": "pro_end_at",
+          "is_new_user": "fresh_acct_ok",
+          "platform": "plat_cd",
+          "version": "app_rev",
+          "login_times": "lgn_num",
+          "create_time": "born_at",
+          "last_login_time": "prev_lgn_at",
+          "password": "sec_str"
         }
       }
     },
     "/api/v1/init": {
-      "path": "/relayjet/jetapi/stp_opts",
+      "path": "/newsconns/newapis/boot_cfg",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
+          "$field": "ret_obj",
           "agreements": {
-            "$field": "terms_set",
-            "user_agreement": "usr_terms",
-            "privacy_agreement": "priv_terms"
+            "$field": "pact_grp",
+            "user_agreement": "acct_pact",
+            "privacy_agreement": "data_pact"
           },
           "share": {
-            "$field": "shr_meta",
-            "qrcode": "qr_img",
-            "links": "url_lst"
+            "$field": "send_opts",
+            "qrcode": "scan_pic",
+            "links": "addr_set"
           },
           "invite": {
-            "$field": "inv_meta",
-            "valid_hours": "valid_hr",
-            "per_invite_seconds": "inv_bns_sec",
-            "per_invite_text": "inv_bns_txt",
-            "max_reward_days": "max_bns_day",
+            "$field": "ref_info",
+            "valid_hours": "live_hrs",
+            "per_invite_seconds": "ref_rwd_dur",
+            "per_invite_text": "ref_rwd_lbl",
+            "max_reward_days": "cap_rwd_day",
             "milestones": {
-              "$field": "stage_lst",
-              "count": "hit_cnt",
-              "reward_seconds": "bns_sec",
-              "reward_text": "bns_txt"
+              "$field": "goal_set",
+              "count": "cnt_num",
+              "reward_seconds": "rwd_dur",
+              "reward_text": "rwd_lbl"
             }
           },
           "app": {
-            "$field": "app_meta",
-            "website": "web_uri",
-            "new_user_free_seconds": "new_free_sec"
+            "$field": "cli_info",
+            "website": "site_url",
+            "new_user_free_seconds": "trial_dur"
           },
           "tools": {
-            "$field": "util_set",
-            "customer_service_enabled": "svc_en",
-            "customer_service_url": "svc_uri",
-            "clean_memory_enabled": "mem_clr_flg",
-            "message_enabled": "msg_en"
+            "$field": "tool_grp",
+            "customer_service_enabled": "help_on",
+            "customer_service_url": "help_url",
+            "clean_memory_enabled": "ram_purge_ok",
+            "message_enabled": "ntc_on"
           },
           "proxy": {
-            "$field": "prx_meta",
-            "skip_domains": "skip_doms"
+            "$field": "fwd_opts",
+            "skip_domains": "pass_hosts"
           }
         }
       }
     },
     "/api/v1/version": {
-      "path": "/relayjet/jetapi/ed_chk",
+      "path": "/newsconns/newapis/ver_chk",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "has_update": "upd_flg",
-          "name": "disp_nm",
-          "platform": "cli_os",
-          "version": "rel_ver",
-          "build": "bld_rev",
-          "force": "req_flg",
-          "url": "dl_uri",
-          "size": "file_sz",
-          "content": "body_txt"
+          "$field": "ret_obj",
+          "has_update": "fresh_rev_ok",
+          "name": "name_lbl",
+          "platform": "plat_cd",
+          "version": "app_rev",
+          "build": "pkg_rev",
+          "force": "must_upd",
+          "url": "fetch_url",
+          "size": "blob_len",
+          "content": "dtl_txt"
         }
       }
     },
     "/api/v1/advert": {
-      "path": "/relayjet/jetapi/spn_shw",
+      "path": "/newsconns/newapis/ad_feed",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "position": "slot_pos",
-          "title": "head_txt",
-          "content": "body_txt",
-          "image_url": "img_uri",
-          "link_url": "lnk_uri",
-          "show_times": "disp_cnt",
-          "max_show_times": "max_disp_cnt",
-          "sorter": "sort_idx"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "position": "spot_idx",
+          "title": "ttl_lbl",
+          "content": "dtl_txt",
+          "image_url": "pic_url",
+          "link_url": "dest_url",
+          "show_times": "view_num",
+          "max_show_times": "cap_view_num",
+          "sorter": "rank_no"
         }
       }
     },
     "/api/v1/notice": {
-      "path": "/relayjet/jetapi/msg_brd",
+      "path": "/newsconns/newapis/ntc_list",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
+          "$field": "ret_obj",
           "system": {
-            "$field": "sys_box",
+            "$field": "host_ntc",
             "list": {
-              "$field": "item_lst",
-              "id": "rec_id",
-              "title": "head_txt",
-              "content": "body_txt",
-              "is_read": "read_flg",
-              "create_time": "crt_tm"
+              "$field": "row_set",
+              "id": "obj_no",
+              "title": "ttl_lbl",
+              "content": "dtl_txt",
+              "is_read": "seen_ok",
+              "create_time": "born_at"
             },
-            "total": "tot_cnt",
-            "unread_count": "unread_cnt"
+            "total": "all_num",
+            "unread_count": "unseen_num"
           },
           "user": {
-            "$field": "usr_box",
+            "$field": "acct_ntc",
             "list": {
-              "$field": "item_lst",
-              "id": "rec_id",
-              "title": "head_txt",
-              "content": "body_txt",
-              "is_read": "read_flg",
-              "create_time": "crt_tm"
+              "$field": "row_set",
+              "id": "obj_no",
+              "title": "ttl_lbl",
+              "content": "dtl_txt",
+              "is_read": "seen_ok",
+              "create_time": "born_at"
             },
-            "total": "tot_cnt",
-            "unread_count": "unread_cnt"
+            "total": "all_num",
+            "unread_count": "unseen_num"
           }
         }
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/relayjet/jetapi/unrd_ntc",
+      "path": "/newsconns/newapis/ntc_new",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
+          "$field": "ret_obj",
           "system": {
-            "$field": "sys_box",
+            "$field": "host_ntc",
             "list": {
-              "$field": "item_lst",
-              "id": "rec_id",
-              "title": "head_txt",
-              "content": "body_txt",
-              "is_read": "read_flg",
-              "create_time": "crt_tm"
+              "$field": "row_set",
+              "id": "obj_no",
+              "title": "ttl_lbl",
+              "content": "dtl_txt",
+              "is_read": "seen_ok",
+              "create_time": "born_at"
             },
-            "total": "tot_cnt",
-            "unread_count": "unread_cnt"
+            "total": "all_num",
+            "unread_count": "unseen_num"
           },
           "user": {
-            "$field": "usr_box",
+            "$field": "acct_ntc",
             "list": {
-              "$field": "item_lst",
-              "id": "rec_id",
-              "title": "head_txt",
-              "content": "body_txt",
-              "is_read": "read_flg",
-              "create_time": "crt_tm"
+              "$field": "row_set",
+              "id": "obj_no",
+              "title": "ttl_lbl",
+              "content": "dtl_txt",
+              "is_read": "seen_ok",
+              "create_time": "born_at"
             },
-            "total": "tot_cnt",
-            "unread_count": "unread_cnt"
+            "total": "all_num",
+            "unread_count": "unseen_num"
           }
         }
       }
     },
     "/api/v1/popup": {
-      "path": "/relayjet/jetapi/ovl_crd",
+      "path": "/newsconns/newapis/pop_box",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "title": "head_txt",
-          "content": "body_txt",
-          "image_url": "img_uri",
-          "jump_type": "nav_cat",
-          "jump_target": "nav_dest",
-          "can_close": "close_flg",
-          "show_times": "disp_cnt",
-          "max_show_times": "max_disp_cnt"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "title": "ttl_lbl",
+          "content": "dtl_txt",
+          "image_url": "pic_url",
+          "jump_type": "jump_cls",
+          "jump_target": "jump_tgt",
+          "can_close": "dismiss_ok",
+          "show_times": "view_num",
+          "max_show_times": "cap_view_num"
         }
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/relayjet/jetapi/dfr_crd",
+      "path": "/newsconns/newapis/pop_wait",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "title": "head_txt",
-          "content": "body_txt",
-          "image_url": "img_uri",
-          "link_url": "lnk_uri",
-          "can_close": "close_flg",
-          "delay_days": "wait_day",
-          "transfer_code": "xfer_cd"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "title": "ttl_lbl",
+          "content": "dtl_txt",
+          "image_url": "pic_url",
+          "link_url": "dest_url",
+          "can_close": "dismiss_ok",
+          "delay_days": "lag_day",
+          "transfer_code": "move_key"
         }
       }
     },
     "/api/v1/read_notice": {
-      "path": "/relayjet/jetapi/ntc_ack",
+      "path": "/newsconns/newapis/ntc_seen",
       "request": {
-        "system_ids": "sys_note_ids",
-        "user_ids": "usr_note_ids"
+        "system_ids": "host_ntc_nos",
+        "user_ids": "acct_ntc_nos"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/error": {
-      "path": "/relayjet/jetapi/iss_rpt",
+      "path": "/newsconns/newapis/err_send",
       "request": {
-        "msg": "msg_txt",
-        "mobile_version": "os_ver",
-        "mobile_model_name": "mdl_nm",
-        "msg_type": "err_cat"
+        "msg": "info_txt",
+        "mobile_version": "sys_rev",
+        "mobile_model_name": "hw_label",
+        "msg_type": "fault_cls"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/packages": {
-      "path": "/relayjet/jetapi/ofr_cat",
+      "path": "/newsconns/newapis/pkg_list",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "id": "rec_id",
-          "apple_id": "apl_id",
-          "name": "disp_nm",
-          "sub_name": "sub_nm",
-          "selected": "sel_flg",
-          "corner": "badge_pos",
-          "price": "pay_amt",
-          "price_text": "amt_txt",
-          "origin_price": "orig_amt",
-          "value": "val_num",
-          "remark": "note_txt",
-          "day": "dur_day"
+          "$field": "ret_obj",
+          "id": "obj_no",
+          "apple_id": "ios_sku",
+          "name": "name_lbl",
+          "sub_name": "alt_lbl",
+          "selected": "pick_ok",
+          "corner": "tag_loc",
+          "price": "bill_cost",
+          "price_text": "cost_lbl",
+          "origin_price": "base_cost",
+          "value": "data_num",
+          "remark": "memo_lbl",
+          "day": "span_day"
         }
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/relayjet/jetapi/chk_bgn",
+      "path": "/newsconns/newapis/pay_init",
       "request": {
-        "package_id": "pkg_id"
+        "package_id": "plan_no"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "type": "cat_cd",
-          "target": "dest_addr",
-          "app_account_token": "app_acct_tkn"
+          "$field": "ret_obj",
+          "type": "kind_no",
+          "target": "tgt_uri",
+          "app_account_token": "cli_usr_key"
         }
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/relayjet/jetapi/apl_cfm",
+      "path": "/newsconns/newapis/ios_chk",
       "request": {
-        "transaction_id": "txn_id"
+        "transaction_id": "trade_no"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "order_no": "ord_id",
-          "pay_status": "pay_st",
-          "pay_type": "pay_mth",
-          "transaction_id": "txn_id",
-          "vip_time": "vip_exp_tm"
+          "$field": "ret_obj",
+          "order_no": "bill_no",
+          "pay_status": "bill_stat",
+          "pay_type": "bill_mode",
+          "transaction_id": "trade_no",
+          "vip_time": "pro_end_at"
         }
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/relayjet/jetapi/apl_ntf",
+      "path": "/newsconns/newapis/ios_hook",
       "request": {
-        "signedPayload": "sig_data"
+        "signedPayload": "sign_blob"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/relayjet/jetapi/xx_ntf",
+      "path": "/newsconns/newapis/xx_hook",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/relayjet/jetapi/ss_ntf",
+      "path": "/newsconns/newapis/ss_hook",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/lines_list": {
-      "path": "/relayjet/jetapi/rgn_cat",
+      "path": "/newsconns/newapis/area_list",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "country": "ctry_nm",
-          "code": "reg_cd",
-          "min_conn_time": "min_conn_sec",
-          "max_conn_time": "max_conn_sec"
+          "$field": "ret_obj",
+          "country": "area_lbl",
+          "code": "area_key",
+          "min_conn_time": "lo_link_ms",
+          "max_conn_time": "hi_link_ms"
         }
       }
     },
     "/api/v1/node": {
-      "path": "/relayjet/jetapi/tun_ent",
+      "path": "/newsconns/newapis/node_get",
       "request": {
-        "code": "rte_cd"
+        "code": "line_key"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "link_url": "lnk_uri"
+          "$field": "ret_obj",
+          "link_url": "dest_url"
         }
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/relayjet/jetapi/tun_egr",
+      "path": "/newsconns/newapis/node_out",
       "request": {
-        "code": "rte_cd"
+        "code": "line_key"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "link_url": "lnk_uri",
-          "outbounds": "exit_lst"
+          "$field": "ret_obj",
+          "link_url": "dest_url",
+          "outbounds": "egr_set"
         }
       }
     },
     "/api/v1/node_config": {
-      "path": "/relayjet/jetapi/tun_opts",
+      "path": "/newsconns/newapis/node_cfg",
       "request": {
-        "code": "rte_cd",
-        "type": "cfg_cat"
+        "code": "line_key",
+        "type": "mode_cd"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "config": "cfg_data"
+          "$field": "ret_obj",
+          "config": "opts_blob"
         }
       }
     },
     "/api/v1/connected": {
-      "path": "/relayjet/jetapi/sess_opn",
+      "path": "/newsconns/newapis/link_on",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/relayjet/jetapi/sess_pls",
+      "path": "/newsconns/newapis/link_ping",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
+        "code": "resp_c",
+        "msg": "resp_m",
         "result": {
-          "$field": "res_data",
-          "connect_status": "conn_st"
+          "$field": "ret_obj",
+          "connect_status": "link_stat"
         }
       }
     },
     "/api/v1/disconnect": {
-      "path": "/relayjet/jetapi/sess_cls",
+      "path": "/newsconns/newapis/link_off",
       "request": {},
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/relayjet/jetapi/trf_rpt",
+      "path": "/newsconns/newapis/flow_send",
       "request": {
-        "flow": "net_bytes"
+        "flow": "flow_amt"
       },
       "response": {
-        "code": "rnumber",
-        "msg": "rmessage",
-        "result": "res_data"
+        "code": "resp_c",
+        "msg": "resp_m",
+        "result": "ret_obj"
       }
     }
   }

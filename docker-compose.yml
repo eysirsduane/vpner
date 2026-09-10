@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: just-vpn-api:latest
-    container_name: just-vpn-api
+    image: vpnno10/vpner-api:6761296056
+    container_name: vpner-api
     restart: unless-stopped
     depends_on:
       redis:
@@ -21,9 +21,35 @@ services:
         max-size: "20m"
         max-file: "3"
 
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nginx
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_started
+    ports:
+      - "80:80"
+      # Enable together with the TLS directives in nginx/conf.d/default.conf.
+      # - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/nginx-health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "3"
+
   redis:
     image: redis:7.4-alpine
-    container_name: just-vpn-redis
+    container_name: redis
     restart: unless-stopped
     environment:
       REDIS_PASSWORD: just_vpn.303

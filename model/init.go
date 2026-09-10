@@ -23,6 +23,8 @@ func Init() error {
 		setting.DatabaseConfig.DbName,
 	)
 
+	fmt.Println(dsn)
+
 	dbLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
