@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: vpnno10/vpner-api:6761296056
+    image: vpnno10/vpner-api:6747706933
     container_name: vpner-api
     restart: unless-stopped
     depends_on:

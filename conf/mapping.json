@@ -1,768 +1,768 @@
 {
-  "product_code": "newsconns",
-  "swagger_path": "/newsconns/v1/documents",
+  "product_code": "oldests",
+  "swagger_path": "/oldests/v1/documents",
   "headers": {
-    "platform": "NewsConn-Home-Name",
-    "version": "NewsConn-Code-Number",
-    "build": "NewsConn-Building-Code",
-    "device_no": "NewsConn-Device-ID-Number",
-    "client_time": "NewsConn-Timestamp",
-    "time_zone": "NewsConn-TimeZone-Code",
-    "app_store_region": "NewsConn-Saves-Region",
-    "language": "NewsConn-Lang"
+    "platform": "Oldests-Plat-Code",
+    "version": "Oldests-Number",
+    "build": "Oldests-Building-Version",
+    "device_no": "Oldests-Device-No",
+    "client_time": "Oldests-Time-Value",
+    "time_zone": "Oldests-Time-Zone-Offset",
+    "app_store_region": "Oldests-Store-Region",
+    "language": "Oldests-Language"
   },
   "field_affix": {
-    "prefix": "news_conn_",
-    "suffix": "_olds_conn"
+    "prefix": "olds_est_",
+    "suffix": "_olds_ast"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/newsconns/newapis/sys_ping",
+      "path": "/oldest/ointer/thisip/srvchk",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/auto_login": {
-      "path": "/newsconns/newapis/anon_lgn",
+      "path": "/oldest/ointer/thisip/gstauth",
       "request": {
-        "device_no": "unit_no",
-        "platform": "plat_cd",
-        "version": "app_rev",
-        "mobile_name": "phone_lbl",
-        "mobile_version": "sys_rev",
-        "mobile_model_name": "hw_label",
-        "source_channel": "entry_src"
+        "device_no": "devnum",
+        "platform": "clios",
+        "version": "relver",
+        "mobile_name": "mobnm",
+        "mobile_version": "osver",
+        "mobile_model_name": "mdlnm",
+        "source_channel": "srcchn"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "token": "auth_tkn",
-          "device_no": "unit_no",
-          "username": "acct_lbl",
-          "type": "kind_no",
-          "is_vip": "pro_ok",
-          "vip_time": "pro_end_at",
-          "is_new_user": "fresh_acct_ok",
-          "platform": "plat_cd",
-          "version": "app_rev",
-          "login_times": "lgn_num",
-          "create_time": "born_at",
-          "last_login_time": "prev_lgn_at",
-          "password": "sec_str"
+          "$field": "orspd",
+          "id": "recid",
+          "token": "sesskey",
+          "device_no": "devnum",
+          "username": "usrnm",
+          "type": "catid",
+          "is_vip": "vipflg",
+          "vip_time": "vipexptm",
+          "is_new_user": "newusrflg",
+          "platform": "clios",
+          "version": "relver",
+          "login_times": "authcnt",
+          "create_time": "crttm",
+          "last_login_time": "lastauth",
+          "password": "pwdtxt"
         }
       }
     },
     "/api/v1/register": {
-      "path": "/newsconns/newapis/usr_reg",
+      "path": "/oldest/ointer/thisip/acctnew",
       "request": {
-        "device_no": "unit_no",
-        "username": "acct_lbl",
-        "password": "sec_str"
+        "device_no": "devnum",
+        "username": "usrnm",
+        "password": "pwdtxt"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "token": "auth_tkn",
-          "device_no": "unit_no",
-          "username": "acct_lbl",
-          "type": "kind_no",
-          "is_vip": "pro_ok",
-          "vip_time": "pro_end_at",
-          "is_new_user": "fresh_acct_ok",
-          "platform": "plat_cd",
-          "version": "app_rev",
-          "login_times": "lgn_num",
-          "create_time": "born_at",
-          "last_login_time": "prev_lgn_at",
-          "password": "sec_str"
+          "$field": "orspd",
+          "id": "recid",
+          "token": "sesskey",
+          "device_no": "devnum",
+          "username": "usrnm",
+          "type": "catid",
+          "is_vip": "vipflg",
+          "vip_time": "vipexptm",
+          "is_new_user": "newusrflg",
+          "platform": "clios",
+          "version": "relver",
+          "login_times": "authcnt",
+          "create_time": "crttm",
+          "last_login_time": "lastauth",
+          "password": "pwdtxt"
         }
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/newsconns/newapis/pub_ios",
+      "path": "/oldest/ointer/thisip/shrapl",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "appid": "svc_key",
-          "pwd": "sec_str"
+          "$field": "orspd",
+          "id": "recid",
+          "appid": "appid",
+          "pwd": "pwdtxt"
         }
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/newsconns/newapis/file_hub/*filepath",
+      "path": "/oldest/ointer/thisip/assetget/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/newsconns/newapis/usr_lgn",
+      "path": "/oldest/ointer/thisip/mbrauth",
       "request": {
-        "device_no": "unit_no",
-        "username": "acct_lbl",
-        "password": "sec_str",
-        "platform": "plat_cd",
-        "version": "app_rev",
-        "mobile_name": "phone_lbl",
-        "mobile_version": "sys_rev",
-        "mobile_model_name": "hw_label",
-        "source_channel": "entry_src"
+        "device_no": "devnum",
+        "username": "usrnm",
+        "password": "pwdtxt",
+        "platform": "clios",
+        "version": "relver",
+        "mobile_name": "mobnm",
+        "mobile_version": "osver",
+        "mobile_model_name": "mdlnm",
+        "source_channel": "srcchn"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "token": "auth_tkn",
-          "device_no": "unit_no",
-          "username": "acct_lbl",
-          "type": "kind_no",
-          "is_vip": "pro_ok",
-          "vip_time": "pro_end_at",
-          "is_new_user": "fresh_acct_ok",
-          "platform": "plat_cd",
-          "version": "app_rev",
-          "login_times": "lgn_num",
-          "create_time": "born_at",
-          "last_login_time": "prev_lgn_at",
-          "password": "sec_str"
+          "$field": "orspd",
+          "id": "recid",
+          "token": "sesskey",
+          "device_no": "devnum",
+          "username": "usrnm",
+          "type": "catid",
+          "is_vip": "vipflg",
+          "vip_time": "vipexptm",
+          "is_new_user": "newusrflg",
+          "platform": "clios",
+          "version": "relver",
+          "login_times": "authcnt",
+          "create_time": "crttm",
+          "last_login_time": "lastauth",
+          "password": "pwdtxt"
         }
       }
     },
     "/api/v1/logout": {
-      "path": "/newsconns/newapis/auth_end",
+      "path": "/oldest/ointer/thisip/sessbye",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "token": "auth_tkn",
-          "device_no": "unit_no",
-          "username": "acct_lbl",
-          "type": "kind_no",
-          "is_vip": "pro_ok",
-          "vip_time": "pro_end_at",
-          "is_new_user": "fresh_acct_ok",
-          "platform": "plat_cd",
-          "version": "app_rev",
-          "login_times": "lgn_num",
-          "create_time": "born_at",
-          "last_login_time": "prev_lgn_at",
-          "password": "sec_str"
+          "$field": "orspd",
+          "id": "recid",
+          "token": "sesskey",
+          "device_no": "devnum",
+          "username": "usrnm",
+          "type": "catid",
+          "is_vip": "vipflg",
+          "vip_time": "vipexptm",
+          "is_new_user": "newusrflg",
+          "platform": "clios",
+          "version": "relver",
+          "login_times": "authcnt",
+          "create_time": "crttm",
+          "last_login_time": "lastauth",
+          "password": "pwdtxt"
         }
       }
     },
     "/api/v1/logoff": {
-      "path": "/newsconns/newapis/usr_del",
+      "path": "/oldest/ointer/thisip/acctoff",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "token": "auth_tkn"
+          "$field": "orspd",
+          "token": "sesskey"
         }
       }
     },
     "/api/v1/change_password": {
-      "path": "/newsconns/newapis/pwd_upd",
+      "path": "/oldest/ointer/thisip/secrnw",
       "request": {
-        "new_password": "fresh_sec"
+        "new_password": "newpwd"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/device_info": {
-      "path": "/newsconns/newapis/unit_info",
+      "path": "/oldest/ointer/thisip/devmeta",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
+          "$field": "orspd",
           "local_device": {
-            "$field": "home_unit",
-            "id": "obj_no",
-            "device_no": "unit_no",
-            "mobile_name": "phone_lbl",
-            "mobile_version": "unit_rev",
-            "mobile_model_name": "hw_label",
-            "platform": "plat_cd",
-            "version": "app_rev",
-            "last_login_time": "prev_lgn_at"
+            "$field": "locdev",
+            "id": "recid",
+            "device_no": "devnum",
+            "mobile_name": "mobnm",
+            "mobile_version": "devver",
+            "mobile_model_name": "mdlnm",
+            "platform": "clios",
+            "version": "relver",
+            "last_login_time": "lastauth"
           },
           "two_device": {
-            "$field": "peer_unit",
-            "id": "obj_no",
-            "device_no": "unit_no",
-            "mobile_name": "phone_lbl",
-            "mobile_version": "unit_rev",
-            "mobile_model_name": "hw_label",
-            "platform": "plat_cd",
-            "version": "app_rev",
-            "last_login_time": "prev_lgn_at"
+            "$field": "pairdev",
+            "id": "recid",
+            "device_no": "devnum",
+            "mobile_name": "mobnm",
+            "mobile_version": "devver",
+            "mobile_model_name": "mdlnm",
+            "platform": "clios",
+            "version": "relver",
+            "last_login_time": "lastauth"
           },
           "devices": {
-            "$field": "unit_set",
-            "id": "obj_no",
-            "device_no": "unit_no",
-            "mobile_name": "phone_lbl",
-            "mobile_version": "unit_rev",
-            "mobile_model_name": "hw_label",
-            "platform": "plat_cd",
-            "version": "app_rev",
-            "last_login_time": "prev_lgn_at"
+            "$field": "devlst",
+            "id": "recid",
+            "device_no": "devnum",
+            "mobile_name": "mobnm",
+            "mobile_version": "devver",
+            "mobile_model_name": "mdlnm",
+            "platform": "clios",
+            "version": "relver",
+            "last_login_time": "lastauth"
           }
         }
       }
     },
     "/api/v1/device_logout": {
-      "path": "/newsconns/newapis/unit_drop",
+      "path": "/oldest/ointer/thisip/devexit",
       "request": {
-        "id": "obj_no"
+        "id": "recid"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
+          "$field": "orspd",
           "local_device": {
-            "$field": "home_unit",
-            "id": "obj_no",
-            "device_no": "unit_no",
-            "mobile_name": "phone_lbl",
-            "mobile_version": "unit_rev",
-            "mobile_model_name": "hw_label",
-            "platform": "plat_cd",
-            "version": "app_rev",
-            "last_login_time": "prev_lgn_at"
+            "$field": "locdev",
+            "id": "recid",
+            "device_no": "devnum",
+            "mobile_name": "mobnm",
+            "mobile_version": "devver",
+            "mobile_model_name": "mdlnm",
+            "platform": "clios",
+            "version": "relver",
+            "last_login_time": "lastauth"
           },
           "two_device": {
-            "$field": "peer_unit",
-            "id": "obj_no",
-            "device_no": "unit_no",
-            "mobile_name": "phone_lbl",
-            "mobile_version": "unit_rev",
-            "mobile_model_name": "hw_label",
-            "platform": "plat_cd",
-            "version": "app_rev",
-            "last_login_time": "prev_lgn_at"
+            "$field": "pairdev",
+            "id": "recid",
+            "device_no": "devnum",
+            "mobile_name": "mobnm",
+            "mobile_version": "devver",
+            "mobile_model_name": "mdlnm",
+            "platform": "clios",
+            "version": "relver",
+            "last_login_time": "lastauth"
           },
           "devices": {
-            "$field": "unit_set",
-            "id": "obj_no",
-            "device_no": "unit_no",
-            "mobile_name": "phone_lbl",
-            "mobile_version": "unit_rev",
-            "mobile_model_name": "hw_label",
-            "platform": "plat_cd",
-            "version": "app_rev",
-            "last_login_time": "prev_lgn_at"
+            "$field": "devlst",
+            "id": "recid",
+            "device_no": "devnum",
+            "mobile_name": "mobnm",
+            "mobile_version": "devver",
+            "mobile_model_name": "mdlnm",
+            "platform": "clios",
+            "version": "relver",
+            "last_login_time": "lastauth"
           }
         }
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/newsconns/newapis/inv_gen",
+      "path": "/oldest/ointer/thisip/refmk",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "invite_code": "inv_key"
+          "$field": "orspd",
+          "invite_code": "refcd"
         }
       }
     },
     "/api/v1/invite_code": {
-      "path": "/newsconns/newapis/inv_use",
+      "path": "/oldest/ointer/thisip/refbind",
       "request": {
-        "invite_code": "inv_key"
+        "invite_code": "refcd"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/newsconns/newapis/inv_info",
+      "path": "/oldest/ointer/thisip/refdtl",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "invite_code": "inv_key",
-          "invite_valid": "ref_ok",
-          "share_count": "send_num",
-          "reward_time": "rwd_at",
-          "per_invite_seconds": "ref_rwd_dur",
-          "per_invite_text": "ref_rwd_lbl",
+          "$field": "orspd",
+          "invite_code": "refcd",
+          "invite_valid": "invvalid",
+          "share_count": "shrcnt",
+          "reward_time": "bnstm",
+          "per_invite_seconds": "invbnssec",
+          "per_invite_text": "invbnstxt",
           "milestones": {
-            "$field": "goal_set",
-            "count": "cnt_num",
-            "reward_seconds": "rwd_dur",
-            "reward_text": "rwd_lbl"
+            "$field": "stagelst",
+            "count": "hitcnt",
+            "reward_seconds": "bnssec",
+            "reward_text": "bnstxt"
           }
         }
       }
     },
     "/api/v1/user_info": {
-      "path": "/newsconns/newapis/usr_info",
+      "path": "/oldest/ointer/thisip/mbrmeta",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "token": "auth_tkn",
-          "device_no": "unit_no",
-          "username": "acct_lbl",
-          "type": "kind_no",
-          "is_vip": "pro_ok",
-          "vip_time": "pro_end_at",
-          "is_new_user": "fresh_acct_ok",
-          "platform": "plat_cd",
-          "version": "app_rev",
-          "login_times": "lgn_num",
-          "create_time": "born_at",
-          "last_login_time": "prev_lgn_at",
-          "password": "sec_str"
+          "$field": "orspd",
+          "id": "recid",
+          "token": "sesskey",
+          "device_no": "devnum",
+          "username": "usrnm",
+          "type": "catid",
+          "is_vip": "vipflg",
+          "vip_time": "vipexptm",
+          "is_new_user": "newusrflg",
+          "platform": "clios",
+          "version": "relver",
+          "login_times": "authcnt",
+          "create_time": "crttm",
+          "last_login_time": "lastauth",
+          "password": "pwdtxt"
         }
       }
     },
     "/api/v1/init": {
-      "path": "/newsconns/newapis/boot_cfg",
+      "path": "/oldest/ointer/thisip/initopts",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
+          "$field": "orspd",
           "agreements": {
-            "$field": "pact_grp",
-            "user_agreement": "acct_pact",
-            "privacy_agreement": "data_pact"
+            "$field": "termsset",
+            "user_agreement": "usrterms",
+            "privacy_agreement": "privterms"
           },
           "share": {
-            "$field": "send_opts",
-            "qrcode": "scan_pic",
-            "links": "addr_set"
+            "$field": "shrmeta",
+            "qrcode": "qrimg",
+            "links": "urllst"
           },
           "invite": {
-            "$field": "ref_info",
-            "valid_hours": "live_hrs",
-            "per_invite_seconds": "ref_rwd_dur",
-            "per_invite_text": "ref_rwd_lbl",
-            "max_reward_days": "cap_rwd_day",
+            "$field": "invmeta",
+            "valid_hours": "validhrs",
+            "per_invite_seconds": "invbnssec",
+            "per_invite_text": "invbnstxt",
+            "max_reward_days": "maxbnsday",
             "milestones": {
-              "$field": "goal_set",
-              "count": "cnt_num",
-              "reward_seconds": "rwd_dur",
-              "reward_text": "rwd_lbl"
+              "$field": "stagelst",
+              "count": "hitcnt",
+              "reward_seconds": "bnssec",
+              "reward_text": "bnstxt"
             }
           },
           "app": {
-            "$field": "cli_info",
-            "website": "site_url",
-            "new_user_free_seconds": "trial_dur"
+            "$field": "appmeta",
+            "website": "webaddr",
+            "new_user_free_seconds": "freesec"
           },
           "tools": {
-            "$field": "tool_grp",
-            "customer_service_enabled": "help_on",
-            "customer_service_url": "help_url",
-            "clean_memory_enabled": "ram_purge_ok",
-            "message_enabled": "ntc_on"
+            "$field": "utilset",
+            "customer_service_enabled": "svcen",
+            "customer_service_url": "svcaddr",
+            "clean_memory_enabled": "memclr",
+            "message_enabled": "msgen"
           },
           "proxy": {
-            "$field": "fwd_opts",
-            "skip_domains": "pass_hosts"
+            "$field": "prxcfg",
+            "skip_domains": "skipdoms"
           }
         }
       }
     },
     "/api/v1/version": {
-      "path": "/newsconns/newapis/ver_chk",
+      "path": "/oldest/ointer/thisip/relchk",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "has_update": "fresh_rev_ok",
-          "name": "name_lbl",
-          "platform": "plat_cd",
-          "version": "app_rev",
-          "build": "pkg_rev",
-          "force": "must_upd",
-          "url": "fetch_url",
-          "size": "blob_len",
-          "content": "dtl_txt"
+          "$field": "orspd",
+          "has_update": "updflg",
+          "name": "dispnm",
+          "platform": "clios",
+          "version": "relver",
+          "build": "bldver",
+          "force": "forceflg",
+          "url": "dladdr",
+          "size": "filesz",
+          "content": "bodytxt"
         }
       }
     },
     "/api/v1/advert": {
-      "path": "/newsconns/newapis/ad_feed",
+      "path": "/oldest/ointer/thisip/promolst",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "position": "spot_idx",
-          "title": "ttl_lbl",
-          "content": "dtl_txt",
-          "image_url": "pic_url",
-          "link_url": "dest_url",
-          "show_times": "view_num",
-          "max_show_times": "cap_view_num",
-          "sorter": "rank_no"
+          "$field": "orspd",
+          "id": "recid",
+          "position": "slotpos",
+          "title": "headtxt",
+          "content": "bodytxt",
+          "image_url": "imgaddr",
+          "link_url": "lnkuri",
+          "show_times": "dispcnt",
+          "max_show_times": "maxdispcnt",
+          "sorter": "sortidx"
         }
       }
     },
     "/api/v1/notice": {
-      "path": "/newsconns/newapis/ntc_list",
+      "path": "/oldest/ointer/thisip/msgbox",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
+          "$field": "orspd",
           "system": {
-            "$field": "host_ntc",
+            "$field": "sysmsg",
             "list": {
-              "$field": "row_set",
-              "id": "obj_no",
-              "title": "ttl_lbl",
-              "content": "dtl_txt",
-              "is_read": "seen_ok",
-              "create_time": "born_at"
+              "$field": "itemlst",
+              "id": "recid",
+              "title": "headtxt",
+              "content": "bodytxt",
+              "is_read": "readflg",
+              "create_time": "crttm"
             },
-            "total": "all_num",
-            "unread_count": "unseen_num"
+            "total": "totalcnt",
+            "unread_count": "unreadcnt"
           },
           "user": {
-            "$field": "acct_ntc",
+            "$field": "usrmsg",
             "list": {
-              "$field": "row_set",
-              "id": "obj_no",
-              "title": "ttl_lbl",
-              "content": "dtl_txt",
-              "is_read": "seen_ok",
-              "create_time": "born_at"
+              "$field": "itemlst",
+              "id": "recid",
+              "title": "headtxt",
+              "content": "bodytxt",
+              "is_read": "readflg",
+              "create_time": "crttm"
             },
-            "total": "all_num",
-            "unread_count": "unseen_num"
+            "total": "totalcnt",
+            "unread_count": "unreadcnt"
           }
         }
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/newsconns/newapis/ntc_new",
+      "path": "/oldest/ointer/thisip/msgunrd",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
+          "$field": "orspd",
           "system": {
-            "$field": "host_ntc",
+            "$field": "sysmsg",
             "list": {
-              "$field": "row_set",
-              "id": "obj_no",
-              "title": "ttl_lbl",
-              "content": "dtl_txt",
-              "is_read": "seen_ok",
-              "create_time": "born_at"
+              "$field": "itemlst",
+              "id": "recid",
+              "title": "headtxt",
+              "content": "bodytxt",
+              "is_read": "readflg",
+              "create_time": "crttm"
             },
-            "total": "all_num",
-            "unread_count": "unseen_num"
+            "total": "totalcnt",
+            "unread_count": "unreadcnt"
           },
           "user": {
-            "$field": "acct_ntc",
+            "$field": "usrmsg",
             "list": {
-              "$field": "row_set",
-              "id": "obj_no",
-              "title": "ttl_lbl",
-              "content": "dtl_txt",
-              "is_read": "seen_ok",
-              "create_time": "born_at"
+              "$field": "itemlst",
+              "id": "recid",
+              "title": "headtxt",
+              "content": "bodytxt",
+              "is_read": "readflg",
+              "create_time": "crttm"
             },
-            "total": "all_num",
-            "unread_count": "unseen_num"
+            "total": "totalcnt",
+            "unread_count": "unreadcnt"
           }
         }
       }
     },
     "/api/v1/popup": {
-      "path": "/newsconns/newapis/pop_box",
+      "path": "/oldest/ointer/thisip/dlgshow",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "title": "ttl_lbl",
-          "content": "dtl_txt",
-          "image_url": "pic_url",
-          "jump_type": "jump_cls",
-          "jump_target": "jump_tgt",
-          "can_close": "dismiss_ok",
-          "show_times": "view_num",
-          "max_show_times": "cap_view_num"
+          "$field": "orspd",
+          "id": "recid",
+          "title": "headtxt",
+          "content": "bodytxt",
+          "image_url": "imgaddr",
+          "jump_type": "navtyp",
+          "jump_target": "navdst",
+          "can_close": "closeflg",
+          "show_times": "dispcnt",
+          "max_show_times": "maxdispcnt"
         }
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/newsconns/newapis/pop_wait",
+      "path": "/oldest/ointer/thisip/dlgdelay",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "title": "ttl_lbl",
-          "content": "dtl_txt",
-          "image_url": "pic_url",
-          "link_url": "dest_url",
-          "can_close": "dismiss_ok",
-          "delay_days": "lag_day",
-          "transfer_code": "move_key"
+          "$field": "orspd",
+          "id": "recid",
+          "title": "headtxt",
+          "content": "bodytxt",
+          "image_url": "imgaddr",
+          "link_url": "lnkuri",
+          "can_close": "closeflg",
+          "delay_days": "waitdays",
+          "transfer_code": "xfercd"
         }
       }
     },
     "/api/v1/read_notice": {
-      "path": "/newsconns/newapis/ntc_seen",
+      "path": "/oldest/ointer/thisip/msgack",
       "request": {
-        "system_ids": "host_ntc_nos",
-        "user_ids": "acct_ntc_nos"
+        "system_ids": "sysmsgids",
+        "user_ids": "usrmsgids"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/error": {
-      "path": "/newsconns/newapis/err_send",
+      "path": "/oldest/ointer/thisip/faultrpt",
       "request": {
-        "msg": "info_txt",
-        "mobile_version": "sys_rev",
-        "mobile_model_name": "hw_label",
-        "msg_type": "fault_cls"
+        "msg": "msgtxt",
+        "mobile_version": "osver",
+        "mobile_model_name": "mdlnm",
+        "msg_type": "errtyp"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/packages": {
-      "path": "/newsconns/newapis/pkg_list",
+      "path": "/oldest/ointer/thisip/offerlst",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "id": "obj_no",
-          "apple_id": "ios_sku",
-          "name": "name_lbl",
-          "sub_name": "alt_lbl",
-          "selected": "pick_ok",
-          "corner": "tag_loc",
-          "price": "bill_cost",
-          "price_text": "cost_lbl",
-          "origin_price": "base_cost",
-          "value": "data_num",
-          "remark": "memo_lbl",
-          "day": "span_day"
+          "$field": "orspd",
+          "id": "recid",
+          "apple_id": "aplprod",
+          "name": "dispnm",
+          "sub_name": "subnm",
+          "selected": "selflg",
+          "corner": "badgepos",
+          "price": "payamt",
+          "price_text": "pricetxt",
+          "origin_price": "origamt",
+          "value": "valnum",
+          "remark": "notetxt",
+          "day": "durdays"
         }
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/newsconns/newapis/pay_init",
+      "path": "/oldest/ointer/thisip/billstart",
       "request": {
-        "package_id": "plan_no"
+        "package_id": "pkgid"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "type": "kind_no",
-          "target": "tgt_uri",
-          "app_account_token": "cli_usr_key"
+          "$field": "orspd",
+          "type": "catid",
+          "target": "destaddr",
+          "app_account_token": "appusrtkn"
         }
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/newsconns/newapis/ios_chk",
+      "path": "/oldest/ointer/thisip/aplverify",
       "request": {
-        "transaction_id": "trade_no"
+        "transaction_id": "txnid"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "order_no": "bill_no",
-          "pay_status": "bill_stat",
-          "pay_type": "bill_mode",
-          "transaction_id": "trade_no",
-          "vip_time": "pro_end_at"
+          "$field": "orspd",
+          "order_no": "ordnum",
+          "pay_status": "payst",
+          "pay_type": "paytyp",
+          "transaction_id": "txnid",
+          "vip_time": "vipexptm"
         }
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/newsconns/newapis/ios_hook",
+      "path": "/oldest/ointer/thisip/aplcb",
       "request": {
-        "signedPayload": "sign_blob"
+        "signedPayload": "sigdata"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/newsconns/newapis/xx_hook",
+      "path": "/oldest/ointer/thisip/xxcb",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/newsconns/newapis/ss_hook",
+      "path": "/oldest/ointer/thisip/sscb",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/lines_list": {
-      "path": "/newsconns/newapis/area_list",
+      "path": "/oldest/ointer/thisip/reglst",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "country": "area_lbl",
-          "code": "area_key",
-          "min_conn_time": "lo_link_ms",
-          "max_conn_time": "hi_link_ms"
+          "$field": "orspd",
+          "country": "ctrynm",
+          "code": "regcd",
+          "min_conn_time": "minconnms",
+          "max_conn_time": "maxconnms"
         }
       }
     },
     "/api/v1/node": {
-      "path": "/newsconns/newapis/node_get",
+      "path": "/oldest/ointer/thisip/tunfetch",
       "request": {
-        "code": "line_key"
+        "code": "rtecd"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "link_url": "dest_url"
+          "$field": "orspd",
+          "link_url": "lnkuri"
         }
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/newsconns/newapis/node_out",
+      "path": "/oldest/ointer/thisip/tunexit",
       "request": {
-        "code": "line_key"
+        "code": "rtecd"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "link_url": "dest_url",
-          "outbounds": "egr_set"
+          "$field": "orspd",
+          "link_url": "lnkuri",
+          "outbounds": "outlst"
         }
       }
     },
     "/api/v1/node_config": {
-      "path": "/newsconns/newapis/node_cfg",
+      "path": "/oldest/ointer/thisip/tunconf",
       "request": {
-        "code": "line_key",
-        "type": "mode_cd"
+        "code": "rtecd",
+        "type": "cfgtyp"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "config": "opts_blob"
+          "$field": "orspd",
+          "config": "cfgdata"
         }
       }
     },
     "/api/v1/connected": {
-      "path": "/newsconns/newapis/link_on",
+      "path": "/oldest/ointer/thisip/connup",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/newsconns/newapis/link_ping",
+      "path": "/oldest/ointer/thisip/connbeat",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "orspc",
+        "msg": "orspm",
         "result": {
-          "$field": "ret_obj",
-          "connect_status": "link_stat"
+          "$field": "orspd",
+          "connect_status": "connst"
         }
       }
     },
     "/api/v1/disconnect": {
-      "path": "/newsconns/newapis/link_off",
+      "path": "/oldest/ointer/thisip/conndown",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/newsconns/newapis/flow_send",
+      "path": "/oldest/ointer/thisip/trfrpt",
       "request": {
-        "flow": "flow_amt"
+        "flow": "trfvol"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
-        "result": "ret_obj"
+        "code": "orspc",
+        "msg": "orspm",
+        "result": "orspd"
       }
     }
   }
