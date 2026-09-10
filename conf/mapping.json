@@ -17,7 +17,7 @@
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/oldest/ointer/thisip/srvchk",
+      "path": "/oldests/ointer/thisip/srvchk",
       "request": {},
       "response": {
         "code": "orspc",
@@ -26,7 +26,7 @@
       }
     },
     "/api/v1/auto_login": {
-      "path": "/oldest/ointer/thisip/gstauth",
+      "path": "/oldests/ointer/thisip/gstauth",
       "request": {
         "device_no": "devnum",
         "platform": "clios",
@@ -59,7 +59,7 @@
       }
     },
     "/api/v1/register": {
-      "path": "/oldest/ointer/thisip/acctnew",
+      "path": "/oldests/ointer/thisip/acctnew",
       "request": {
         "device_no": "devnum",
         "username": "usrnm",
@@ -88,7 +88,7 @@
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/oldest/ointer/thisip/shrapl",
+      "path": "/oldests/ointer/thisip/shrapl",
       "request": {},
       "response": {
         "code": "orspc",
@@ -102,12 +102,12 @@
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/oldest/ointer/thisip/assetget/*filepath",
+      "path": "/oldests/ointer/thisip/assetget/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/oldest/ointer/thisip/mbrauth",
+      "path": "/oldests/ointer/thisip/mbrauth",
       "request": {
         "device_no": "devnum",
         "username": "usrnm",
@@ -142,7 +142,7 @@
       }
     },
     "/api/v1/logout": {
-      "path": "/oldest/ointer/thisip/sessbye",
+      "path": "/oldests/ointer/thisip/sessbye",
       "request": {},
       "response": {
         "code": "orspc",
@@ -167,7 +167,7 @@
       }
     },
     "/api/v1/logoff": {
-      "path": "/oldest/ointer/thisip/acctoff",
+      "path": "/oldests/ointer/thisip/acctoff",
       "request": {},
       "response": {
         "code": "orspc",
@@ -179,7 +179,7 @@
       }
     },
     "/api/v1/change_password": {
-      "path": "/oldest/ointer/thisip/secrnw",
+      "path": "/oldests/ointer/thisip/secrnw",
       "request": {
         "new_password": "newpwd"
       },
@@ -190,7 +190,7 @@
       }
     },
     "/api/v1/device_info": {
-      "path": "/oldest/ointer/thisip/devmeta",
+      "path": "/oldests/ointer/thisip/devmeta",
       "request": {},
       "response": {
         "code": "orspc",
@@ -234,7 +234,7 @@
       }
     },
     "/api/v1/device_logout": {
-      "path": "/oldest/ointer/thisip/devexit",
+      "path": "/oldests/ointer/thisip/devexit",
       "request": {
         "id": "recid"
       },
@@ -280,7 +280,7 @@
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/oldest/ointer/thisip/refmk",
+      "path": "/oldests/ointer/thisip/refmk",
       "request": {},
       "response": {
         "code": "orspc",
@@ -292,7 +292,7 @@
       }
     },
     "/api/v1/invite_code": {
-      "path": "/oldest/ointer/thisip/refbind",
+      "path": "/oldests/ointer/thisip/refbind",
       "request": {
         "invite_code": "refcd"
       },
@@ -303,7 +303,7 @@
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/oldest/ointer/thisip/refdtl",
+      "path": "/oldests/ointer/thisip/refdtl",
       "request": {},
       "response": {
         "code": "orspc",
@@ -326,7 +326,7 @@
       }
     },
     "/api/v1/user_info": {
-      "path": "/oldest/ointer/thisip/mbrmeta",
+      "path": "/oldests/ointer/thisip/mbrmeta",
       "request": {},
       "response": {
         "code": "orspc",
@@ -351,7 +351,7 @@
       }
     },
     "/api/v1/init": {
-      "path": "/oldest/ointer/thisip/initopts",
+      "path": "/oldests/ointer/thisip/initopts",
       "request": {},
       "response": {
         "code": "orspc",
@@ -401,7 +401,7 @@
       }
     },
     "/api/v1/version": {
-      "path": "/oldest/ointer/thisip/relchk",
+      "path": "/oldests/ointer/thisip/relchk",
       "request": {},
       "response": {
         "code": "orspc",
@@ -421,7 +421,7 @@
       }
     },
     "/api/v1/advert": {
-      "path": "/oldest/ointer/thisip/promolst",
+      "path": "/oldests/ointer/thisip/promolst",
       "request": {},
       "response": {
         "code": "orspc",
@@ -441,7 +441,7 @@
       }
     },
     "/api/v1/notice": {
-      "path": "/oldest/ointer/thisip/msgbox",
+      "path": "/oldests/ointer/thisip/msgbox",
       "request": {},
       "response": {
         "code": "orspc",
@@ -478,7 +478,7 @@
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/oldest/ointer/thisip/msgunrd",
+      "path": "/oldests/ointer/thisip/msgunrd",
       "request": {},
       "response": {
         "code": "orspc",
@@ -515,7 +515,7 @@
       }
     },
     "/api/v1/popup": {
-      "path": "/oldest/ointer/thisip/dlgshow",
+      "path": "/oldests/ointer/thisip/dlgshow",
       "request": {},
       "response": {
         "code": "orspc",
@@ -535,7 +535,7 @@
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/oldest/ointer/thisip/dlgdelay",
+      "path": "/oldests/ointer/thisip/dlgdelay",
       "request": {},
       "response": {
         "code": "orspc",
@@ -554,7 +554,7 @@
       }
     },
     "/api/v1/read_notice": {
-      "path": "/oldest/ointer/thisip/msgack",
+      "path": "/oldests/ointer/thisip/msgack",
       "request": {
         "system_ids": "sysmsgids",
         "user_ids": "usrmsgids"
@@ -566,7 +566,7 @@
       }
     },
     "/api/v1/error": {
-      "path": "/oldest/ointer/thisip/faultrpt",
+      "path": "/oldests/ointer/thisip/faultrpt",
       "request": {
         "msg": "msgtxt",
         "mobile_version": "osver",
@@ -580,7 +580,7 @@
       }
     },
     "/api/v1/packages": {
-      "path": "/oldest/ointer/thisip/offerlst",
+      "path": "/oldests/ointer/thisip/offerlst",
       "request": {},
       "response": {
         "code": "orspc",
@@ -603,7 +603,7 @@
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/oldest/ointer/thisip/billstart",
+      "path": "/oldests/ointer/thisip/billstart",
       "request": {
         "package_id": "pkgid"
       },
@@ -619,7 +619,7 @@
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/oldest/ointer/thisip/aplverify",
+      "path": "/oldests/ointer/thisip/aplverify",
       "request": {
         "transaction_id": "txnid"
       },
@@ -637,7 +637,7 @@
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/oldest/ointer/thisip/aplcb",
+      "path": "/oldests/ointer/thisip/aplcb",
       "request": {
         "signedPayload": "sigdata"
       },
@@ -648,7 +648,7 @@
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/oldest/ointer/thisip/xxcb",
+      "path": "/oldests/ointer/thisip/xxcb",
       "request": {},
       "response": {
         "code": "orspc",
@@ -657,7 +657,7 @@
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/oldest/ointer/thisip/sscb",
+      "path": "/oldests/ointer/thisip/sscb",
       "request": {},
       "response": {
         "code": "orspc",
@@ -666,7 +666,7 @@
       }
     },
     "/api/v1/lines_list": {
-      "path": "/oldest/ointer/thisip/reglst",
+      "path": "/oldests/ointer/thisip/reglst",
       "request": {},
       "response": {
         "code": "orspc",
@@ -681,7 +681,7 @@
       }
     },
     "/api/v1/node": {
-      "path": "/oldest/ointer/thisip/tunfetch",
+      "path": "/oldests/ointer/thisip/tunfetch",
       "request": {
         "code": "rtecd"
       },
@@ -695,7 +695,7 @@
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/oldest/ointer/thisip/tunexit",
+      "path": "/oldests/ointer/thisip/tunexit",
       "request": {
         "code": "rtecd"
       },
@@ -710,7 +710,7 @@
       }
     },
     "/api/v1/node_config": {
-      "path": "/oldest/ointer/thisip/tunconf",
+      "path": "/oldests/ointer/thisip/tunconf",
       "request": {
         "code": "rtecd",
         "type": "cfgtyp"
@@ -725,7 +725,7 @@
       }
     },
     "/api/v1/connected": {
-      "path": "/oldest/ointer/thisip/connup",
+      "path": "/oldests/ointer/thisip/connup",
       "request": {},
       "response": {
         "code": "orspc",
@@ -734,7 +734,7 @@
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/oldest/ointer/thisip/connbeat",
+      "path": "/oldests/ointer/thisip/connbeat",
       "request": {},
       "response": {
         "code": "orspc",
@@ -746,7 +746,7 @@
       }
     },
     "/api/v1/disconnect": {
-      "path": "/oldest/ointer/thisip/conndown",
+      "path": "/oldests/ointer/thisip/conndown",
       "request": {},
       "response": {
         "code": "orspc",
@@ -755,7 +755,7 @@
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/oldest/ointer/thisip/trfrpt",
+      "path": "/oldests/ointer/thisip/trfrpt",
       "request": {
         "flow": "trfvol"
       },
