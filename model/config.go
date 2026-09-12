@@ -105,7 +105,7 @@ func InitConfigs() error {
 		{
 			BaseModel: BaseModel{CreateTime: now},
 			Code:      ConfigNewUserFreeSeconds,
-			Value:     "3600",
+			Value:     "600",
 			Remark:    "新用户首次自动登录赠送会员秒数，0表示不赠送",
 		},
 		{
