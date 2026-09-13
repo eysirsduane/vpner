@@ -217,12 +217,13 @@ func buildNodeConfigDNS(domains []string, configType string) map[string]interfac
 	}
 	if configType == nodeConfigTypeFast {
 		rules = append(rules,
-			map[string]interface{}{"server": "dns_local", "rewrite_ttl": 900, "rule_set": "geosite-cn"},
-			map[string]interface{}{"server": "dns_proxy", "rewrite_ttl": 900, "rule_set": "geosite-geolocation-!cn"},
+			map[string]interface{}{"server": "dns_local", "rule_set": "geosite-cn"},
+			map[string]interface{}{"server": "dns_proxy", "rule_set": "geosite-geolocation-!cn"},
 		)
 	}
 
 	dns := map[string]interface{}{
+		"disable_cache": true,
 		"servers": []interface{}{
 			map[string]interface{}{"strategy": "prefer_ipv4", "detour": "proxy", "address_strategy": "prefer_ipv4", "tag": "dns_proxy", "address": "1.1.1.1"},
 			map[string]interface{}{"strategy": "prefer_ipv4", "detour": "direct", "address_strategy": "prefer_ipv4", "tag": "dns_local", "address": "local"},
@@ -260,16 +261,9 @@ func buildNodeConfigRoute(host string, domains []string, configType string) map[
 	}
 
 	rules = append(rules,
-		map[string]interface{}{
-			"rules": []interface{}{
-				map[string]interface{}{"invert": true, "rule_set": "geoip-cn"},
-				map[string]interface{}{"rule_set": "geosite-geolocation-!cn"},
-			},
-			"outbound": "proxy",
-			"type":     "logical",
-			"mode":     "and",
-		},
+		map[string]interface{}{"rule_set": "geosite-cn", "outbound": "direct"},
 		map[string]interface{}{"outbound": "direct", "rule_set": "geoip-cn"},
+		map[string]interface{}{"rule_set": "geosite-geolocation-!cn", "outbound": "proxy"},
 		map[string]interface{}{"outbound": "direct", "ip_is_private": true},
 	)
 	route["rules"] = rules
@@ -337,6 +331,10 @@ func parseAnyTLSConfigOutbound(parsed *url.URL) (nodeConfigOutbound, error) {
 	}
 	query := parsed.Query()
 	proxy := map[string]interface{}{"server": host, "server_port": port, "password": parsed.User.Username(), "type": "anytls", "tag": "proxy"}
+	proxy["domain_resolver"] = map[string]interface{}{"server": "dns_local", "strategy": "prefer_ipv6"}
+	proxy["idle_session_check_interval"] = "10s"
+	proxy["idle_session_timeout"] = "15s"
+	proxy["min_idle_session"] = 0
 	if strings.EqualFold(query.Get("security"), "tls") {
 		proxy["tls"] = buildNodeTLS(query, host)
 	}
