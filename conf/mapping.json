@@ -1,768 +1,768 @@
 {
-  "product_code": "oldests",
-  "swagger_path": "/oldests/v1/documents",
+  "product_code": "mid_caller",
+  "swagger_path": "/mid_caller/v1/documents",
   "headers": {
-    "platform": "Oldests-Plat-Code",
-    "version": "Oldests-Number",
-    "build": "Oldests-Building-Version",
-    "device_no": "Oldests-Device-No",
-    "client_time": "Oldests-Time-Value",
-    "time_zone": "Oldests-Time-Zone-Offset",
-    "app_store_region": "Oldests-Store-Region",
-    "language": "Oldests-Language"
+    "platform": "MiddleCaller-Platform-Name",
+    "version": "MiddleCaller-Code-Version",
+    "build": "MiddleCaller-Structural-Version",
+    "device_no": "MiddleCaller-Dev-Code",
+    "client_time": "MiddleCaller-Timestamp",
+    "time_zone": "MiddleCaller-TimeZone-Off",
+    "app_store_region": "MiddleCaller-Region",
+    "language": "MiddleCaller-Language-Code"
   },
   "field_affix": {
-    "prefix": "olds_est_",
-    "suffix": "_olds_ast"
+    "prefix": "mid_call_",
+    "suffix": "_call_fix"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/oldests/ointer/thisip/srvchk",
+      "path": "/mid_caller/intes/hlth",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/auto_login": {
-      "path": "/oldests/ointer/thisip/gstauth",
+      "path": "/mid_caller/intes/algn",
       "request": {
-        "device_no": "devnum",
-        "platform": "clios",
-        "version": "relver",
-        "mobile_name": "mobnm",
-        "mobile_version": "osver",
-        "mobile_model_name": "mdlnm",
-        "source_channel": "srcchn"
+        "device_no": "hwid",
+        "platform": "sys",
+        "version": "rev",
+        "mobile_name": "hwlbl",
+        "mobile_version": "osrev",
+        "mobile_model_name": "hwmdl",
+        "source_channel": "acqchn"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "token": "sesskey",
-          "device_no": "devnum",
-          "username": "usrnm",
-          "type": "catid",
-          "is_vip": "vipflg",
-          "vip_time": "vipexptm",
-          "is_new_user": "newusrflg",
-          "platform": "clios",
-          "version": "relver",
-          "login_times": "authcnt",
-          "create_time": "crttm",
-          "last_login_time": "lastauth",
-          "password": "pwdtxt"
+          "$field": "rslt",
+          "id": "entid",
+          "token": "cred",
+          "device_no": "hwid",
+          "username": "acctnm",
+          "type": "cls",
+          "is_vip": "prmon",
+          "vip_time": "prmexp",
+          "is_new_user": "nwmbr",
+          "platform": "sys",
+          "version": "rev",
+          "login_times": "authqty",
+          "create_time": "initts",
+          "last_login_time": "prvauth",
+          "password": "psec"
         }
       }
     },
     "/api/v1/register": {
-      "path": "/oldests/ointer/thisip/acctnew",
+      "path": "/mid_caller/intes/reg",
       "request": {
-        "device_no": "devnum",
-        "username": "usrnm",
-        "password": "pwdtxt"
+        "device_no": "hwid",
+        "username": "acctnm",
+        "password": "psec"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "token": "sesskey",
-          "device_no": "devnum",
-          "username": "usrnm",
-          "type": "catid",
-          "is_vip": "vipflg",
-          "vip_time": "vipexptm",
-          "is_new_user": "newusrflg",
-          "platform": "clios",
-          "version": "relver",
-          "login_times": "authcnt",
-          "create_time": "crttm",
-          "last_login_time": "lastauth",
-          "password": "pwdtxt"
+          "$field": "rslt",
+          "id": "entid",
+          "token": "cred",
+          "device_no": "hwid",
+          "username": "acctnm",
+          "type": "cls",
+          "is_vip": "prmon",
+          "vip_time": "prmexp",
+          "is_new_user": "nwmbr",
+          "platform": "sys",
+          "version": "rev",
+          "login_times": "authqty",
+          "create_time": "initts",
+          "last_login_time": "prvauth",
+          "password": "psec"
         }
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/oldests/ointer/thisip/shrapl",
+      "path": "/mid_caller/intes/pubaplid",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "appid": "appid",
-          "pwd": "pwdtxt"
+          "$field": "rslt",
+          "id": "entid",
+          "appid": "aplacct",
+          "pwd": "psec"
         }
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/oldests/ointer/thisip/assetget/*filepath",
+      "path": "/mid_caller/intes/upld/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/oldests/ointer/thisip/mbrauth",
+      "path": "/mid_caller/intes/lgn",
       "request": {
-        "device_no": "devnum",
-        "username": "usrnm",
-        "password": "pwdtxt",
-        "platform": "clios",
-        "version": "relver",
-        "mobile_name": "mobnm",
-        "mobile_version": "osver",
-        "mobile_model_name": "mdlnm",
-        "source_channel": "srcchn"
+        "device_no": "hwid",
+        "username": "acctnm",
+        "password": "psec",
+        "platform": "sys",
+        "version": "rev",
+        "mobile_name": "hwlbl",
+        "mobile_version": "osrev",
+        "mobile_model_name": "hwmdl",
+        "source_channel": "acqchn"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "token": "sesskey",
-          "device_no": "devnum",
-          "username": "usrnm",
-          "type": "catid",
-          "is_vip": "vipflg",
-          "vip_time": "vipexptm",
-          "is_new_user": "newusrflg",
-          "platform": "clios",
-          "version": "relver",
-          "login_times": "authcnt",
-          "create_time": "crttm",
-          "last_login_time": "lastauth",
-          "password": "pwdtxt"
+          "$field": "rslt",
+          "id": "entid",
+          "token": "cred",
+          "device_no": "hwid",
+          "username": "acctnm",
+          "type": "cls",
+          "is_vip": "prmon",
+          "vip_time": "prmexp",
+          "is_new_user": "nwmbr",
+          "platform": "sys",
+          "version": "rev",
+          "login_times": "authqty",
+          "create_time": "initts",
+          "last_login_time": "prvauth",
+          "password": "psec"
         }
       }
     },
     "/api/v1/logout": {
-      "path": "/oldests/ointer/thisip/sessbye",
+      "path": "/mid_caller/intes/lgo",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "token": "sesskey",
-          "device_no": "devnum",
-          "username": "usrnm",
-          "type": "catid",
-          "is_vip": "vipflg",
-          "vip_time": "vipexptm",
-          "is_new_user": "newusrflg",
-          "platform": "clios",
-          "version": "relver",
-          "login_times": "authcnt",
-          "create_time": "crttm",
-          "last_login_time": "lastauth",
-          "password": "pwdtxt"
+          "$field": "rslt",
+          "id": "entid",
+          "token": "cred",
+          "device_no": "hwid",
+          "username": "acctnm",
+          "type": "cls",
+          "is_vip": "prmon",
+          "vip_time": "prmexp",
+          "is_new_user": "nwmbr",
+          "platform": "sys",
+          "version": "rev",
+          "login_times": "authqty",
+          "create_time": "initts",
+          "last_login_time": "prvauth",
+          "password": "psec"
         }
       }
     },
     "/api/v1/logoff": {
-      "path": "/oldests/ointer/thisip/acctoff",
+      "path": "/mid_caller/intes/lgf",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "token": "sesskey"
+          "$field": "rslt",
+          "token": "cred"
         }
       }
     },
     "/api/v1/change_password": {
-      "path": "/oldests/ointer/thisip/secrnw",
+      "path": "/mid_caller/intes/chgpwd",
       "request": {
-        "new_password": "newpwd"
+        "new_password": "nwpsec"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/device_info": {
-      "path": "/oldests/ointer/thisip/devmeta",
+      "path": "/mid_caller/intes/devinf",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
+          "$field": "rslt",
           "local_device": {
-            "$field": "locdev",
-            "id": "recid",
-            "device_no": "devnum",
-            "mobile_name": "mobnm",
-            "mobile_version": "devver",
-            "mobile_model_name": "mdlnm",
-            "platform": "clios",
-            "version": "relver",
-            "last_login_time": "lastauth"
+            "$field": "curhw",
+            "id": "entid",
+            "device_no": "hwid",
+            "mobile_name": "hwlbl",
+            "mobile_version": "osrev",
+            "mobile_model_name": "hwmdl",
+            "platform": "sys",
+            "version": "rev",
+            "last_login_time": "prvauth"
           },
           "two_device": {
-            "$field": "pairdev",
-            "id": "recid",
-            "device_no": "devnum",
-            "mobile_name": "mobnm",
-            "mobile_version": "devver",
-            "mobile_model_name": "mdlnm",
-            "platform": "clios",
-            "version": "relver",
-            "last_login_time": "lastauth"
+            "$field": "althw",
+            "id": "entid",
+            "device_no": "hwid",
+            "mobile_name": "hwlbl",
+            "mobile_version": "osrev",
+            "mobile_model_name": "hwmdl",
+            "platform": "sys",
+            "version": "rev",
+            "last_login_time": "prvauth"
           },
           "devices": {
-            "$field": "devlst",
-            "id": "recid",
-            "device_no": "devnum",
-            "mobile_name": "mobnm",
-            "mobile_version": "devver",
-            "mobile_model_name": "mdlnm",
-            "platform": "clios",
-            "version": "relver",
-            "last_login_time": "lastauth"
+            "$field": "hwls",
+            "id": "entid",
+            "device_no": "hwid",
+            "mobile_name": "hwlbl",
+            "mobile_version": "osrev",
+            "mobile_model_name": "hwmdl",
+            "platform": "sys",
+            "version": "rev",
+            "last_login_time": "prvauth"
           }
         }
       }
     },
     "/api/v1/device_logout": {
-      "path": "/oldests/ointer/thisip/devexit",
+      "path": "/mid_caller/intes/devlgo",
       "request": {
-        "id": "recid"
+        "id": "entid"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
+          "$field": "rslt",
           "local_device": {
-            "$field": "locdev",
-            "id": "recid",
-            "device_no": "devnum",
-            "mobile_name": "mobnm",
-            "mobile_version": "devver",
-            "mobile_model_name": "mdlnm",
-            "platform": "clios",
-            "version": "relver",
-            "last_login_time": "lastauth"
+            "$field": "curhw",
+            "id": "entid",
+            "device_no": "hwid",
+            "mobile_name": "hwlbl",
+            "mobile_version": "osrev",
+            "mobile_model_name": "hwmdl",
+            "platform": "sys",
+            "version": "rev",
+            "last_login_time": "prvauth"
           },
           "two_device": {
-            "$field": "pairdev",
-            "id": "recid",
-            "device_no": "devnum",
-            "mobile_name": "mobnm",
-            "mobile_version": "devver",
-            "mobile_model_name": "mdlnm",
-            "platform": "clios",
-            "version": "relver",
-            "last_login_time": "lastauth"
+            "$field": "althw",
+            "id": "entid",
+            "device_no": "hwid",
+            "mobile_name": "hwlbl",
+            "mobile_version": "osrev",
+            "mobile_model_name": "hwmdl",
+            "platform": "sys",
+            "version": "rev",
+            "last_login_time": "prvauth"
           },
           "devices": {
-            "$field": "devlst",
-            "id": "recid",
-            "device_no": "devnum",
-            "mobile_name": "mobnm",
-            "mobile_version": "devver",
-            "mobile_model_name": "mdlnm",
-            "platform": "clios",
-            "version": "relver",
-            "last_login_time": "lastauth"
+            "$field": "hwls",
+            "id": "entid",
+            "device_no": "hwid",
+            "mobile_name": "hwlbl",
+            "mobile_version": "osrev",
+            "mobile_model_name": "hwmdl",
+            "platform": "sys",
+            "version": "rev",
+            "last_login_time": "prvauth"
           }
         }
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/oldests/ointer/thisip/refmk",
+      "path": "/mid_caller/intes/drwinvcd",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "invite_code": "refcd"
+          "$field": "rslt",
+          "invite_code": "rfrcd"
         }
       }
     },
     "/api/v1/invite_code": {
-      "path": "/oldests/ointer/thisip/refbind",
+      "path": "/mid_caller/intes/invcd",
       "request": {
-        "invite_code": "refcd"
+        "invite_code": "rfrcd"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/oldests/ointer/thisip/refdtl",
+      "path": "/mid_caller/intes/invdtl",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "invite_code": "refcd",
-          "invite_valid": "invvalid",
-          "share_count": "shrcnt",
-          "reward_time": "bnstm",
-          "per_invite_seconds": "invbnssec",
-          "per_invite_text": "invbnstxt",
+          "$field": "rslt",
+          "invite_code": "rfrcd",
+          "invite_valid": "rfrok",
+          "share_count": "shrqty",
+          "reward_time": "awdtm",
+          "per_invite_seconds": "rfrawdsec",
+          "per_invite_text": "rfrawdtxt",
           "milestones": {
-            "$field": "stagelst",
-            "count": "hitcnt",
-            "reward_seconds": "bnssec",
-            "reward_text": "bnstxt"
+            "$field": "mlst",
+            "count": "qty",
+            "reward_seconds": "awdsec",
+            "reward_text": "awdtxt"
           }
         }
       }
     },
     "/api/v1/user_info": {
-      "path": "/oldests/ointer/thisip/mbrmeta",
+      "path": "/mid_caller/intes/usrinf",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "token": "sesskey",
-          "device_no": "devnum",
-          "username": "usrnm",
-          "type": "catid",
-          "is_vip": "vipflg",
-          "vip_time": "vipexptm",
-          "is_new_user": "newusrflg",
-          "platform": "clios",
-          "version": "relver",
-          "login_times": "authcnt",
-          "create_time": "crttm",
-          "last_login_time": "lastauth",
-          "password": "pwdtxt"
+          "$field": "rslt",
+          "id": "entid",
+          "token": "cred",
+          "device_no": "hwid",
+          "username": "acctnm",
+          "type": "cls",
+          "is_vip": "prmon",
+          "vip_time": "prmexp",
+          "is_new_user": "nwmbr",
+          "platform": "sys",
+          "version": "rev",
+          "login_times": "authqty",
+          "create_time": "initts",
+          "last_login_time": "prvauth",
+          "password": "psec"
         }
       }
     },
     "/api/v1/init": {
-      "path": "/oldests/ointer/thisip/initopts",
+      "path": "/mid_caller/intes/ini",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
+          "$field": "rslt",
           "agreements": {
-            "$field": "termsset",
-            "user_agreement": "usrterms",
-            "privacy_agreement": "privterms"
+            "$field": "pcts",
+            "user_agreement": "mbrpct",
+            "privacy_agreement": "prvpct"
           },
           "share": {
-            "$field": "shrmeta",
-            "qrcode": "qrimg",
-            "links": "urllst"
+            "$field": "shr",
+            "qrcode": "qrc",
+            "links": "hrefs"
           },
           "invite": {
-            "$field": "invmeta",
-            "valid_hours": "validhrs",
-            "per_invite_seconds": "invbnssec",
-            "per_invite_text": "invbnstxt",
-            "max_reward_days": "maxbnsday",
+            "$field": "rfr",
+            "valid_hours": "ttlhrs",
+            "per_invite_seconds": "rfrawdsec",
+            "per_invite_text": "rfrawdtxt",
+            "max_reward_days": "maxawdprd",
             "milestones": {
-              "$field": "stagelst",
-              "count": "hitcnt",
-              "reward_seconds": "bnssec",
-              "reward_text": "bnstxt"
+              "$field": "mlst",
+              "count": "qty",
+              "reward_seconds": "awdsec",
+              "reward_text": "awdtxt"
             }
           },
           "app": {
-            "$field": "appmeta",
-            "website": "webaddr",
-            "new_user_free_seconds": "freesec"
+            "$field": "appl",
+            "website": "siteuri",
+            "new_user_free_seconds": "nwtrialsec"
           },
           "tools": {
-            "$field": "utilset",
-            "customer_service_enabled": "svcen",
-            "customer_service_url": "svcaddr",
-            "clean_memory_enabled": "memclr",
-            "message_enabled": "msgen"
+            "$field": "utls",
+            "customer_service_enabled": "hlpon",
+            "customer_service_url": "hlpuri",
+            "clean_memory_enabled": "ramclron",
+            "message_enabled": "ntcon"
           },
           "proxy": {
-            "$field": "prxcfg",
-            "skip_domains": "skipdoms"
+            "$field": "rly",
+            "skip_domains": "bypdom"
           }
         }
       }
     },
     "/api/v1/version": {
-      "path": "/oldests/ointer/thisip/relchk",
+      "path": "/mid_caller/intes/ver",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "has_update": "updflg",
-          "name": "dispnm",
-          "platform": "clios",
-          "version": "relver",
-          "build": "bldver",
-          "force": "forceflg",
-          "url": "dladdr",
-          "size": "filesz",
-          "content": "bodytxt"
+          "$field": "rslt",
+          "has_update": "updavl",
+          "name": "lbl",
+          "platform": "sys",
+          "version": "rev",
+          "build": "cmprev",
+          "force": "rqrd",
+          "url": "uri",
+          "size": "sz",
+          "content": "dtltxt"
         }
       }
     },
     "/api/v1/advert": {
-      "path": "/oldests/ointer/thisip/promolst",
+      "path": "/mid_caller/intes/adv",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "position": "slotpos",
-          "title": "headtxt",
-          "content": "bodytxt",
-          "image_url": "imgaddr",
-          "link_url": "lnkuri",
-          "show_times": "dispcnt",
-          "max_show_times": "maxdispcnt",
-          "sorter": "sortidx"
+          "$field": "rslt",
+          "id": "entid",
+          "position": "plc",
+          "title": "hdr",
+          "content": "dtltxt",
+          "image_url": "picuri",
+          "link_url": "href",
+          "show_times": "impqty",
+          "max_show_times": "maximp",
+          "sorter": "rnk"
         }
       }
     },
     "/api/v1/notice": {
-      "path": "/oldests/ointer/thisip/msgbox",
+      "path": "/mid_caller/intes/ntc",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
+          "$field": "rslt",
           "system": {
-            "$field": "sysmsg",
+            "$field": "sysntc",
             "list": {
-              "$field": "itemlst",
-              "id": "recid",
-              "title": "headtxt",
-              "content": "bodytxt",
-              "is_read": "readflg",
-              "create_time": "crttm"
+              "$field": "ents",
+              "id": "entid",
+              "title": "hdr",
+              "content": "dtltxt",
+              "is_read": "rdflg",
+              "create_time": "initts"
             },
-            "total": "totalcnt",
-            "unread_count": "unreadcnt"
+            "total": "sumqty",
+            "unread_count": "unrdqty"
           },
           "user": {
-            "$field": "usrmsg",
+            "$field": "mbr",
             "list": {
-              "$field": "itemlst",
-              "id": "recid",
-              "title": "headtxt",
-              "content": "bodytxt",
-              "is_read": "readflg",
-              "create_time": "crttm"
+              "$field": "ents",
+              "id": "entid",
+              "title": "hdr",
+              "content": "dtltxt",
+              "is_read": "rdflg",
+              "create_time": "initts"
             },
-            "total": "totalcnt",
-            "unread_count": "unreadcnt"
+            "total": "sumqty",
+            "unread_count": "unrdqty"
           }
         }
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/oldests/ointer/thisip/msgunrd",
+      "path": "/mid_caller/intes/ntcunrd",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
+          "$field": "rslt",
           "system": {
-            "$field": "sysmsg",
+            "$field": "sysntc",
             "list": {
-              "$field": "itemlst",
-              "id": "recid",
-              "title": "headtxt",
-              "content": "bodytxt",
-              "is_read": "readflg",
-              "create_time": "crttm"
+              "$field": "ents",
+              "id": "entid",
+              "title": "hdr",
+              "content": "dtltxt",
+              "is_read": "rdflg",
+              "create_time": "initts"
             },
-            "total": "totalcnt",
-            "unread_count": "unreadcnt"
+            "total": "sumqty",
+            "unread_count": "unrdqty"
           },
           "user": {
-            "$field": "usrmsg",
+            "$field": "mbr",
             "list": {
-              "$field": "itemlst",
-              "id": "recid",
-              "title": "headtxt",
-              "content": "bodytxt",
-              "is_read": "readflg",
-              "create_time": "crttm"
+              "$field": "ents",
+              "id": "entid",
+              "title": "hdr",
+              "content": "dtltxt",
+              "is_read": "rdflg",
+              "create_time": "initts"
             },
-            "total": "totalcnt",
-            "unread_count": "unreadcnt"
+            "total": "sumqty",
+            "unread_count": "unrdqty"
           }
         }
       }
     },
     "/api/v1/popup": {
-      "path": "/oldests/ointer/thisip/dlgshow",
+      "path": "/mid_caller/intes/pup",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "title": "headtxt",
-          "content": "bodytxt",
-          "image_url": "imgaddr",
-          "jump_type": "navtyp",
-          "jump_target": "navdst",
-          "can_close": "closeflg",
-          "show_times": "dispcnt",
-          "max_show_times": "maxdispcnt"
+          "$field": "rslt",
+          "id": "entid",
+          "title": "hdr",
+          "content": "dtltxt",
+          "image_url": "picuri",
+          "jump_type": "rdrcls",
+          "jump_target": "rdrdst",
+          "can_close": "dsmok",
+          "show_times": "impqty",
+          "max_show_times": "maximp"
         }
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/oldests/ointer/thisip/dlgdelay",
+      "path": "/mid_caller/intes/dlypup",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "title": "headtxt",
-          "content": "bodytxt",
-          "image_url": "imgaddr",
-          "link_url": "lnkuri",
-          "can_close": "closeflg",
-          "delay_days": "waitdays",
-          "transfer_code": "xfercd"
+          "$field": "rslt",
+          "id": "entid",
+          "title": "hdr",
+          "content": "dtltxt",
+          "image_url": "picuri",
+          "link_url": "href",
+          "can_close": "dsmok",
+          "delay_days": "dlyd",
+          "transfer_code": "migcd"
         }
       }
     },
     "/api/v1/read_notice": {
-      "path": "/oldests/ointer/thisip/msgack",
+      "path": "/mid_caller/intes/rdntc",
       "request": {
-        "system_ids": "sysmsgids",
-        "user_ids": "usrmsgids"
+        "system_ids": "sysrefs",
+        "user_ids": "mbrrefs"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/error": {
-      "path": "/oldests/ointer/thisip/faultrpt",
+      "path": "/mid_caller/intes/err",
       "request": {
-        "msg": "msgtxt",
-        "mobile_version": "osver",
-        "mobile_model_name": "mdlnm",
-        "msg_type": "errtyp"
+        "msg": "dtl",
+        "mobile_version": "osrev",
+        "mobile_model_name": "hwmdl",
+        "msg_type": "errcls"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/packages": {
-      "path": "/oldests/ointer/thisip/offerlst",
+      "path": "/mid_caller/intes/pkgs",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "id": "recid",
-          "apple_id": "aplprod",
-          "name": "dispnm",
-          "sub_name": "subnm",
-          "selected": "selflg",
-          "corner": "badgepos",
-          "price": "payamt",
-          "price_text": "pricetxt",
-          "origin_price": "origamt",
-          "value": "valnum",
-          "remark": "notetxt",
-          "day": "durdays"
+          "$field": "rslt",
+          "id": "entid",
+          "apple_id": "aplsku",
+          "name": "lbl",
+          "sub_name": "sublbl",
+          "selected": "chsn",
+          "corner": "bdg",
+          "price": "amt",
+          "price_text": "amtlbl",
+          "origin_price": "baseamt",
+          "value": "val",
+          "remark": "memo",
+          "day": "prd"
         }
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/oldests/ointer/thisip/billstart",
+      "path": "/mid_caller/intes/paylnch",
       "request": {
-        "package_id": "pkgid"
+        "package_id": "planid"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "type": "catid",
-          "target": "destaddr",
-          "app_account_token": "appusrtkn"
+          "$field": "rslt",
+          "type": "cls",
+          "target": "dst",
+          "app_account_token": "apacctcred"
         }
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/oldests/ointer/thisip/aplverify",
+      "path": "/mid_caller/intes/payaplvfy",
       "request": {
-        "transaction_id": "txnid"
+        "transaction_id": "purchref"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "order_no": "ordnum",
-          "pay_status": "payst",
-          "pay_type": "paytyp",
-          "transaction_id": "txnid",
-          "vip_time": "vipexptm"
+          "$field": "rslt",
+          "order_no": "billref",
+          "pay_status": "billst",
+          "pay_type": "billcls",
+          "transaction_id": "purchref",
+          "vip_time": "prmexp"
         }
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/oldests/ointer/thisip/aplcb",
+      "path": "/mid_caller/intes/payaplcb",
       "request": {
-        "signedPayload": "sigdata"
+        "signedPayload": "sgnpld"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/oldests/ointer/thisip/xxcb",
+      "path": "/mid_caller/intes/payxxcb",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/oldests/ointer/thisip/sscb",
+      "path": "/mid_caller/intes/paysscb",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/lines_list": {
-      "path": "/oldests/ointer/thisip/reglst",
+      "path": "/mid_caller/intes/lnlst",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "country": "ctrynm",
-          "code": "regcd",
-          "min_conn_time": "minconnms",
-          "max_conn_time": "maxconnms"
+          "$field": "rslt",
+          "country": "ntn",
+          "code": "loccd",
+          "min_conn_time": "lolnktm",
+          "max_conn_time": "hilnktm"
         }
       }
     },
     "/api/v1/node": {
-      "path": "/oldests/ointer/thisip/tunfetch",
+      "path": "/mid_caller/intes/nd",
       "request": {
-        "code": "rtecd"
+        "code": "loccd"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "link_url": "lnkuri"
+          "$field": "rslt",
+          "link_url": "href"
         }
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/oldests/ointer/thisip/tunexit",
+      "path": "/mid_caller/intes/ndout",
       "request": {
-        "code": "rtecd"
+        "code": "loccd"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "link_url": "lnkuri",
-          "outbounds": "outlst"
+          "$field": "rslt",
+          "link_url": "href",
+          "outbounds": "egrls"
         }
       }
     },
     "/api/v1/node_config": {
-      "path": "/oldests/ointer/thisip/tunconf",
+      "path": "/mid_caller/intes/ndcfg",
       "request": {
-        "code": "rtecd",
-        "type": "cfgtyp"
+        "code": "loccd",
+        "type": "cls"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "config": "cfgdata"
+          "$field": "rslt",
+          "config": "cfg"
         }
       }
     },
     "/api/v1/connected": {
-      "path": "/oldests/ointer/thisip/connup",
+      "path": "/mid_caller/intes/cnctd",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/oldests/ointer/thisip/connbeat",
+      "path": "/mid_caller/intes/hrtbt",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
+        "code": "midc",
+        "msg": "midm",
         "result": {
-          "$field": "orspd",
-          "connect_status": "connst"
+          "$field": "rslt",
+          "connect_status": "lnkst"
         }
       }
     },
     "/api/v1/disconnect": {
-      "path": "/oldests/ointer/thisip/conndown",
+      "path": "/mid_caller/intes/dcnct",
       "request": {},
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/oldests/ointer/thisip/trfrpt",
+      "path": "/mid_caller/intes/vpnflw",
       "request": {
-        "flow": "trfvol"
+        "flow": "bwqty"
       },
       "response": {
-        "code": "orspc",
-        "msg": "orspm",
-        "result": "orspd"
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     }
   }
