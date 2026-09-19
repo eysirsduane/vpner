@@ -675,6 +675,7 @@
           "$field": "rslt",
           "country": "ntn",
           "code": "loccd",
+          "img_url":"imgu",
           "min_conn_time": "lolnktm",
           "max_conn_time": "hilnktm"
         }
