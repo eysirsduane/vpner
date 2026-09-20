@@ -3,6 +3,9 @@ package errmsg
 import "strings"
 
 var englishMessages = map[string]string{
+	"幸运转盘奖励已领取":           "You have already claimed this lucky wheel reward.",
+	"您今天尚未参与幸运转盘":         "You have not played the lucky wheel today.",
+	"幸运转盘奖励信息异常，请稍后再试":    "Invalid lucky wheel reward. Please try again later.",
 	"您今天已参与幸运转盘，请明天再试":    "You have already played the lucky wheel today. Please try again tomorrow.",
 	"幸运转盘仅限新用户参与":         "The lucky wheel is only available to new users.",
 	"系统错误，请稍后再试":          "System error. Please try again later.",

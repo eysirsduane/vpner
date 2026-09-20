@@ -748,7 +748,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "仅限注册24小时内的新用户调用，以服务器时间和用户创建时间判断；每个用户每天仅可参与一次，按北京时间零点重置。不符合条件或当天已参与返回业务状态码500。从lucky_wheel表中等概率随机读取一条未删除的记录，保存user_id、title、desc、remark至lucky_wheel_play_record表后返回level、title、remark。校验、抽奖和记录写入在同一事务中完成，不修改用户会员时长。",
+                "description": "仅限注册24小时内的新用户调用，使用Redis SET NX原子占用北京时间当天参与次数，标记于次日零点过期；不符合条件、当天已有标记或Redis不可用时返回业务状态码500。从lucky_wheel表中等概率随机读取一条未删除的记录，保存user_id、title、desc、remark、vip_secs及未领取状态至lucky_wheel_play_record表后返回level、title、desc、remark。抽奖或写入失败时释放本次占位。不查询数据库参与次数，不使用显式事务或GORM默认写入事务，不修改用户会员时长。Redis标记丢失后无法保证每日防重。",
                 "produces": [
                     "application/json"
                 ],
@@ -773,6 +773,31 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/lucky_wheel_win": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "根据北京时间当天的参与记录领取会员时长，无需请求参数。同一记录只能领取一次；仅更新用户、账号及同账号正常用户的vip_time，领取状态与会员时间在同一事务中保存。",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "领取幸运转盘奖励",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
                         }
                     }
                 }
@@ -2271,6 +2296,10 @@ const docTemplate = `{
         "controller.LuckyWheelPlayResponse": {
             "type": "object",
             "properties": {
+                "desc": {
+                    "type": "string",
+                    "example": "免费会员"
+                },
                 "level": {
                     "type": "integer",
                     "example": 1

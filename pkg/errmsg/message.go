@@ -12,6 +12,9 @@ import (
 const defaultErrorMessage = "系统错误，请稍后再试"
 
 var exactMessages = map[string]string{
+	"lucky wheel reward already claimed":                     "幸运转盘奖励已领取",
+	"lucky wheel reward not found today":                     "您今天尚未参与幸运转盘",
+	"lucky wheel reward duration invalid":                    "幸运转盘奖励信息异常，请稍后再试",
 	"lucky wheel already played today":                       "您今天已参与幸运转盘，请明天再试",
 	"lucky wheel is only available to new users":             "幸运转盘仅限新用户参与",
 	"sspay api url is required":                              "支付配置异常，请稍后再试",

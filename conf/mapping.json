@@ -430,8 +430,18 @@
           "$field": "rslt",
           "level": "lvl",
           "title": "hdr",
+          "desc": "dsc",
           "remark": "memo"
         }
+      }
+    },
+    "/api/v1/lucky_wheel_win": {
+      "path": "/mid_caller/intes/lkwwin",
+      "request": {},
+      "response": {
+        "code": "midc",
+        "msg": "midm",
+        "result": "rslt"
       }
     },
     "/api/v1/lucky_wheel_winners": {
