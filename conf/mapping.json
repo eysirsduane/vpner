@@ -1,32 +1,32 @@
 {
-  "product_code": "newsconns",
-  "swagger_path": "/newsconns/v1/documents",
+  "product_code": "odbcor",
+  "swagger_path": "/odbcor/v1/documents",
   "headers": {
-    "platform": "NewsConn-Home-Name",
-    "version": "NewsConn-Code-Number",
-    "build": "NewsConn-Building-Code",
-    "device_no": "NewsConn-Device-ID-Number",
-    "client_time": "NewsConn-Timestamp",
-    "time_zone": "NewsConn-TimeZone-Code",
-    "app_store_region": "NewsConn-Saves-Region",
-    "language": "NewsConn-Lang"
+    "platform": "Odbcor-Home-Name",
+    "version": "Odbcor-Code-Number",
+    "build": "Odbcor-Building-Code",
+    "device_no": "Odbcor-Device-ID-Number",
+    "client_time": "Odbcor-Timestamp",
+    "time_zone": "Odbcor-TimeZone-Code",
+    "app_store_region": "Odbcor-Saves-Region",
+    "language": "Odbcor-Lang"
   },
   "field_affix": {
-    "prefix": "news_conn_",
-    "suffix": "_olds_conn"
+    "prefix": "odbcor_conn_",
+    "suffix": "_odbcor_conn"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/newsconns/newapis/sys_ping",
+      "path": "/odbcor/newapis/sys/ping",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/auto_login": {
-      "path": "/newsconns/newapis/anon_lgn",
+      "path": "/odbcor/newapis/anon/lgn",
       "request": {
         "device_no": "unit_no",
         "platform": "plat_cd",
@@ -37,8 +37,8 @@
         "source_channel": "entry_src"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -59,15 +59,15 @@
       }
     },
     "/api/v1/register": {
-      "path": "/newsconns/newapis/usr_reg",
+      "path": "/odbcor/newapis/usr/reg",
       "request": {
         "device_no": "unit_no",
         "username": "acct_lbl",
         "password": "sec_str"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -88,11 +88,11 @@
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/newsconns/newapis/pub_ios",
+      "path": "/odbcor/newapis/pub/ios",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -102,12 +102,12 @@
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/newsconns/newapis/file_hub/*filepath",
+      "path": "/odbcor/newapis/file/hub/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/newsconns/newapis/usr_lgn",
+      "path": "/odbcor/newapis/usr/lgn",
       "request": {
         "device_no": "unit_no",
         "username": "acct_lbl",
@@ -120,8 +120,8 @@
         "source_channel": "entry_src"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -142,11 +142,11 @@
       }
     },
     "/api/v1/logout": {
-      "path": "/newsconns/newapis/auth_end",
+      "path": "/odbcor/newapis/auth/end",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -167,11 +167,11 @@
       }
     },
     "/api/v1/logoff": {
-      "path": "/newsconns/newapis/usr_del",
+      "path": "/odbcor/newapis/usr/del",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "token": "auth_tkn"
@@ -179,22 +179,22 @@
       }
     },
     "/api/v1/change_password": {
-      "path": "/newsconns/newapis/pwd_upd",
+      "path": "/odbcor/newapis/pwd/upd",
       "request": {
         "new_password": "fresh_sec"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/device_info": {
-      "path": "/newsconns/newapis/unit_info",
+      "path": "/odbcor/newapis/unit/info",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "local_device": {
@@ -234,13 +234,13 @@
       }
     },
     "/api/v1/device_logout": {
-      "path": "/newsconns/newapis/unit_drop",
+      "path": "/odbcor/newapis/unit/drop",
       "request": {
         "id": "obj_no"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "local_device": {
@@ -280,11 +280,11 @@
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/newsconns/newapis/inv_gen",
+      "path": "/odbcor/newapis/inv/gen",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "invite_code": "inv_key"
@@ -292,22 +292,22 @@
       }
     },
     "/api/v1/invite_code": {
-      "path": "/newsconns/newapis/inv_use",
+      "path": "/odbcor/newapis/inv/use",
       "request": {
         "invite_code": "inv_key"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/newsconns/newapis/inv_info",
+      "path": "/odbcor/newapis/inv/info",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "invite_code": "inv_key",
@@ -326,11 +326,11 @@
       }
     },
     "/api/v1/user_info": {
-      "path": "/newsconns/newapis/usr_info",
+      "path": "/odbcor/newapis/usr/info",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -351,11 +351,11 @@
       }
     },
     "/api/v1/init": {
-      "path": "/newsconns/newapis/boot_cfg",
+      "path": "/odbcor/newapis/boot/cfg",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "agreements": {
@@ -401,11 +401,11 @@
       }
     },
     "/api/v1/version": {
-      "path": "/newsconns/newapis/ver_chk",
+      "path": "/odbcor/newapis/ver/chk",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "has_update": "fresh_rev_ok",
@@ -421,11 +421,11 @@
       }
     },
     "/api/v1/advert": {
-      "path": "/newsconns/newapis/ad_feed",
+      "path": "/odbcor/newapis/ad/feed",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -441,11 +441,11 @@
       }
     },
     "/api/v1/notice": {
-      "path": "/newsconns/newapis/ntc_list",
+      "path": "/odbcor/newapis/ntc/list",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "system": {
@@ -478,11 +478,11 @@
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/newsconns/newapis/ntc_new",
+      "path": "/odbcor/newapis/ntc/new",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "system": {
@@ -515,11 +515,11 @@
       }
     },
     "/api/v1/popup": {
-      "path": "/newsconns/newapis/pop_box",
+      "path": "/odbcor/newapis/pop/box",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -535,11 +535,11 @@
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/newsconns/newapis/pop_wait",
+      "path": "/odbcor/newapis/pop/wait",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -554,19 +554,19 @@
       }
     },
     "/api/v1/read_notice": {
-      "path": "/newsconns/newapis/ntc_seen",
+      "path": "/odbcor/newapis/ntc/seen",
       "request": {
         "system_ids": "host_ntc_nos",
         "user_ids": "acct_ntc_nos"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/error": {
-      "path": "/newsconns/newapis/err_send",
+      "path": "/odbcor/newapis/err/send",
       "request": {
         "msg": "info_txt",
         "mobile_version": "sys_rev",
@@ -574,17 +574,17 @@
         "msg_type": "fault_cls"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/packages": {
-      "path": "/newsconns/newapis/pkg_list",
+      "path": "/odbcor/newapis/pkg/list",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "id": "obj_no",
@@ -603,13 +603,13 @@
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/newsconns/newapis/pay_init",
+      "path": "/odbcor/newapis/pay/init",
       "request": {
         "package_id": "plan_no"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "type": "kind_no",
@@ -619,13 +619,13 @@
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/newsconns/newapis/ios_chk",
+      "path": "/odbcor/newapis/ios/chk",
       "request": {
         "transaction_id": "trade_no"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "order_no": "bill_no",
@@ -637,40 +637,40 @@
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/newsconns/newapis/ios_hook",
+      "path": "/odbcor/newapis/ios/hook",
       "request": {
         "signedPayload": "sign_blob"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/newsconns/newapis/xx_hook",
+      "path": "/odbcor/newapis/xx/hook",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/newsconns/newapis/ss_hook",
+      "path": "/odbcor/newapis/ss/hook",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/lines_list": {
-      "path": "/newsconns/newapis/area_list",
+      "path": "/odbcor/newapis/area/list",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "country": "area_lbl",
@@ -681,13 +681,13 @@
       }
     },
     "/api/v1/node": {
-      "path": "/newsconns/newapis/node_get",
+      "path": "/odbcor/newapis/node/get",
       "request": {
         "code": "line_key"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "link_url": "dest_url"
@@ -695,13 +695,13 @@
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/newsconns/newapis/node_out",
+      "path": "/odbcor/newapis/node/out",
       "request": {
         "code": "line_key"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "link_url": "dest_url",
@@ -710,14 +710,14 @@
       }
     },
     "/api/v1/node_config": {
-      "path": "/newsconns/newapis/node_cfg",
+      "path": "/odbcor/newapis/node/cfg",
       "request": {
         "code": "line_key",
         "type": "mode_cd"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "config": "opts_blob"
@@ -725,20 +725,20 @@
       }
     },
     "/api/v1/connected": {
-      "path": "/newsconns/newapis/link_on",
+      "path": "/odbcor/newapis/link/on",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/newsconns/newapis/link_ping",
+      "path": "/odbcor/newapis/link/ping",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": {
           "$field": "ret_obj",
           "connect_status": "link_stat"
@@ -746,22 +746,22 @@
       }
     },
     "/api/v1/disconnect": {
-      "path": "/newsconns/newapis/link_off",
+      "path": "/odbcor/newapis/link/off",
       "request": {},
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/newsconns/newapis/flow_send",
+      "path": "/odbcor/newapis/flow/send",
       "request": {
         "flow": "flow_amt"
       },
       "response": {
-        "code": "resp_c",
-        "msg": "resp_m",
+        "code": "rcc0",
+        "msg": "rcc1",
         "result": "ret_obj"
       }
     }
