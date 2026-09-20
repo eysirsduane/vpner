@@ -4,6 +4,52 @@
 
 文档中的请求和响应字段已包含 `field_affix` 配置的前缀 `mid_call_` 和后缀 `_call_fix`，客户端直接使用文档中的完整字段名，无需重复拼接。例如映射值 `midc`、`midm`、`rslt` 对应 `mid_call_midc_call_fix`、`mid_call_midm_call_fix`、`mid_call_rslt_call_fix`。请求头名称和接口路径不添加字段前后缀。
 
+## 幸运转盘
+
+- 请求：`POST /mid_caller/intes/lkwpl`（原始路由：`/api/v1/lucky_wheel_play`）。
+- 鉴权：`Authorization: Bearer <token>`，无需请求参数或请求体。
+- 仅限注册 24 小时内的新用户调用（包含恰好 24 小时的边界），按服务器时间和用户 `create_time` 判断；创建时间为空、晚于当前时间或已超过 24 小时均不允许参与。
+- 每个用户每天只能参与一次，按北京时间（Asia/Shanghai）自然日计算，零点重置；次日参与时仍须满足新用户条件。
+- 从 `lucky_wheel` 表中等概率随机读取一条 `delete_time IS NULL` 的记录。
+- 抽中后将 `user_id`、`title`、`desc`、`remark` 写入 `lucky_wheel_play_record` 表。次数校验、抽奖和记录写入在同一数据库事务中完成；同一用户的并发请求串行处理，写入失败时回滚并返回错误。
+- 成功时 `mid_call_rslt_call_fix` 为对象，仅包含以下三个字段：
+
+| 实际字段 | 原始字段 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `mid_call_lvl_call_fix` | `level` | number | 奖品等级 |
+| `mid_call_hdr_call_fix` | `title` | string | 奖品标题，例如 `10分钟免费会员` |
+| `mid_call_memo_call_fix` | `remark` | string | 奖品备注，例如 `高速会员专属权益` |
+
+非新用户返回业务状态码 `500`，提示“幸运转盘仅限新用户参与”。当天已参与返回业务状态码 `500`，提示“您今天已参与幸运转盘，请明天再试”；软删除的参与记录仍计入当天次数。无可用记录、数据库查询或记录写入失败时，返回业务状态码 `500`；未登录返回 `401`，HTTP 状态码均为 `200`。本接口保存中奖信息，不修改用户会员时长。
+
+启动时按 `level` 补充缺失的初始记录，并将这些等级已有记录的空 `desc` 补为 `免费会员`，保留其他已有内容：
+
+| level | title | desc | remark |
+| --- | --- | --- | --- |
+| 1 | 10分钟 | 免费会员 | 高速会员专属权益 |
+| 2 | 20分钟 | 免费会员 | 高速会员专属权益 |
+| 3 | 30分钟 | 免费会员 | 高速会员专属权益 |
+| 4 | 1天 | 免费会员 | 高速会员专属权益 |
+| 5 | 7天 | 免费会员 | 高速会员专属权益 |
+
+## 用户中奖记录
+
+- 请求：`GET /mid_caller/intes/przwn`（原始路由：`/api/v1/lucky_wheel_winners`）。
+- 鉴权：`Authorization: Bearer <token>`，无需请求参数。
+- 每次请求读取 `lucky_wheel` 表中全部未删除的数据，再等概率有放回抽取，组成 30 条展示记录，不保存生成的中奖记录。
+- `mid_call_rslt_call_fix` 为记录数组，每条记录包含：
+
+| 实际字段 | 原始字段 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `mid_call_usrid_call_fix` | `user_id` | string | 100–999 的随机数 + `...` + 0–9 的随机数，例如 `123...4` |
+| `mid_call_hdr_call_fix` | `title` | string | 抽中转盘记录的标题 |
+| `mid_call_dsc_call_fix` | `desc` | string | 抽中转盘记录的描述，例如 `免费会员` |
+| `mid_call_memo_call_fix` | `remark` | string | 抽中转盘记录的备注，例如 `高速会员专属权益` |
+
+成功响应中 `mid_call_midc_call_fix` 为 `200`，`mid_call_midm_call_fix` 为 `success`；数组固定包含 30 条记录，允许用户标识或奖品重复。每条结果的 `title`、`desc`、`remark` 来自同一条数据库记录。
+
+无可用转盘记录或数据库查询失败时返回业务状态码 `500`，HTTP 状态码为 `200`。
+
 ## 公共说明
 
 ### 基础地址

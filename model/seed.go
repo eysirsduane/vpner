@@ -2,6 +2,7 @@ package model
 
 func InitSeedData() error {
 	seeders := []func() error{
+		InitLuckyWheels,
 		seedPackages,
 		seedNodeAreas,
 		seedNodes,

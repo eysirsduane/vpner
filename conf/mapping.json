@@ -420,6 +420,35 @@
         }
       }
     },
+    "/api/v1/lucky_wheel_play": {
+      "path": "/mid_caller/intes/lkwpl",
+      "request": {},
+      "response": {
+        "code": "midc",
+        "msg": "midm",
+        "result": {
+          "$field": "rslt",
+          "level": "lvl",
+          "title": "hdr",
+          "remark": "memo"
+        }
+      }
+    },
+    "/api/v1/lucky_wheel_winners": {
+      "path": "/mid_caller/intes/przwn",
+      "request": {},
+      "response": {
+        "code": "midc",
+        "msg": "midm",
+        "result": {
+          "$field": "rslt",
+          "user_id": "usrid",
+          "title": "hdr",
+          "desc": "dsc",
+          "remark": "memo"
+        }
+      }
+    },
     "/api/v1/advert": {
       "path": "/mid_caller/intes/adv",
       "request": {},

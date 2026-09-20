@@ -12,6 +12,8 @@ import (
 const defaultErrorMessage = "系统错误，请稍后再试"
 
 var exactMessages = map[string]string{
+	"lucky wheel already played today":                       "您今天已参与幸运转盘，请明天再试",
+	"lucky wheel is only available to new users":             "幸运转盘仅限新用户参与",
 	"sspay api url is required":                              "支付配置异常，请稍后再试",
 	"sspay pid is required":                                  "支付配置异常，请稍后再试",
 	"sspay key is required":                                  "支付配置异常，请稍后再试",

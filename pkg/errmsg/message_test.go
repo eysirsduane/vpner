@@ -8,6 +8,7 @@ func TestFriendly(t *testing.T) {
 		msg  string
 		want string
 	}{
+		{name: "lucky wheel daily limit", msg: "lucky wheel already played today", want: "您今天已参与幸运转盘，请明天再试"},
 		{name: "sspay pid missing", msg: "sspay pid is required", want: "支付配置异常，请稍后再试"},
 		{name: "sspay callback missing", msg: "sspay notify_url is required", want: "支付回调配置异常，请稍后再试"},
 		{name: "sspay order missing", msg: "sspay order_no is required", want: "订单信息异常，请重新发起支付"},
@@ -31,6 +32,9 @@ func TestFriendly(t *testing.T) {
 }
 
 func TestFriendlyForLanguage(t *testing.T) {
+	if got := FriendlyForLanguage("lucky wheel already played today", "en"); got != "You have already played the lucky wheel today. Please try again tomorrow." {
+		t.Fatalf("FriendlyForLanguage() = %q", got)
+	}
 	if got := FriendlyForLanguage("package not found", "EN"); got != "The selected plan is unavailable." {
 		t.Fatalf("FriendlyForLanguage() = %q", got)
 	}

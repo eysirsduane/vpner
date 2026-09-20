@@ -52,6 +52,7 @@ func Init() error {
 
 func AutoMigrate() error {
 	err := DB.AutoMigrate(
+		&LuckyWhellPlayRecord{},
 		&AppleNotification{},
 		&Advert{},
 		&Config{},
@@ -59,6 +60,7 @@ func AutoMigrate() error {
 		&DelayedPopup{},
 		&Error{},
 		&InviteConfig{},
+		&LuckyWheel{},
 		&Node{},
 		&NodeArea{},
 		&NodeConnectHistory{},

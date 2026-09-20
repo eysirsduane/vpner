@@ -3,6 +3,8 @@ package errmsg
 import "strings"
 
 var englishMessages = map[string]string{
+	"您今天已参与幸运转盘，请明天再试":    "You have already played the lucky wheel today. Please try again tomorrow.",
+	"幸运转盘仅限新用户参与":         "The lucky wheel is only available to new users.",
 	"系统错误，请稍后再试":          "System error. Please try again later.",
 	"请求参数格式不正确":           "Invalid request format.",
 	"数据不存在":               "Data not found.",

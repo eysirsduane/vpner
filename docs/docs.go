@@ -741,6 +741,83 @@ const docTemplate = `{
                 }
             }
         },
+        "/lucky_wheel_play": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "仅限注册24小时内的新用户调用，以服务器时间和用户创建时间判断；每个用户每天仅可参与一次，按北京时间零点重置。不符合条件或当天已参与返回业务状态码500。从lucky_wheel表中等概率随机读取一条未删除的记录，保存user_id、title、desc、remark至lucky_wheel_play_record表后返回level、title、remark。校验、抽奖和记录写入在同一事务中完成，不修改用户会员时长。",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "随机获取幸运转盘奖品",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/controller.LuckyWheelPlayResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/lucky_wheel_winners": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "读取lucky_wheel表中全部未删除的数据，等概率有放回抽取并生成30条展示记录，title、desc、remark来自同一条转盘记录。user_id由100至999的随机数、三个英文句点和0至9的随机数组成。无可用记录时返回业务状态码500，不保存生成的中奖记录。",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统"
+                ],
+                "summary": "获取用户中奖记录",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/controller.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/controller.LuckyWheelWinnerResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/node": {
             "post": {
                 "security": [
@@ -1139,6 +1216,29 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/pay/ss_callback": {
+            "get": {
+                "description": "接收 SS 支付异步回调，验签、验金额并发放会员权益；处理成功返回纯字符串 success",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "支付"
+                ],
+                "summary": "SS支付回调",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1674,9 +1774,14 @@ const docTemplate = `{
                     ]
                 },
                 "link_url": {
-                    "description": "弹窗跳转链接",
-                    "type": "string",
-                    "example": "https://example.com/download"
+                    "description": "弹窗跳转链接数组",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "https://example.com/download"
+                    ]
                 },
                 "title": {
                     "description": "弹窗标题",
@@ -2163,6 +2268,44 @@ const docTemplate = `{
                 }
             }
         },
+        "controller.LuckyWheelPlayResponse": {
+            "type": "object",
+            "properties": {
+                "level": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "remark": {
+                    "type": "string",
+                    "example": "高速会员专属权益"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "10分钟免费会员"
+                }
+            }
+        },
+        "controller.LuckyWheelWinnerResponse": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "type": "string",
+                    "example": "免费会员"
+                },
+                "remark": {
+                    "type": "string",
+                    "example": "高速会员专属权益"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "10分钟"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "123...4"
+                }
+            }
+        },
         "controller.NodeConfigRequest": {
             "type": "object",
             "required": [
@@ -2411,9 +2554,14 @@ const docTemplate = `{
                     ]
                 },
                 "jump_target": {
-                    "description": "跳转目标，内部跳转填业务code，外部跳转填URL",
-                    "type": "string",
-                    "example": "purchase"
+                    "description": "跳转目标数组，内部跳转填业务code，外部跳转填URL",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "purchase"
+                    ]
                 },
                 "jump_type": {
                     "description": "跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)",

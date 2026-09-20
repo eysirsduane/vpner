@@ -3,6 +3,7 @@ module just-vpn
 go 1.25.0
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-ini/ini v1.62.0
 	github.com/go-pay/gopay v1.5.122
