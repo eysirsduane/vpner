@@ -210,6 +210,7 @@ func TestLuckyWheelGetStatus(t *testing.T) {
 					"mid_call_midm_call_fix": "success",
 					"mid_call_rslt_call_fix": map[string]interface{}{
 						"mid_call_tdpl_call_fix": tc.played == 1,
+						"mid_call_cply_call_fix": tc.played == 0,
 						"mid_call_nwen_call_fix": tc.wantNews,
 						"mid_call_gnen_call_fix": tc.wantGeneral,
 						"mid_call_nwcl_call_fix": closeNews,

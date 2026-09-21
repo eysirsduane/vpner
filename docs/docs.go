@@ -773,7 +773,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "返回北京时间当天的Redis参与标记today_played，以及news_enabled、general_enabled、news_close_enabled、general_close_enabled四个开关配置。配置字符串原样返回，缺失、为空或读取失败时返回空字符串；查询沿用配置缓存，不修改参与标记或TTL。Redis读取失败返回业务状态码500。",
+                "description": "返回北京时间当天的Redis参与标记today_played、其反值can_play，以及news_enabled、general_enabled、news_close_enabled、general_close_enabled四个开关配置。can_play仅表示当天次数是否可用，实际参与仍需满足开关和用户类型条件。配置字符串原样返回，缺失、为空或读取失败时返回空字符串；查询沿用配置缓存，不修改参与标记或TTL。Redis读取失败返回业务状态码500。",
                 "produces": [
                     "application/json"
                 ],
@@ -2354,6 +2354,11 @@ const docTemplate = `{
         "controller.LuckyWheelStatusResponse": {
             "type": "object",
             "properties": {
+                "can_play": {
+                    "description": "是否可参与幸运转盘",
+                    "type": "boolean",
+                    "example": true
+                },
                 "general_close_enabled": {
                     "description": "通用幸运转盘界面关闭开关配置原值",
                     "type": "string",

@@ -26,6 +26,7 @@ type LuckyWheelPlayResponse struct {
 
 type LuckyWheelStatusResponse struct {
 	TodayPlayed         bool   `json:"today_played" example:"false"`       // 北京时间当天是否已有参与标记
+	CanPlay             bool   `json:"can_play" example:"true"`            // 是否可参与幸运转盘
 	NewsEnabled         string `json:"news_enabled" example:"off"`         // 新用户幸运转盘开关配置原值
 	GeneralEnabled      string `json:"general_enabled" example:"off"`      // 通用幸运转盘开关配置原值
 	NewsCloseEnabled    string `json:"news_close_enabled" example:"on"`    // 新用户幸运转盘界面关闭开关配置原值
@@ -34,7 +35,7 @@ type LuckyWheelStatusResponse struct {
 
 // LuckyWheelGetStatusHandler 获取当前用户的幸运转盘状态。
 // @Summary 获取幸运转盘状态
-// @Description 返回北京时间当天的Redis参与标记today_played，以及news_enabled、general_enabled、news_close_enabled、general_close_enabled四个开关配置。配置字符串原样返回，缺失、为空或读取失败时返回空字符串；查询沿用配置缓存，不修改参与标记或TTL。Redis读取失败返回业务状态码500。
+// @Description 返回北京时间当天的Redis参与标记today_played、其反值can_play，以及news_enabled、general_enabled、news_close_enabled、general_close_enabled四个开关配置。can_play仅表示当天次数是否可用，实际参与仍需满足开关和用户类型条件。配置字符串原样返回，缺失、为空或读取失败时返回空字符串；查询沿用配置缓存，不修改参与标记或TTL。Redis读取失败返回业务状态码500。
 // @Tags 活动
 // @Produce json
 // @Security BearerAuth
@@ -53,6 +54,7 @@ func LuckyWheelGetStatusHandler(c *gin.Context) {
 	}
 	JsonReturn(c, CodeSuccess, "success", LuckyWheelStatusResponse{
 		TodayPlayed:         played,
+		CanPlay:             !played,
 		NewsEnabled:         model.ConfigValue(model.ConfigLuckyWheelNewUserEnabled, ""),
 		GeneralEnabled:      model.ConfigValue(model.ConfigLuckyWheelGeneralEnabled, ""),
 		NewsCloseEnabled:    model.ConfigValue(model.ConfigLuckyWheelNewUserCloseEnabled, ""),

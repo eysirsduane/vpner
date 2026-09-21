@@ -444,6 +444,7 @@
         "result": {
           "$field": "rslt",
           "today_played": "tdpl",
+          "can_play": "cply",
           "news_enabled": "nwen",
           "general_enabled": "gnen",
           "news_close_enabled": "nwcl",
