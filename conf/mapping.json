@@ -1,824 +1,824 @@
 {
-  "product_code": "mid_caller",
-  "swagger_path": "/mid_caller/v1/documents",
+  "product_code": "uppiaing",
+  "swagger_path": "/uppiaing/v1/documents",
   "headers": {
-    "platform": "MiddleCaller-Platform-Name",
-    "version": "MiddleCaller-Code-Version",
-    "build": "MiddleCaller-Structural-Version",
-    "device_no": "MiddleCaller-Dev-Code",
-    "client_time": "MiddleCaller-Timestamp",
-    "time_zone": "MiddleCaller-TimeZone-Off",
-    "app_store_region": "MiddleCaller-Region",
-    "language": "MiddleCaller-Language-Code"
+    "platform": "Uppiaing-PF-Name",
+    "version": "Uppiaing-C-Ver",
+    "build": "Uppiaing-S-Ver",
+    "device_no": "Uppiaing-D-C",
+    "client_time": "Uppiaing-Time",
+    "time_zone": "Uppiaing-TZ-Off",
+    "app_store_region": "Uppiaing-Reg",
+    "language": "Uppiaing-Lang-Code"
   },
   "field_affix": {
-    "prefix": "mid_call_",
-    "suffix": "_call_fix"
+    "prefix": "upp_",
+    "suffix": "_upld"
   },
   "routes": {
     "/api/v1/health": {
-      "path": "/mid_caller/intes/hlth",
+      "path": "/uppiaing/maycallers_v/srv_chk",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/auto_login": {
-      "path": "/mid_caller/intes/algn",
+      "path": "/uppiaing/maycallers_v/gst_ent",
       "request": {
-        "device_no": "hwid",
-        "platform": "sys",
-        "version": "rev",
-        "mobile_name": "hwlbl",
-        "mobile_version": "osrev",
-        "mobile_model_name": "hwmdl",
-        "source_channel": "acqchn"
+        "device_no": "dev_no",
+        "platform": "plat_cd",
+        "version": "app_ver",
+        "mobile_name": "dev_nm",
+        "mobile_version": "os_ver",
+        "mobile_model_name": "dev_mdl",
+        "source_channel": "src_ch"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "token": "cred",
-          "device_no": "hwid",
-          "username": "acctnm",
-          "type": "cls",
-          "is_vip": "prmon",
-          "vip_time": "prmexp",
-          "is_new_user": "nwmbr",
-          "platform": "sys",
-          "version": "rev",
-          "login_times": "authqty",
-          "create_time": "initts",
-          "last_login_time": "prvauth",
-          "password": "psec"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "token": "auth_key",
+          "device_no": "dev_no",
+          "username": "login_nm",
+          "type": "kind_tp",
+          "is_vip": "vip_ok",
+          "vip_time": "vip_end",
+          "is_new_user": "fresh_usr",
+          "platform": "plat_cd",
+          "version": "app_ver",
+          "login_times": "sign_cnt",
+          "create_time": "crt_at",
+          "last_login_time": "last_in",
+          "password": "sec_key"
         }
       }
     },
     "/api/v1/register": {
-      "path": "/mid_caller/intes/reg",
+      "path": "/uppiaing/maycallers_v/acc_reg",
       "request": {
-        "device_no": "hwid",
-        "username": "acctnm",
-        "password": "psec"
+        "device_no": "dev_no",
+        "username": "login_nm",
+        "password": "sec_key"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "token": "cred",
-          "device_no": "hwid",
-          "username": "acctnm",
-          "type": "cls",
-          "is_vip": "prmon",
-          "vip_time": "prmexp",
-          "is_new_user": "nwmbr",
-          "platform": "sys",
-          "version": "rev",
-          "login_times": "authqty",
-          "create_time": "initts",
-          "last_login_time": "prvauth",
-          "password": "psec"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "token": "auth_key",
+          "device_no": "dev_no",
+          "username": "login_nm",
+          "type": "kind_tp",
+          "is_vip": "vip_ok",
+          "vip_time": "vip_end",
+          "is_new_user": "fresh_usr",
+          "platform": "plat_cd",
+          "version": "app_ver",
+          "login_times": "sign_cnt",
+          "create_time": "crt_at",
+          "last_login_time": "last_in",
+          "password": "sec_key"
         }
       }
     },
     "/api/v1/public_apple_id": {
-      "path": "/mid_caller/intes/pubaplid",
+      "path": "/uppiaing/maycallers_v/ios_pub",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "appid": "aplacct",
-          "pwd": "psec"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "appid": "ios_acc",
+          "pwd": "sec_key"
         }
       }
     },
     "/api/v1/upload/*filepath": {
-      "path": "/mid_caller/intes/upld/*filepath",
+      "path": "/uppiaing/maycallers_v/fil_get/*filepath",
       "request": {},
       "response": {}
     },
     "/api/v1/login": {
-      "path": "/mid_caller/intes/lgn",
+      "path": "/uppiaing/maycallers_v/acc_ent",
       "request": {
-        "device_no": "hwid",
-        "username": "acctnm",
-        "password": "psec",
-        "platform": "sys",
-        "version": "rev",
-        "mobile_name": "hwlbl",
-        "mobile_version": "osrev",
-        "mobile_model_name": "hwmdl",
-        "source_channel": "acqchn"
+        "device_no": "dev_no",
+        "username": "login_nm",
+        "password": "sec_key",
+        "platform": "plat_cd",
+        "version": "app_ver",
+        "mobile_name": "dev_nm",
+        "mobile_version": "os_ver",
+        "mobile_model_name": "dev_mdl",
+        "source_channel": "src_ch"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "token": "cred",
-          "device_no": "hwid",
-          "username": "acctnm",
-          "type": "cls",
-          "is_vip": "prmon",
-          "vip_time": "prmexp",
-          "is_new_user": "nwmbr",
-          "platform": "sys",
-          "version": "rev",
-          "login_times": "authqty",
-          "create_time": "initts",
-          "last_login_time": "prvauth",
-          "password": "psec"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "token": "auth_key",
+          "device_no": "dev_no",
+          "username": "login_nm",
+          "type": "kind_tp",
+          "is_vip": "vip_ok",
+          "vip_time": "vip_end",
+          "is_new_user": "fresh_usr",
+          "platform": "plat_cd",
+          "version": "app_ver",
+          "login_times": "sign_cnt",
+          "create_time": "crt_at",
+          "last_login_time": "last_in",
+          "password": "sec_key"
         }
       }
     },
     "/api/v1/logout": {
-      "path": "/mid_caller/intes/lgo",
+      "path": "/uppiaing/maycallers_v/acc_out",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "token": "cred",
-          "device_no": "hwid",
-          "username": "acctnm",
-          "type": "cls",
-          "is_vip": "prmon",
-          "vip_time": "prmexp",
-          "is_new_user": "nwmbr",
-          "platform": "sys",
-          "version": "rev",
-          "login_times": "authqty",
-          "create_time": "initts",
-          "last_login_time": "prvauth",
-          "password": "psec"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "token": "auth_key",
+          "device_no": "dev_no",
+          "username": "login_nm",
+          "type": "kind_tp",
+          "is_vip": "vip_ok",
+          "vip_time": "vip_end",
+          "is_new_user": "fresh_usr",
+          "platform": "plat_cd",
+          "version": "app_ver",
+          "login_times": "sign_cnt",
+          "create_time": "crt_at",
+          "last_login_time": "last_in",
+          "password": "sec_key"
         }
       }
     },
     "/api/v1/logoff": {
-      "path": "/mid_caller/intes/lgf",
+      "path": "/uppiaing/maycallers_v/acc_del",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "token": "cred"
+          "$field": "out_dat",
+          "token": "auth_key"
         }
       }
     },
     "/api/v1/change_password": {
-      "path": "/mid_caller/intes/chgpwd",
+      "path": "/uppiaing/maycallers_v/pwd_upd",
       "request": {
-        "new_password": "nwpsec"
+        "new_password": "new_sec"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/device_info": {
-      "path": "/mid_caller/intes/devinf",
+      "path": "/uppiaing/maycallers_v/dev_inf",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
+          "$field": "out_dat",
           "local_device": {
-            "$field": "curhw",
-            "id": "entid",
-            "device_no": "hwid",
-            "mobile_name": "hwlbl",
-            "mobile_version": "osrev",
-            "mobile_model_name": "hwmdl",
-            "platform": "sys",
-            "version": "rev",
-            "last_login_time": "prvauth"
+            "$field": "now_dev",
+            "id": "obj_no",
+            "device_no": "dev_no",
+            "mobile_name": "dev_nm",
+            "mobile_version": "os_ver",
+            "mobile_model_name": "dev_mdl",
+            "platform": "plat_cd",
+            "version": "app_ver",
+            "last_login_time": "last_in"
           },
           "two_device": {
-            "$field": "althw",
-            "id": "entid",
-            "device_no": "hwid",
-            "mobile_name": "hwlbl",
-            "mobile_version": "osrev",
-            "mobile_model_name": "hwmdl",
-            "platform": "sys",
-            "version": "rev",
-            "last_login_time": "prvauth"
+            "$field": "oth_dev",
+            "id": "obj_no",
+            "device_no": "dev_no",
+            "mobile_name": "dev_nm",
+            "mobile_version": "os_ver",
+            "mobile_model_name": "dev_mdl",
+            "platform": "plat_cd",
+            "version": "app_ver",
+            "last_login_time": "last_in"
           },
           "devices": {
-            "$field": "hwls",
-            "id": "entid",
-            "device_no": "hwid",
-            "mobile_name": "hwlbl",
-            "mobile_version": "osrev",
-            "mobile_model_name": "hwmdl",
-            "platform": "sys",
-            "version": "rev",
-            "last_login_time": "prvauth"
+            "$field": "dev_ls",
+            "id": "obj_no",
+            "device_no": "dev_no",
+            "mobile_name": "dev_nm",
+            "mobile_version": "os_ver",
+            "mobile_model_name": "dev_mdl",
+            "platform": "plat_cd",
+            "version": "app_ver",
+            "last_login_time": "last_in"
           }
         }
       }
     },
     "/api/v1/device_logout": {
-      "path": "/mid_caller/intes/devlgo",
+      "path": "/uppiaing/maycallers_v/dev_out",
       "request": {
-        "id": "entid"
+        "id": "obj_no"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
+          "$field": "out_dat",
           "local_device": {
-            "$field": "curhw",
-            "id": "entid",
-            "device_no": "hwid",
-            "mobile_name": "hwlbl",
-            "mobile_version": "osrev",
-            "mobile_model_name": "hwmdl",
-            "platform": "sys",
-            "version": "rev",
-            "last_login_time": "prvauth"
+            "$field": "now_dev",
+            "id": "obj_no",
+            "device_no": "dev_no",
+            "mobile_name": "dev_nm",
+            "mobile_version": "os_ver",
+            "mobile_model_name": "dev_mdl",
+            "platform": "plat_cd",
+            "version": "app_ver",
+            "last_login_time": "last_in"
           },
           "two_device": {
-            "$field": "althw",
-            "id": "entid",
-            "device_no": "hwid",
-            "mobile_name": "hwlbl",
-            "mobile_version": "osrev",
-            "mobile_model_name": "hwmdl",
-            "platform": "sys",
-            "version": "rev",
-            "last_login_time": "prvauth"
+            "$field": "oth_dev",
+            "id": "obj_no",
+            "device_no": "dev_no",
+            "mobile_name": "dev_nm",
+            "mobile_version": "os_ver",
+            "mobile_model_name": "dev_mdl",
+            "platform": "plat_cd",
+            "version": "app_ver",
+            "last_login_time": "last_in"
           },
           "devices": {
-            "$field": "hwls",
-            "id": "entid",
-            "device_no": "hwid",
-            "mobile_name": "hwlbl",
-            "mobile_version": "osrev",
-            "mobile_model_name": "hwmdl",
-            "platform": "sys",
-            "version": "rev",
-            "last_login_time": "prvauth"
+            "$field": "dev_ls",
+            "id": "obj_no",
+            "device_no": "dev_no",
+            "mobile_name": "dev_nm",
+            "mobile_version": "os_ver",
+            "mobile_model_name": "dev_mdl",
+            "platform": "plat_cd",
+            "version": "app_ver",
+            "last_login_time": "last_in"
           }
         }
       }
     },
     "/api/v1/draw_invite_code": {
-      "path": "/mid_caller/intes/drwinvcd",
+      "path": "/uppiaing/maycallers_v/ref_gen",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "invite_code": "rfrcd"
+          "$field": "out_dat",
+          "invite_code": "ref_key"
         }
       }
     },
     "/api/v1/invite_code": {
-      "path": "/mid_caller/intes/invcd",
+      "path": "/uppiaing/maycallers_v/ref_use",
       "request": {
-        "invite_code": "rfrcd"
+        "invite_code": "ref_key"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/invite_detail": {
-      "path": "/mid_caller/intes/invdtl",
+      "path": "/uppiaing/maycallers_v/ref_inf",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "invite_code": "rfrcd",
-          "invite_valid": "rfrok",
-          "share_count": "shrqty",
-          "reward_time": "awdtm",
-          "per_invite_seconds": "rfrawdsec",
-          "per_invite_text": "rfrawdtxt",
+          "$field": "out_dat",
+          "invite_code": "ref_key",
+          "invite_valid": "ref_ok",
+          "share_count": "send_cnt",
+          "reward_time": "grant_at",
+          "per_invite_seconds": "ref_sec",
+          "per_invite_text": "ref_txt",
           "milestones": {
-            "$field": "mlst",
-            "count": "qty",
-            "reward_seconds": "awdsec",
-            "reward_text": "awdtxt"
+            "$field": "goal_ls",
+            "count": "cnt",
+            "reward_seconds": "bonus_sec",
+            "reward_text": "bonus_tx"
           }
         }
       }
     },
     "/api/v1/user_info": {
-      "path": "/mid_caller/intes/usrinf",
+      "path": "/uppiaing/maycallers_v/usr_inf",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "token": "cred",
-          "device_no": "hwid",
-          "username": "acctnm",
-          "type": "cls",
-          "is_vip": "prmon",
-          "vip_time": "prmexp",
-          "is_new_user": "nwmbr",
-          "platform": "sys",
-          "version": "rev",
-          "login_times": "authqty",
-          "create_time": "initts",
-          "last_login_time": "prvauth",
-          "password": "psec"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "token": "auth_key",
+          "device_no": "dev_no",
+          "username": "login_nm",
+          "type": "kind_tp",
+          "is_vip": "vip_ok",
+          "vip_time": "vip_end",
+          "is_new_user": "fresh_usr",
+          "platform": "plat_cd",
+          "version": "app_ver",
+          "login_times": "sign_cnt",
+          "create_time": "crt_at",
+          "last_login_time": "last_in",
+          "password": "sec_key"
         }
       }
     },
     "/api/v1/init": {
-      "path": "/mid_caller/intes/ini",
+      "path": "/uppiaing/maycallers_v/app_ini",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
+          "$field": "out_dat",
           "agreements": {
-            "$field": "pcts",
-            "user_agreement": "mbrpct",
-            "privacy_agreement": "prvpct"
+            "$field": "agr_set",
+            "user_agreement": "terms_url",
+            "privacy_agreement": "priv_url"
           },
           "share": {
-            "$field": "shr",
-            "qrcode": "qrc",
-            "links": "hrefs"
+            "$field": "pub_set",
+            "qrcode": "qr_img",
+            "links": "lnk_ls"
           },
           "invite": {
-            "$field": "rfr",
-            "valid_hours": "ttlhrs",
-            "per_invite_seconds": "rfrawdsec",
-            "per_invite_text": "rfrawdtxt",
-            "max_reward_days": "maxawdprd",
+            "$field": "ref_box",
+            "valid_hours": "live_hr",
+            "per_invite_seconds": "ref_sec",
+            "per_invite_text": "ref_txt",
+            "max_reward_days": "cap_day",
             "milestones": {
-              "$field": "mlst",
-              "count": "qty",
-              "reward_seconds": "awdsec",
-              "reward_text": "awdtxt"
+              "$field": "goal_ls",
+              "count": "cnt",
+              "reward_seconds": "bonus_sec",
+              "reward_text": "bonus_tx"
             }
           },
           "app": {
-            "$field": "appl",
-            "website": "siteuri",
-            "new_user_free_seconds": "nwtrialsec"
+            "$field": "cli_app",
+            "website": "home_url",
+            "new_user_free_seconds": "trial_sec"
           },
           "tools": {
-            "$field": "utls",
-            "customer_service_enabled": "hlpon",
-            "customer_service_url": "hlpuri",
-            "clean_memory_enabled": "ramclron",
-            "message_enabled": "ntcon"
+            "$field": "util_set",
+            "customer_service_enabled": "svc_on",
+            "customer_service_url": "svc_url",
+            "clean_memory_enabled": "mem_on",
+            "message_enabled": "msg_on"
           },
           "proxy": {
-            "$field": "rly",
-            "skip_domains": "bypdom"
+            "$field": "prx_set",
+            "skip_domains": "pass_dom"
           }
         }
       }
     },
     "/api/v1/version": {
-      "path": "/mid_caller/intes/ver",
+      "path": "/uppiaing/maycallers_v/ver_chk",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "has_update": "updavl",
-          "name": "lbl",
-          "platform": "sys",
-          "version": "rev",
-          "build": "cmprev",
-          "force": "rqrd",
-          "url": "uri",
-          "size": "sz",
-          "content": "dtltxt"
+          "$field": "out_dat",
+          "has_update": "new_avl",
+          "name": "disp_nm",
+          "platform": "plat_cd",
+          "version": "app_ver",
+          "build": "bld_no",
+          "force": "must_do",
+          "url": "web_url",
+          "size": "byte_sz",
+          "content": "body_tx"
         }
       }
     },
     "/api/v1/lucky_wheel_play": {
-      "path": "/mid_caller/intes/lkwpl",
+      "path": "/uppiaing/maycallers_v/whl_run",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "level": "lvl",
-          "title": "hdr",
-          "desc": "dsc",
-          "remark": "memo"
+          "$field": "out_dat",
+          "level": "tier_no",
+          "title": "head_tx",
+          "desc": "intro_tx",
+          "remark": "note_tx"
         }
       }
     },
     "/api/v1/lucky_wheel_get_status": {
-      "path": "/mid_caller/intes/lkwst",
+      "path": "/uppiaing/maycallers_v/whl_sts",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "today_played": "tdpl",
-          "news_enabled": "nwen",
-          "general_enabled": "gnen",
-          "news_close_enabled": "nwcl",
-          "general_close_enabled": "gncl"
+          "$field": "out_dat",
+          "today_played": "day_done",
+          "news_enabled": "new_on",
+          "general_enabled": "all_on",
+          "news_close_enabled": "new_cls",
+          "general_close_enabled": "all_cls"
         }
       }
     },
     "/api/v1/lucky_wheel_get_reward": {
-      "path": "/mid_caller/intes/lkwwin",
+      "path": "/uppiaing/maycallers_v/whl_clm",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/lucky_wheel_winners": {
-      "path": "/mid_caller/intes/przwn",
+      "path": "/uppiaing/maycallers_v/whl_win",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "user_id": "usrid",
-          "title": "hdr",
-          "desc": "dsc",
-          "remark": "memo"
+          "$field": "out_dat",
+          "user_id": "usr_no",
+          "title": "head_tx",
+          "desc": "intro_tx",
+          "remark": "note_tx"
         }
       }
     },
     "/api/v1/advert": {
-      "path": "/mid_caller/intes/adv",
+      "path": "/uppiaing/maycallers_v/ads_lst",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "position": "plc",
-          "title": "hdr",
-          "content": "dtltxt",
-          "image_url": "picuri",
-          "link_url": "href",
-          "show_times": "impqty",
-          "max_show_times": "maximp",
-          "sorter": "rnk"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "position": "slot_no",
+          "title": "head_tx",
+          "content": "body_tx",
+          "image_url": "pic_url",
+          "link_url": "lnk_url",
+          "show_times": "view_cnt",
+          "max_show_times": "cap_show",
+          "sorter": "ord_idx"
         }
       }
     },
     "/api/v1/notice": {
-      "path": "/mid_caller/intes/ntc",
+      "path": "/uppiaing/maycallers_v/ntc_lst",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
+          "$field": "out_dat",
           "system": {
-            "$field": "sysntc",
+            "$field": "pub_ntc",
             "list": {
-              "$field": "ents",
-              "id": "entid",
-              "title": "hdr",
-              "content": "dtltxt",
-              "is_read": "rdflg",
-              "create_time": "initts"
+              "$field": "itm_ls",
+              "id": "obj_no",
+              "title": "head_tx",
+              "content": "body_tx",
+              "is_read": "seen_ok",
+              "create_time": "crt_at"
             },
-            "total": "sumqty",
-            "unread_count": "unrdqty"
+            "total": "all_cnt",
+            "unread_count": "new_cnt"
           },
           "user": {
-            "$field": "mbr",
+            "$field": "usr_box",
             "list": {
-              "$field": "ents",
-              "id": "entid",
-              "title": "hdr",
-              "content": "dtltxt",
-              "is_read": "rdflg",
-              "create_time": "initts"
+              "$field": "itm_ls",
+              "id": "obj_no",
+              "title": "head_tx",
+              "content": "body_tx",
+              "is_read": "seen_ok",
+              "create_time": "crt_at"
             },
-            "total": "sumqty",
-            "unread_count": "unrdqty"
+            "total": "all_cnt",
+            "unread_count": "new_cnt"
           }
         }
       }
     },
     "/api/v1/notice/unread": {
-      "path": "/mid_caller/intes/ntcunrd",
+      "path": "/uppiaing/maycallers_v/ntc_new",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
+          "$field": "out_dat",
           "system": {
-            "$field": "sysntc",
+            "$field": "pub_ntc",
             "list": {
-              "$field": "ents",
-              "id": "entid",
-              "title": "hdr",
-              "content": "dtltxt",
-              "is_read": "rdflg",
-              "create_time": "initts"
+              "$field": "itm_ls",
+              "id": "obj_no",
+              "title": "head_tx",
+              "content": "body_tx",
+              "is_read": "seen_ok",
+              "create_time": "crt_at"
             },
-            "total": "sumqty",
-            "unread_count": "unrdqty"
+            "total": "all_cnt",
+            "unread_count": "new_cnt"
           },
           "user": {
-            "$field": "mbr",
+            "$field": "usr_box",
             "list": {
-              "$field": "ents",
-              "id": "entid",
-              "title": "hdr",
-              "content": "dtltxt",
-              "is_read": "rdflg",
-              "create_time": "initts"
+              "$field": "itm_ls",
+              "id": "obj_no",
+              "title": "head_tx",
+              "content": "body_tx",
+              "is_read": "seen_ok",
+              "create_time": "crt_at"
             },
-            "total": "sumqty",
-            "unread_count": "unrdqty"
+            "total": "all_cnt",
+            "unread_count": "new_cnt"
           }
         }
       }
     },
     "/api/v1/popup": {
-      "path": "/mid_caller/intes/pup",
+      "path": "/uppiaing/maycallers_v/pop_get",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "title": "hdr",
-          "content": "dtltxt",
-          "image_url": "picuri",
-          "jump_type": "rdrcls",
-          "jump_target": "rdrdst",
-          "can_close": "dsmok",
-          "show_times": "impqty",
-          "max_show_times": "maximp"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "title": "head_tx",
+          "content": "body_tx",
+          "image_url": "pic_url",
+          "jump_type": "nav_tp",
+          "jump_target": "nav_dst",
+          "can_close": "cls_ok",
+          "show_times": "view_cnt",
+          "max_show_times": "cap_show"
         }
       }
     },
     "/api/v1/delayed_popup": {
-      "path": "/mid_caller/intes/dlypup",
+      "path": "/uppiaing/maycallers_v/pop_dly",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "title": "hdr",
-          "content": "dtltxt",
-          "image_url": "picuri",
-          "link_url": "href",
-          "can_close": "dsmok",
-          "delay_days": "dlyd",
-          "transfer_code": "migcd"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "title": "head_tx",
+          "content": "body_tx",
+          "image_url": "pic_url",
+          "link_url": "lnk_url",
+          "can_close": "cls_ok",
+          "delay_days": "wait_day",
+          "transfer_code": "move_key"
         }
       }
     },
     "/api/v1/read_notice": {
-      "path": "/mid_caller/intes/rdntc",
+      "path": "/uppiaing/maycallers_v/ntc_ack",
       "request": {
-        "system_ids": "sysrefs",
-        "user_ids": "mbrrefs"
+        "system_ids": "pub_ids",
+        "user_ids": "usr_ids"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/error": {
-      "path": "/mid_caller/intes/err",
+      "path": "/uppiaing/maycallers_v/err_log",
       "request": {
-        "msg": "dtl",
-        "mobile_version": "osrev",
-        "mobile_model_name": "hwmdl",
-        "msg_type": "errcls"
+        "msg": "err_tx",
+        "mobile_version": "os_ver",
+        "mobile_model_name": "dev_mdl",
+        "msg_type": "err_tp"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/packages": {
-      "path": "/mid_caller/intes/pkgs",
+      "path": "/uppiaing/maycallers_v/pkg_lst",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "id": "entid",
-          "apple_id": "aplsku",
-          "name": "lbl",
-          "sub_name": "sublbl",
-          "selected": "chsn",
-          "corner": "bdg",
-          "price": "amt",
-          "price_text": "amtlbl",
-          "origin_price": "baseamt",
-          "value": "val",
-          "remark": "memo",
-          "day": "prd"
+          "$field": "out_dat",
+          "id": "obj_no",
+          "apple_id": "ios_sku",
+          "name": "disp_nm",
+          "sub_name": "alt_nm",
+          "selected": "pick_ok",
+          "corner": "tag_tx",
+          "price": "fee",
+          "price_text": "fee_txt",
+          "origin_price": "list_amt",
+          "value": "raw_v",
+          "remark": "note_tx",
+          "day": "dur_day"
         }
       }
     },
     "/api/v1/pay/launch": {
-      "path": "/mid_caller/intes/paylnch",
+      "path": "/uppiaing/maycallers_v/pay_ini",
       "request": {
-        "package_id": "planid"
+        "package_id": "plan_no"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "type": "cls",
-          "target": "dst",
-          "app_account_token": "apacctcred"
+          "$field": "out_dat",
+          "type": "kind_tp",
+          "target": "aim_no",
+          "app_account_token": "acc_tkn"
         }
       }
     },
     "/api/v1/pay/apple_verify": {
-      "path": "/mid_caller/intes/payaplvfy",
+      "path": "/uppiaing/maycallers_v/ios_vfy",
       "request": {
-        "transaction_id": "purchref"
+        "transaction_id": "deal_no"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "order_no": "billref",
-          "pay_status": "billst",
-          "pay_type": "billcls",
-          "transaction_id": "purchref",
-          "vip_time": "prmexp"
+          "$field": "out_dat",
+          "order_no": "ord_no",
+          "pay_status": "pay_st",
+          "pay_type": "pay_tp",
+          "transaction_id": "deal_no",
+          "vip_time": "vip_end"
         }
       }
     },
     "/api/v1/pay/apple_callback": {
-      "path": "/mid_caller/intes/payaplcb",
+      "path": "/uppiaing/maycallers_v/ios_cbk",
       "request": {
-        "signedPayload": "sgnpld"
+        "signedPayload": "sig_dat"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/pay/xx_callback": {
-      "path": "/mid_caller/intes/payxxcb",
+      "path": "/uppiaing/maycallers_v/xxy_cbk",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/pay/ss_callback": {
-      "path": "/mid_caller/intes/paysscb",
+      "path": "/uppiaing/maycallers_v/ssy_cbk",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/lines_list": {
-      "path": "/mid_caller/intes/lnlst",
+      "path": "/uppiaing/maycallers_v/loc_lst",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "country": "ntn",
-          "code": "loccd",
-          "img_url":"imgu",
-          "min_conn_time": "lolnktm",
-          "max_conn_time": "hilnktm"
+          "$field": "out_dat",
+          "country": "ctry",
+          "code": "reg_cd",
+          "img_url":"img_url",
+          "min_conn_time": "min_sec",
+          "max_conn_time": "max_sec"
         }
       }
     },
     "/api/v1/node": {
-      "path": "/mid_caller/intes/nd",
+      "path": "/uppiaing/maycallers_v/nod_get",
       "request": {
-        "code": "loccd"
+        "code": "reg_cd"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "link_url": "href"
+          "$field": "out_dat",
+          "link_url": "lnk_url"
         }
       }
     },
     "/api/v1/node_outbounds": {
-      "path": "/mid_caller/intes/ndout",
+      "path": "/uppiaing/maycallers_v/nod_egr",
       "request": {
-        "code": "loccd"
+        "code": "reg_cd"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "link_url": "href",
-          "outbounds": "egrls"
+          "$field": "out_dat",
+          "link_url": "lnk_url",
+          "outbounds": "eg_ls"
         }
       }
     },
     "/api/v1/node_config": {
-      "path": "/mid_caller/intes/ndcfg",
+      "path": "/uppiaing/maycallers_v/nod_cfg",
       "request": {
-        "code": "loccd",
-        "type": "cls"
+        "code": "reg_cd",
+        "type": "kind_tp"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "config": "cfg"
+          "$field": "out_dat",
+          "config": "opt_txt"
         }
       }
     },
     "/api/v1/connected": {
-      "path": "/mid_caller/intes/cnctd",
+      "path": "/uppiaing/maycallers_v/ses_onl",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/heartbeat": {
-      "path": "/mid_caller/intes/hrtbt",
+      "path": "/uppiaing/maycallers_v/ses_hbt",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
+        "code": "reccd1",
+        "msg": "remms1",
         "result": {
-          "$field": "rslt",
-          "connect_status": "lnkst"
+          "$field": "out_dat",
+          "connect_status": "ses_st"
         }
       }
     },
     "/api/v1/disconnect": {
-      "path": "/mid_caller/intes/dcnct",
+      "path": "/uppiaing/maycallers_v/ses_off",
       "request": {},
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     },
     "/api/v1/vpn_flow": {
-      "path": "/mid_caller/intes/vpnflw",
+      "path": "/uppiaing/maycallers_v/net_flo",
       "request": {
-        "flow": "bwqty"
+        "flow": "traf_sz"
       },
       "response": {
-        "code": "midc",
-        "msg": "midm",
-        "result": "rslt"
+        "code": "reccd1",
+        "msg": "remms1",
+        "result": "out_dat"
       }
     }
   }

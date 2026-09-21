@@ -107,7 +107,7 @@ func TestLuckyWheelPlayEligibility(t *testing.T) {
 			if tc.allowed {
 				wantMessage, wantReservations = "您今天已参与幸运转盘，请明天再试", 1
 			}
-			if recorder.Code != 200 || response["mid_call_midc_call_fix"] != float64(500) || response["mid_call_midm_call_fix"] != wantMessage {
+			if recorder.Code != 200 || response["upp_reccd1_upld"] != float64(500) || response["upp_remms1_upld"] != wantMessage {
 				t.Fatalf("unexpected response: %s", recorder.Body.String())
 			}
 			if reservations != wantReservations {
@@ -201,19 +201,19 @@ func TestLuckyWheelGetStatus(t *testing.T) {
 				t.Fatalf("HTTP status = %d", recorder.Code)
 			}
 			if tc.redisErr != nil {
-				if response["mid_call_midc_call_fix"] != float64(500) {
+				if response["upp_reccd1_upld"] != float64(500) {
 					t.Fatalf("response = %v", response)
 				}
 			} else {
 				want := map[string]interface{}{
-					"mid_call_midc_call_fix": float64(200),
-					"mid_call_midm_call_fix": "success",
-					"mid_call_rslt_call_fix": map[string]interface{}{
-						"mid_call_tdpl_call_fix": tc.played == 1,
-						"mid_call_nwen_call_fix": tc.wantNews,
-						"mid_call_gnen_call_fix": tc.wantGeneral,
-						"mid_call_nwcl_call_fix": closeNews,
-						"mid_call_gncl_call_fix": closeGeneral,
+					"upp_reccd1_upld": float64(200),
+					"upp_remms1_upld": "success",
+					"upp_out_dat_upld": map[string]interface{}{
+						"upp_day_done_upld": tc.played == 1,
+						"upp_new_on_upld":   tc.wantNews,
+						"upp_all_on_upld":   tc.wantGeneral,
+						"upp_new_cls_upld":  closeNews,
+						"upp_all_cls_upld":  closeGeneral,
 					},
 				}
 				if !reflect.DeepEqual(response, want) {
