@@ -62,7 +62,7 @@ func InitRouter() *gin.Engine {
 		system.POST(mapping.Endpoint("/api/v1/read_notice"), controller.ReadNoticeHandler)               // 批量标记通知已读
 		system.GET(mapping.Endpoint("/api/v1/lucky_wheel_winners"), controller.LuckyWheelWinnersHandler) // 获取用户中奖记录
 		system.POST(mapping.Endpoint("/api/v1/lucky_wheel_play"), controller.LuckyWheelPlayHandler)      // 随机获取幸运转盘奖品
-		system.POST(mapping.Endpoint("/api/v1/lucky_wheel_get_reward"), controller.LuckyWheelWinHandler)        // 领取幸运转盘奖励
+		system.POST(mapping.Endpoint("/api/v1/lucky_wheel_get_reward"), controller.LuckyWheelGetRewardHandler)        // 领取幸运转盘奖励
 	}
 
 	// 上报相关路由
