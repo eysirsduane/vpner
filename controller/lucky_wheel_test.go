@@ -73,16 +73,13 @@ func TestLuckyWheelPlayEligibility(t *testing.T) {
 			oldRedis := appredis.Redis
 			appredis.Redis = client
 			defer func() { appredis.Redis = oldRedis }()
-			if tc.allowed {
-				expectLuckyWheelRoundConfig(mock)
-			}
 			reservations := 0
 			client.WrapProcess(func(_ func(goredis.Cmder) error) func(goredis.Cmder) error {
 				return func(cmd goredis.Cmder) error {
 					if !tc.allowed {
 						t.Fatal("ineligible user reached Redis")
 					}
-					if cmd.Name() != "set" || cmd.Args()[1] != "lucky_wheel:played:42" {
+					if cmd.Name() != "set" || cmd.Args()[1] != "lucky_wheel:played:20260921:42" {
 						t.Fatalf("unexpected command: %v", cmd.Args())
 					}
 					reservations++
@@ -108,7 +105,7 @@ func TestLuckyWheelPlayEligibility(t *testing.T) {
 			wantMessage := "当前用户暂不可参与幸运转盘"
 			wantReservations := 0
 			if tc.allowed {
-				wantMessage, wantReservations = "您已参与本轮幸运转盘，请冷却结束后再试", 1
+				wantMessage, wantReservations = "您今天已参与幸运转盘，请明天再试", 1
 			}
 			if recorder.Code != 200 || response["mid_call_midc_call_fix"] != float64(500) || response["mid_call_midm_call_fix"] != wantMessage {
 				t.Fatalf("unexpected response: %s", recorder.Body.String())
@@ -133,11 +130,11 @@ func TestLuckyWheelGetStatus(t *testing.T) {
 		wantNews, wantGeneral string
 		redisErr              error
 	}{
-		{"played before midnight", time.Date(2026, 9, 20, 15, 59, 59, 0, time.UTC), "lucky_wheel:played:42", 1, "on", "off", "on", "off", nil},
-		{"new China day preserves whitespace", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:42", 0, "off", " ON ", "off", " ON ", nil},
-		{"arbitrary strings", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:42", 0, "custom", "1", "custom", "1", nil},
-		{"missing configs return empty", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:42", 0, "", "", "", "", nil},
-		{"redis failure", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:42", 0, "", "", "", "", errors.New("redis unavailable")},
+		{"played before midnight", time.Date(2026, 9, 20, 15, 59, 59, 0, time.UTC), "lucky_wheel:played:20260920:42", 1, "on", "off", "on", "off", nil},
+		{"new China day preserves whitespace", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:20260921:42", 0, "off", " ON ", "off", " ON ", nil},
+		{"arbitrary strings", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:20260921:42", 0, "custom", "1", "custom", "1", nil},
+		{"missing configs return empty", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:20260921:42", 0, "", "", "", "", nil},
+		{"redis failure", time.Date(2026, 9, 20, 16, 0, 0, 0, time.UTC), "lucky_wheel:played:20260921:42", 0, "", "", "", "", errors.New("redis unavailable")},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			sqlDB, mock, err := sqlmock.New()
@@ -263,9 +260,8 @@ func TestClaimLuckyWheel(t *testing.T) {
 			model.DB = db
 			defer func() { model.DB = oldDB }()
 			cache := mockLuckyWheelClaimRedis(t, scenario == "redis unavailable")
-			expectLuckyWheelRoundConfig(mock)
 			mock.ExpectBegin()
-			roundEnd := fixedNow.In(setting.ChinaLocation)
+			dayStart := time.Date(2026, 9, 21, 0, 0, 0, 0, setting.ChinaLocation)
 			rows := sqlmock.NewRows([]string{"id", "user_id", "vip_secs", "status"})
 			status, seconds := 0, 600
 			if scenario == "already claimed" {
@@ -277,14 +273,14 @@ func TestClaimLuckyWheel(t *testing.T) {
 			if scenario != "no record" {
 				rows.AddRow(7, 42, seconds, status)
 			}
-			mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `lucky_wheel_play_record` WHERE user_id = ? AND create_time > ? AND create_time <= ? ORDER BY create_time DESC, id DESC,`lucky_wheel_play_record`.`id` LIMIT ? FOR UPDATE")).
-				WithArgs(42, roundEnd.Add(-time.Hour), roundEnd, 1).WillReturnRows(rows)
+			mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `lucky_wheel_play_record` WHERE user_id = ? AND create_time >= ? AND create_time < ? ORDER BY `lucky_wheel_play_record`.`id` LIMIT ? FOR UPDATE")).
+				WithArgs(42, dayStart, dayStart.AddDate(0, 0, 1), 1).WillReturnRows(rows)
 			wantErr := ""
 			switch scenario {
 			case "already claimed":
 				wantErr = "lucky wheel reward already claimed"
 			case "no record":
-				wantErr = "lucky wheel reward not found this round"
+				wantErr = "lucky wheel reward not found today"
 			case "invalid seconds":
 				wantErr = "lucky wheel reward duration invalid"
 			default:
@@ -356,9 +352,6 @@ func TestClaimLuckyWheel(t *testing.T) {
 				}
 				if keepMarker {
 					// 后续并发请求均由 Redis 拦截，不得再开启数据库事务。
-					for i := 0; i < 10; i++ {
-						expectLuckyWheelRoundConfig(mock)
-					}
 					var requests sync.WaitGroup
 					for i := 0; i < 10; i++ {
 						requests.Add(1)
@@ -370,21 +363,6 @@ func TestClaimLuckyWheel(t *testing.T) {
 						}()
 					}
 					requests.Wait()
-					if scenario == "active account" {
-						// 下一轮已有新参与标记，即使上一轮的领奖缓存尚未过期也应进入数据库校验。
-						cache.playToken = "next-play-token"
-						fixedNow = fixedNow.Add(time.Hour)
-						expectLuckyWheelRoundConfig(mock)
-						mock.ExpectBegin()
-						nextEnd := fixedNow.In(setting.ChinaLocation)
-						mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `lucky_wheel_play_record` WHERE user_id = ? AND create_time > ? AND create_time <= ? ORDER BY create_time DESC, id DESC,`lucky_wheel_play_record`.`id` LIMIT ? FOR UPDATE")).
-							WithArgs(42, nextEnd.Add(-time.Hour), nextEnd, 1).
-							WillReturnRows(sqlmock.NewRows([]string{"id", "user_id", "vip_secs", "status"}).AddRow(8, 42, 600, 1))
-						mock.ExpectRollback()
-						if err := claimLuckyWheel(42); err == nil || err.Error() != "lucky wheel reward already claimed" {
-							t.Fatalf("next round error = %v", err)
-						}
-					}
 				} else if cache.releases != 1 {
 					t.Fatalf("release count = %d, want 1", cache.releases)
 				}
@@ -397,16 +375,14 @@ func TestClaimLuckyWheel(t *testing.T) {
 }
 
 type luckyWheelClaimCache struct {
-	mu        sync.Mutex
-	marker    string
-	markerKey string
-	playToken string
-	releases  int
+	mu       sync.Mutex
+	marker   string
+	releases int
 }
 
 func mockLuckyWheelClaimRedis(t *testing.T, unavailable bool) *luckyWheelClaimCache {
 	t.Helper()
-	state := &luckyWheelClaimCache{playToken: "play-token"}
+	state := &luckyWheelClaimCache{}
 	client := goredis.NewClient(&goredis.Options{Addr: "unused:6379"})
 	oldRedis := appredis.Redis
 	appredis.Redis = client
@@ -416,33 +392,22 @@ func mockLuckyWheelClaimRedis(t *testing.T, unavailable bool) *luckyWheelClaimCa
 			state.mu.Lock()
 			defer state.mu.Unlock()
 			args := cmd.Args()
-			claimKey := "lucky_wheel:claimed:42:" + state.playToken
 			switch cmd.Name() {
-			case "get":
-				if args[1] != "lucky_wheel:played:42" {
-					t.Errorf("unexpected play key: %v", args)
-				}
-				var getErr error
-				if unavailable {
-					getErr = errors.New("redis unavailable")
-				}
-				*cmd.(*goredis.StringCmd) = *goredis.NewStringResult(state.playToken, getErr)
 			case "set":
-				if len(args) != 6 || args[1] != claimKey || args[3] != "ex" || args[4] != int64(3600) || args[5] != "nx" {
+				if len(args) != 6 || args[1] != "lucky_wheel:claimed:20260921:42" || args[3] != "ex" || args[4] != int64(86340) || args[5] != "nx" {
 					t.Errorf("unexpected claim reservation: %v", args)
 				}
 				var err error
 				if unavailable {
 					err = errors.New("redis unavailable")
 				}
-				acquired := (state.marker == "" || state.markerKey != claimKey) && err == nil
+				acquired := state.marker == "" && err == nil
 				if acquired {
 					state.marker = args[2].(string)
-					state.markerKey = claimKey
 				}
 				*cmd.(*goredis.BoolCmd) = *goredis.NewBoolResult(acquired, err)
 			case "eval":
-				if args[3] != state.markerKey || args[4] != state.marker {
+				if args[3] != "lucky_wheel:claimed:20260921:42" || args[4] != state.marker {
 					t.Errorf("release does not own marker: %v", args)
 				}
 				state.marker = ""
@@ -455,9 +420,4 @@ func mockLuckyWheelClaimRedis(t *testing.T, unavailable bool) *luckyWheelClaimCa
 		}
 	})
 	return state
-}
-
-func expectLuckyWheelRoundConfig(mock sqlmock.Sqlmock) {
-	mock.ExpectQuery("SELECT .* FROM `config`").WithArgs(model.ConfigLuckyWheelRoundTime, 1).
-		WillReturnRows(sqlmock.NewRows([]string{"code", "value"}).AddRow(model.ConfigLuckyWheelRoundTime, "3600"))
 }

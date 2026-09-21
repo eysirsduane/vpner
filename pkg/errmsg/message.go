@@ -12,8 +12,6 @@ import (
 const defaultErrorMessage = "系统错误，请稍后再试"
 
 var exactMessages = map[string]string{
-	"lucky wheel already played this round":                  "您已参与本轮幸运转盘，请冷却结束后再试",
-	"lucky wheel reward not found this round":                "当前周期内没有幸运转盘中奖记录",
 	"lucky wheel is not available for this user":             "当前用户暂不可参与幸运转盘",
 	"lucky wheel reward claiming or claimed":                 "幸运转盘奖励正在领取或已领取，请勿重复操作",
 	"lucky wheel reward already claimed":                     "幸运转盘奖励已领取",

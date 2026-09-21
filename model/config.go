@@ -207,12 +207,6 @@ func InitConfigs() error {
 			Value:     "off",
 			Remark:    "通用幸运转盘开关，on开启，off关闭",
 		},
-		{
-			BaseModel: BaseModel{CreateTime: now},
-			Code:      ConfigLuckyWheelRoundTime,
-			Value:     "86400",
-			Remark:    "幸运转盘用户多长时间能玩一次, 单位秒, 默认86400秒(1天)",
-		},
 	}
 
 	for _, config := range configs {
