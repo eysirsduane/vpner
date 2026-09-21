@@ -18,7 +18,10 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func TestPlayLuckyWheelRedisDailyLimit(t *testing.T) {
+func TestPlayLuckyWheelRedisRoundLimit(t *testing.T) {
+	oldCache := systemConfigCache
+	systemConfigCache = &configCacheStore{loaded: true, values: map[string]string{ConfigLuckyWheelRoundTime: "3600"}}
+	defer func() { systemConfigCache = oldCache }()
 	for _, scenario := range []string{"concurrent requests", "insert failure then retry", "redis unavailable", "empty pool"} {
 		t.Run(scenario, func(t *testing.T) {
 			sqlDB, mock, err := sqlmock.New()
@@ -26,7 +29,7 @@ func TestPlayLuckyWheelRedisDailyLimit(t *testing.T) {
 				t.Fatal(err)
 			}
 			defer sqlDB.Close()
-			// UTC 16:01 对应北京时间次日 00:01，距离下一次零点 86340 秒。
+			// 验证按配置冷却 3600 秒，而不是到次日零点。
 			now := time.Date(2026, 9, 20, 16, 1, 0, 0, time.UTC)
 			db, err := gorm.Open(mysql.New(mysql.Config{Conn: sqlDB, SkipInitializeWithVersion: true}), &gorm.Config{
 				NowFunc: func() time.Time { return now }, Logger: logger.Default.LogMode(logger.Silent),
@@ -54,8 +57,8 @@ func TestPlayLuckyWheelRedisDailyLimit(t *testing.T) {
 					args := cmd.Args()
 					switch cmd.Name() {
 					case "set":
-						if len(args) != 6 || args[1] != "lucky_wheel:played:20260921:42" || args[3] != "ex" || args[4] != int64(86340) || args[5] != "nx" {
-							t.Errorf("unexpected daily reservation: %v", args)
+						if len(args) != 6 || args[1] != "lucky_wheel:played:42" || args[3] != "ex" || args[4] != int64(3600) || args[5] != "nx" {
+							t.Errorf("unexpected round reservation: %v", args)
 						}
 						var setErr error
 						if scenario == "redis unavailable" {
@@ -74,7 +77,7 @@ func TestPlayLuckyWheelRedisDailyLimit(t *testing.T) {
 					case "get":
 						*cmd.(*goredis.StringCmd) = *goredis.NewStringResult(string(poolJSON), nil)
 					case "eval":
-						if args[3] != "lucky_wheel:played:20260921:42" || args[4] != marker {
+						if args[3] != "lucky_wheel:played:42" || args[4] != marker {
 							t.Errorf("release does not own marker: %v", args)
 						}
 						marker = ""
@@ -135,6 +138,26 @@ func TestPlayLuckyWheelRedisDailyLimit(t *testing.T) {
 			}
 			if err := mock.ExpectationsWereMet(); err != nil {
 				t.Fatal(err)
+			}
+		})
+	}
+}
+
+func TestLuckyWheelRoundDuration(t *testing.T) {
+	oldCache := systemConfigCache
+	defer func() { systemConfigCache = oldCache }()
+	for _, tc := range []struct {
+		value string
+		want  time.Duration
+	}{
+		{"3600", time.Hour}, {" 60 ", time.Minute}, {"172800", 48 * time.Hour},
+		{"", 24 * time.Hour}, {"0", 24 * time.Hour}, {"-1", 24 * time.Hour},
+		{"invalid", 24 * time.Hour}, {"9223372036854775807", 24 * time.Hour},
+	} {
+		t.Run(tc.value, func(t *testing.T) {
+			systemConfigCache = &configCacheStore{loaded: true, values: map[string]string{ConfigLuckyWheelRoundTime: tc.value}}
+			if got := LuckyWheelRoundDuration(); got != tc.want {
+				t.Fatalf("duration = %v, want %v", got, tc.want)
 			}
 		})
 	}

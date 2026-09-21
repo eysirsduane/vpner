@@ -435,7 +435,21 @@
         }
       }
     },
-    "/api/v1/lucky_wheel_win": {
+    "/api/v1/lucky_wheel_get_status": {
+      "path": "/mid_caller/intes/lkwst",
+      "request": {},
+      "response": {
+        "code": "midc",
+        "msg": "midm",
+        "result": {
+          "$field": "rslt",
+          "today_played": "tdpl",
+          "news_enabled": "nwen",
+          "general_enabled": "gnen"
+        }
+      }
+    },
+    "/api/v1/lucky_wheel_get_reward": {
       "path": "/mid_caller/intes/lkwwin",
       "request": {},
       "response": {

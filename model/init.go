@@ -52,7 +52,7 @@ func Init() error {
 
 func AutoMigrate() error {
 	err := DB.AutoMigrate(
-		&LuckyWhellPlayRecord{},
+		&LuckyWheelPlayRecord{},
 		&AppleNotification{},
 		&Advert{},
 		&Config{},

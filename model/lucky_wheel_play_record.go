@@ -19,8 +19,8 @@ const (
 	LuckyWheelClaimed   = 1
 )
 
-// LuckyWhellPlayRecord 用户幸运大转盘参与记录表
-type LuckyWhellPlayRecord struct {
+// LuckyWheelPlayRecord 用户幸运大转盘参与记录表
+type LuckyWheelPlayRecord struct {
 	BaseModel
 	UserId     int    `json:"user_id" gorm:"column:user_id;type:int;index:idx_user_id;comment:用户ID"`
 	VipSeconds int    `json:"vip_secs" gorm:"column:vip_secs;type:int;comment:会员时长(秒)"`
@@ -30,7 +30,16 @@ type LuckyWhellPlayRecord struct {
 	Remark     string `json:"remark" gorm:"column:remark;type:varchar(255);comment:奖品备注"`
 }
 
-func (LuckyWhellPlayRecord) TableName() string { return "lucky_wheel_play_record" }
+func (LuckyWheelPlayRecord) TableName() string { return "lucky_wheel_play_record" }
+
+func luckyWheelPlayedKey(userID int, now time.Time) string {
+	return fmt.Sprintf("lucky_wheel:played:%s:%d", now.In(setting.ChinaLocation).Format("20060102"), userID)
+}
+
+// LuckyWheelPlayedToday 与抽奖接口使用同一个 Redis 标记，不修改标记或过期时间。
+func LuckyWheelPlayedToday(userID int) (bool, error) {
+	return redis.Exists(luckyWheelPlayedKey(userID, DB.NowFunc()))
+}
 
 // PlayLuckyWheel 通过 Redis 原子占用当天参与次数，中奖记录通过单条 INSERT 保存。
 func PlayLuckyWheel(userId int) (LuckyWheel, error) {
@@ -41,7 +50,7 @@ func PlayLuckyWheel(userId int) (LuckyWheel, error) {
 	if redis.Redis == nil {
 		return LuckyWheel{}, errors.New("redis is not initialized")
 	}
-	key := fmt.Sprintf("lucky_wheel:played:%s:%d", now.Format("20060102"), userId)
+	key := luckyWheelPlayedKey(userId, now)
 	token := rand.Text()
 	acquired, err := redis.Redis.SetNX(key, token, dayEnd.Sub(now)).Result()
 	if err != nil {
@@ -65,7 +74,7 @@ func PlayLuckyWheel(userId int) (LuckyWheel, error) {
 	if prize.Seconds <= 0 {
 		return LuckyWheel{}, errors.New("lucky wheel reward duration invalid")
 	}
-	err = DB.Session(&gorm.Session{SkipDefaultTransaction: true}).Create(&LuckyWhellPlayRecord{
+	err = DB.Session(&gorm.Session{SkipDefaultTransaction: true}).Create(&LuckyWheelPlayRecord{
 		BaseModel:  BaseModel{CreateTime: now.Truncate(time.Second)},
 		UserId:     userId,
 		VipSeconds: prize.Seconds,

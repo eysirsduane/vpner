@@ -29,6 +29,9 @@ const (
 	ConfigMaxLoginDevices            = "account.max_login_devices"
 	ConfigRequestResponseDebug       = "debug.request_response_enabled"
 	ConfigRequestResponseDebugUsers  = "debug.request_response_user_ids"
+	ConfigLuckyWheelNewUserEnabled   = "lucky_wheel.new_user_enabled"
+	ConfigLuckyWheelGeneralEnabled   = "lucky_wheel.general_enabled"
+	ConfigLuckyWheelRoundTime        = "lucky_wheel.round_time"
 )
 
 // Config 系统配置表
@@ -191,6 +194,24 @@ func InitConfigs() error {
 			Code:      ConfigRequestResponseDebugUsers,
 			Value:     "",
 			Remark:    "请求响应调试用户ID列表，多个用英文逗号分隔",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigLuckyWheelNewUserEnabled,
+			Value:     "off",
+			Remark:    "新用户幸运转盘开关，on开启，off关闭",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigLuckyWheelGeneralEnabled,
+			Value:     "off",
+			Remark:    "通用幸运转盘开关，on开启，off关闭",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigLuckyWheelRoundTime,
+			Value:     "86400",
+			Remark:    "幸运转盘用户多长时间能玩一次, 单位秒, 默认86400秒(1天)",
 		},
 	}
 

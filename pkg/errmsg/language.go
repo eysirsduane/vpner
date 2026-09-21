@@ -3,6 +3,13 @@ package errmsg
 import "strings"
 
 var englishMessages = map[string]string{
+	"您已参与本轮幸运转盘，请冷却结束后再试": "You have already played this round. Please try again after the cooldown.",
+	"当前周期内没有幸运转盘中奖记录":     "No lucky wheel reward was found within the current round duration.",
+
+	"当前用户暂不可参与幸运转盘": "The lucky wheel is currently unavailable for this user.",
+
+	"幸运转盘奖励正在领取或已领取，请勿重复操作": "Your lucky wheel reward is being claimed or has already been claimed. Please do not repeat the request.",
+
 	"幸运转盘奖励已领取":           "You have already claimed this lucky wheel reward.",
 	"您今天尚未参与幸运转盘":         "You have not played the lucky wheel today.",
 	"幸运转盘奖励信息异常，请稍后再试":    "Invalid lucky wheel reward. Please try again later.",

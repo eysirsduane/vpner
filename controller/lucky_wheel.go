@@ -1,6 +1,7 @@
 package controller
 
 import (
+	cryptorand "crypto/rand"
 	"errors"
 	"fmt"
 	"math/rand/v2"
@@ -8,6 +9,7 @@ import (
 
 	"just-vpn/middleware"
 	"just-vpn/model"
+	"just-vpn/pkg/redis"
 	"just-vpn/pkg/setting"
 
 	"github.com/gin-gonic/gin"
@@ -22,9 +24,41 @@ type LuckyWheelPlayResponse struct {
 	Remark string `json:"remark" example:"高速会员专属权益"`
 }
 
+type LuckyWheelStatusResponse struct {
+	TodayPlayed    bool   `json:"today_played" example:"false"`
+	NewsEnabled    string `json:"news_enabled" example:"off"`
+	GeneralEnabled string `json:"general_enabled" example:"off"`
+}
+
+// LuckyWheelGetStatusHandler 获取当前用户的幸运转盘状态。
+// @Summary 获取幸运转盘状态
+// @Description 根据当前配置周期的Redis参与标记返回today_played布尔值（字段名保留，含义为是否仍处于参与冷却期）；news_enabled与general_enabled原样返回系统配置字符串，不转换大小写、不去除空白、不限制取值，配置缺失或读取失败返回空字符串。沿用系统配置缓存。查询不会写入标记或延长TTL；Redis读取失败返回业务状态码500。
+// @Tags 系统
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} Response{result=LuckyWheelStatusResponse}
+// @Router /lucky_wheel_get_status [get]
+func LuckyWheelGetStatusHandler(c *gin.Context) {
+	user, err := middleware.CurrentUser(c)
+	if err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return
+	}
+	played, err := model.LuckyWheelPlayedToday(user.Id)
+	if err != nil {
+		JsonReturn(c, CodeError, err.Error(), nil)
+		return
+	}
+	JsonReturn(c, CodeSuccess, "success", LuckyWheelStatusResponse{
+		TodayPlayed:    played,
+		NewsEnabled:    model.ConfigValue(model.ConfigLuckyWheelNewUserEnabled, ""),
+		GeneralEnabled: model.ConfigValue(model.ConfigLuckyWheelGeneralEnabled, ""),
+	})
+}
+
 // LuckyWheelPlayHandler 随机获取幸运转盘奖品。
 // @Summary 随机获取幸运转盘奖品
-// @Description 仅限注册24小时内的新用户调用，使用Redis SET NX原子占用北京时间当天参与次数，标记于次日零点过期；不符合条件、当天已有标记或Redis不可用时返回业务状态码500。从lucky_wheel表中等概率随机读取一条未删除的记录，保存user_id、title、desc、remark、vip_secs及未领取状态至lucky_wheel_play_record表后返回level、title、desc、remark。抽奖或写入失败时释放本次占位。不查询数据库参与次数，不使用显式事务或GORM默认写入事务，不修改用户会员时长。Redis标记丢失后无法保证每日防重。
+// @Description 通用开关lucky_wheel.general_enabled为on，或新用户开关lucky_wheel.new_user_enabled为on且user.type=1，满足任一条件即可参与，不限制注册时长。使用Redis SET NX原子占用参与次数，TTL为lucky_wheel.round_time配置的秒数，从参与时刻起计算；配置无效时默认86400秒。不符合条件、已有未过期标记或Redis不可用时返回业务状态码500。从lucky_wheel表中等概率随机读取一条未删除的记录，保存user_id、title、desc、remark、vip_secs及未领取状态至lucky_wheel_play_record表后返回level、title、desc、remark。抽奖或写入失败时释放本次占位。不查询数据库参与次数，不使用显式事务或GORM默认写入事务，不修改用户会员时长。Redis标记丢失后无法保证周期内防重。
 // @Tags 系统
 // @Produce json
 // @Security BearerAuth
@@ -36,8 +70,10 @@ func LuckyWheelPlayHandler(c *gin.Context) {
 		JsonReturn(c, CodeError, err.Error(), nil)
 		return
 	}
-	if !isLuckyWheelNewUser(user.CreateTime, chinaNow()) {
-		JsonReturn(c, CodeError, "lucky wheel is only available to new users", nil)
+	generalEnabled := model.ConfigValue(model.ConfigLuckyWheelGeneralEnabled, "off") == "on"
+	newUserEnabled := model.ConfigValue(model.ConfigLuckyWheelNewUserEnabled, "off") == "on"
+	if !generalEnabled && !(newUserEnabled && user.Type == 1) {
+		JsonReturn(c, CodeError, "lucky wheel is not available for this user", nil)
 		return
 	}
 	prize, err := model.PlayLuckyWheel(user.Id)
@@ -53,13 +89,9 @@ func LuckyWheelPlayHandler(c *gin.Context) {
 	})
 }
 
-func isLuckyWheelNewUser(createTime time.Time, now time.Time) bool {
-	return !createTime.IsZero() && !createTime.After(now) && now.Sub(createTime) <= 24*time.Hour
-}
-
-// LuckyWheelWinHandler 领取当天幸运转盘奖励。
+// LuckyWheelGetRewardHandler 领取当前周期内的幸运转盘奖励。
 // @Summary 领取幸运转盘奖励
-// @Description 根据北京时间当天的参与记录领取会员时长，无需请求参数。同一记录只能领取一次；仅更新用户、账号及同账号正常用户的vip_time，领取状态与会员时间在同一事务中保存。
+// @Description 查询当前时间之前lucky_wheel.round_time秒内最近一条参与记录领取会员时长，无需请求参数。Redis SET NX按参与轮次提前拦截重复领奖，TTL为配置秒数，配置无效时默认86400秒，失败释放本次标记；Redis不可用时回退数据库。同一记录只能领取一次，保留数据库状态校验和行锁；仅更新用户、账号及同账号正常用户的vip_time，领取状态与会员时间在同一事务中保存。
 // @Tags 系统
 // @Produce json
 // @Security BearerAuth
@@ -82,8 +114,28 @@ func claimLuckyWheel(userID int) error {
 	now := model.DB.NowFunc().In(setting.ChinaLocation)
 	dayStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, setting.ChinaLocation)
 	dayEnd := dayStart.AddDate(0, 0, 1)
-	return model.DB.Transaction(func(tx *gorm.DB) error {
-		var record model.LuckyWhellPlayRecord
+	client := redis.Redis
+	key := fmt.Sprintf("lucky_wheel:claimed:%s:%d", now.Format("20060102"), userID)
+	token := cryptorand.Text()
+	reserved, keepMarker := false, false
+	if client != nil {
+		acquired, err := client.SetNX(key, token, dayEnd.Sub(now)).Result()
+		if err == nil {
+			if !acquired {
+				return errors.New("lucky wheel reward claiming or claimed")
+			}
+			reserved = true
+		}
+		// Redis 不可用时仍由数据库行锁与领取状态保证只发奖一次。
+	}
+	defer func() {
+		if reserved && !keepMarker {
+			// 校验请求标识后删除，避免误删其他请求的占位。
+			_ = client.Eval(`if redis.call("GET", KEYS[1]) == ARGV[1] then return redis.call("DEL", KEYS[1]) end return 0`, []string{key}, token).Err()
+		}
+	}()
+	err := model.DB.Transaction(func(tx *gorm.DB) error {
+		var record model.LuckyWheelPlayRecord
 		// 不过滤 status，确保重复调用始终检查同一条记录。
 		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
 			Where("user_id = ? AND create_time >= ? AND create_time < ?", userID, dayStart, dayEnd).
@@ -94,6 +146,7 @@ func claimLuckyWheel(userID int) error {
 			return err
 		}
 		if record.Status == model.LuckyWheelClaimed {
+			keepMarker = true // 缓存数据库已确认的领取状态。
 			return errors.New("lucky wheel reward already claimed")
 		}
 		if record.Status != model.LuckyWheelUnclaimed || record.DeleteTime != nil || record.VipSeconds <= 0 {
@@ -120,7 +173,7 @@ func claimLuckyWheel(userID int) error {
 				return err
 			}
 		}
-		result := tx.Model(&model.LuckyWhellPlayRecord{}).
+		result := tx.Model(&model.LuckyWheelPlayRecord{}).
 			Where("id = ? AND status = ?", record.Id, model.LuckyWheelUnclaimed).
 			Update("status", model.LuckyWheelClaimed)
 		if result.Error != nil {
@@ -131,6 +184,10 @@ func claimLuckyWheel(userID int) error {
 		}
 		return nil
 	})
+	if err == nil {
+		keepMarker = true
+	}
+	return err
 }
 
 // LuckyWheelWinnerResponse 随机生成的用户中奖记录。
