@@ -8,30 +8,32 @@ import (
 )
 
 const (
-	ConfigUserAgreement              = "user_agreement"
-	ConfigPrivacyAgreement           = "privacy_agreement"
-	ConfigShareQrcode                = "share_qrcode"
-	ConfigShareLinks                 = "share.links"
-	ConfigWebsite                    = "website"
-	ConfigNewUserFreeSeconds         = "new_user_free_seconds"
-	ConfigToolCustomer               = "tool.customer_service"
-	ConfigToolCustomerServiceEnabled = "tool.customer_service_enabled"
-	ConfigToolCustomerServiceURL     = "tool.customer_service_url"
-	ConfigToolCleanMemoryEnabled     = "tool.clean_memory_enabled"
-	ConfigToolMessageEnabled         = "tool.message_enabled"
-	ConfigNodeLinkAESKey             = "node.link_aes_key"
-	ConfigNodePullURL                = "node.pull_url"
-	ConfigNodePullIntervalSeconds    = "node.pull_interval_seconds"
-	ConfigNodeReviewVersions         = "node.review_versions"
-	ConfigNodeReviewLink             = "node.review_link"
-	ConfigSkipProxyDomains           = "skip_proxy_domains"
-	ConfigRealLogoffVersions         = "account.real_logoff_versions"
-	ConfigMaxLoginDevices            = "account.max_login_devices"
-	ConfigRequestResponseDebug       = "debug.request_response_enabled"
-	ConfigRequestResponseDebugUsers  = "debug.request_response_user_ids"
-	ConfigLuckyWheelNewUserEnabled   = "lucky_wheel.new_user_enabled"
-	ConfigLuckyWheelGeneralEnabled   = "lucky_wheel.general_enabled"
-	ConfigLuckyWheelRoundTime        = "lucky_wheel.round_time"
+	ConfigUserAgreement                 = "user_agreement"
+	ConfigPrivacyAgreement              = "privacy_agreement"
+	ConfigShareQrcode                   = "share_qrcode"
+	ConfigShareLinks                    = "share.links"
+	ConfigWebsite                       = "website"
+	ConfigNewUserFreeSeconds            = "new_user_free_seconds"
+	ConfigToolCustomer                  = "tool.customer_service"
+	ConfigToolCustomerServiceEnabled    = "tool.customer_service_enabled"
+	ConfigToolCustomerServiceURL        = "tool.customer_service_url"
+	ConfigToolCleanMemoryEnabled        = "tool.clean_memory_enabled"
+	ConfigToolMessageEnabled            = "tool.message_enabled"
+	ConfigNodeLinkAESKey                = "node.link_aes_key"
+	ConfigNodePullURL                   = "node.pull_url"
+	ConfigNodePullIntervalSeconds       = "node.pull_interval_seconds"
+	ConfigNodeReviewVersions            = "node.review_versions"
+	ConfigNodeReviewLink                = "node.review_link"
+	ConfigSkipProxyDomains              = "skip_proxy_domains"
+	ConfigRealLogoffVersions            = "account.real_logoff_versions"
+	ConfigMaxLoginDevices               = "account.max_login_devices"
+	ConfigRequestResponseDebug          = "debug.request_response_enabled"
+	ConfigRequestResponseDebugUsers     = "debug.request_response_user_ids"
+	ConfigLuckyWheelNewUserEnabled      = "lucky_wheel.new_user_enabled"
+	ConfigLuckyWheelGeneralEnabled      = "lucky_wheel.general_enabled"
+	ConfigLuckyWheelRoundTime           = "lucky_wheel.round_time"
+	ConfigLuckyWheelNewUserCloseEnabled = "lucky_wheel.new_user_close_enabled"
+	ConfigLuckyWheelGeneralCloseEnabled = "lucky_wheel.general_close_enabled"
 )
 
 // Config 系统配置表
@@ -206,6 +208,18 @@ func InitConfigs() error {
 			Code:      ConfigLuckyWheelGeneralEnabled,
 			Value:     "off",
 			Remark:    "通用幸运转盘开关，on开启，off关闭",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigLuckyWheelNewUserCloseEnabled,
+			Value:     "on",
+			Remark:    "新用户幸运转盘界面关闭开关，on开启，off关闭",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigLuckyWheelGeneralCloseEnabled,
+			Value:     "on",
+			Remark:    "通用幸运转盘界面关闭开关，on开启，off关闭",
 		},
 	}
 

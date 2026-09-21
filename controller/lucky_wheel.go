@@ -25,9 +25,11 @@ type LuckyWheelPlayResponse struct {
 }
 
 type LuckyWheelStatusResponse struct {
-	TodayPlayed    bool   `json:"today_played" example:"false"`
-	NewsEnabled    string `json:"news_enabled" example:"off"`
-	GeneralEnabled string `json:"general_enabled" example:"off"`
+	TodayPlayed         bool   `json:"today_played" example:"false"`
+	NewsEnabled         string `json:"news_enabled" example:"off"`
+	GeneralEnabled      string `json:"general_enabled" example:"off"`
+	NewsCloseEnabled    string `json:"news_close_enabled" example:"on"`
+	GeneralCloseEnabled string `json:"general_close_enabled" example:"on"`
 }
 
 // LuckyWheelGetStatusHandler 获取当前用户的幸运转盘状态。
@@ -50,9 +52,11 @@ func LuckyWheelGetStatusHandler(c *gin.Context) {
 		return
 	}
 	JsonReturn(c, CodeSuccess, "success", LuckyWheelStatusResponse{
-		TodayPlayed:    played,
-		NewsEnabled:    model.ConfigValue(model.ConfigLuckyWheelNewUserEnabled, ""),
-		GeneralEnabled: model.ConfigValue(model.ConfigLuckyWheelGeneralEnabled, ""),
+		TodayPlayed:         played,
+		NewsEnabled:         model.ConfigValue(model.ConfigLuckyWheelNewUserEnabled, ""),
+		GeneralEnabled:      model.ConfigValue(model.ConfigLuckyWheelGeneralEnabled, ""),
+		NewsCloseEnabled:    model.ConfigValue(model.ConfigLuckyWheelNewUserCloseEnabled, ""),
+		GeneralCloseEnabled: model.ConfigValue(model.ConfigLuckyWheelGeneralCloseEnabled, ""),
 	})
 }
 
