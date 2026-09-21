@@ -445,7 +445,9 @@
           "$field": "rslt",
           "today_played": "tdpl",
           "news_enabled": "nwen",
-          "general_enabled": "gnen"
+          "general_enabled": "gnen",
+          "news_close_enabled": "nwcl",
+          "general_close_enabled": "gncl"
         }
       }
     },

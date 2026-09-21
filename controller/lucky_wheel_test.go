@@ -167,10 +167,16 @@ func TestLuckyWheelGetStatus(t *testing.T) {
 					return cmd.Err()
 				}
 			})
+			closeNews, closeGeneral := " ON ", "custom"
+			if tc.name == "missing configs return empty" {
+				closeNews, closeGeneral = "", ""
+			}
 			if tc.redisErr == nil {
 				for _, config := range []struct{ code, value string }{
 					{model.ConfigLuckyWheelNewUserEnabled, tc.news},
 					{model.ConfigLuckyWheelGeneralEnabled, tc.general},
+					{model.ConfigLuckyWheelNewUserCloseEnabled, closeNews},
+					{model.ConfigLuckyWheelGeneralCloseEnabled, closeGeneral},
 				} {
 					rows := sqlmock.NewRows([]string{"code", "value"})
 					if config.value != "" {
@@ -206,6 +212,8 @@ func TestLuckyWheelGetStatus(t *testing.T) {
 						"mid_call_tdpl_call_fix": tc.played == 1,
 						"mid_call_nwen_call_fix": tc.wantNews,
 						"mid_call_gnen_call_fix": tc.wantGeneral,
+						"mid_call_nwcl_call_fix": closeNews,
+						"mid_call_gncl_call_fix": closeGeneral,
 					},
 				}
 				if !reflect.DeepEqual(response, want) {

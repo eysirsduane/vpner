@@ -25,16 +25,16 @@ type LuckyWheelPlayResponse struct {
 }
 
 type LuckyWheelStatusResponse struct {
-	TodayPlayed         bool   `json:"today_played" example:"false"`
-	NewsEnabled         string `json:"news_enabled" example:"off"`
-	GeneralEnabled      string `json:"general_enabled" example:"off"`
-	NewsCloseEnabled    string `json:"news_close_enabled" example:"on"`
-	GeneralCloseEnabled string `json:"general_close_enabled" example:"on"`
+	TodayPlayed         bool   `json:"today_played" example:"false"`       // 北京时间当天是否已有参与标记
+	NewsEnabled         string `json:"news_enabled" example:"off"`         // 新用户幸运转盘开关配置原值
+	GeneralEnabled      string `json:"general_enabled" example:"off"`      // 通用幸运转盘开关配置原值
+	NewsCloseEnabled    string `json:"news_close_enabled" example:"on"`    // 新用户幸运转盘界面关闭开关配置原值
+	GeneralCloseEnabled string `json:"general_close_enabled" example:"on"` // 通用幸运转盘界面关闭开关配置原值
 }
 
 // LuckyWheelGetStatusHandler 获取当前用户的幸运转盘状态。
 // @Summary 获取幸运转盘状态
-// @Description 返回当前用户当天是否已参与过幸运转盘，以及新用户开关和通用开关的状态。
+// @Description 返回北京时间当天的Redis参与标记today_played，以及news_enabled、general_enabled、news_close_enabled、general_close_enabled四个开关配置。配置字符串原样返回，缺失、为空或读取失败时返回空字符串；查询沿用配置缓存，不修改参与标记或TTL。Redis读取失败返回业务状态码500。
 // @Tags 活动
 // @Produce json
 // @Security BearerAuth

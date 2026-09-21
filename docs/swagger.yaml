@@ -498,13 +498,24 @@ definitions:
     type: object
   controller.LuckyWheelStatusResponse:
     properties:
+      general_close_enabled:
+        description: 通用幸运转盘界面关闭开关配置原值
+        example: "on"
+        type: string
       general_enabled:
+        description: 通用幸运转盘开关配置原值
         example: "off"
         type: string
+      news_close_enabled:
+        description: 新用户幸运转盘界面关闭开关配置原值
+        example: "on"
+        type: string
       news_enabled:
+        description: 新用户幸运转盘开关配置原值
         example: "off"
         type: string
       today_played:
+        description: 北京时间当天是否已有参与标记
         example: false
         type: boolean
     type: object
@@ -1347,7 +1358,7 @@ paths:
       - 活动
   /lucky_wheel_get_status:
     get:
-      description: 返回当前用户当天是否已参与过幸运转盘，以及新用户开关和通用开关的状态。
+      description: 返回北京时间当天的Redis参与标记today_played，以及news_enabled、general_enabled、news_close_enabled、general_close_enabled四个开关配置。配置字符串原样返回，缺失、为空或读取失败时返回空字符串；查询沿用配置缓存，不修改参与标记或TTL。Redis读取失败返回业务状态码500。
       produces:
       - application/json
       responses:

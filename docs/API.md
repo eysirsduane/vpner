@@ -39,15 +39,35 @@
 - 请求：`GET /mid_caller/intes/lkwst`（原始路由：`/api/v1/lucky_wheel_get_status`）。
 - 鉴权：`Authorization: Bearer <token>`，无需请求参数。
 - `today_played` 根据北京时间当天的 Redis 参与标记是否存在返回，与抽奖接口的每日限制一致；正在抽奖的占位也视为已参与。只查询，不写入或延长 TTL。Redis 读取失败返回业务状态码 `500`。
-- 两个字段分别原样返回系统配置 `lucky_wheel.new_user_enabled`、`lucky_wheel.general_enabled` 的字符串值，保留大小写和空白，不限制为 `on/off`；配置缺失或读取失败返回空字符串。沿用系统配置缓存刷新规则，不根据用户注册时长修改配置值。
+- 四个开关字段原样返回下表所列系统配置的字符串值，保留大小写和空白，不限制为 `on/off`；配置缺失、为空或读取失败返回空字符串。沿用系统配置缓存刷新规则，不根据用户注册时长修改配置值。
 
 | 实际字段 | 原始字段 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | `mid_call_tdpl_call_fix` | `today_played` | boolean | 当天已有参与标记为 `true`，否则为 `false` |
-| `mid_call_nwen_call_fix` | `news_enabled` | string | 新用户幸运转盘配置原始字符串 |
-| `mid_call_gnen_call_fix` | `general_enabled` | string | 通用幸运转盘配置原始字符串 |
+| `mid_call_nwen_call_fix` | `news_enabled` | string | 新用户幸运转盘开关，来自 `lucky_wheel.new_user_enabled` |
+| `mid_call_gnen_call_fix` | `general_enabled` | string | 通用幸运转盘开关，来自 `lucky_wheel.general_enabled` |
+| `mid_call_nwcl_call_fix` | `news_close_enabled` | string | 新用户幸运转盘界面关闭开关，来自 `lucky_wheel.new_user_close_enabled` |
+| `mid_call_gncl_call_fix` | `general_close_enabled` | string | 通用幸运转盘界面关闭开关，来自 `lucky_wheel.general_close_enabled` |
 
-以上三个字段位于 `mid_call_rslt_call_fix` 对象中，成功业务状态码为 `200`。
+以上五个字段位于 `mid_call_rslt_call_fix` 对象中，成功时全部返回，包括值为空字符串的配置字段。四个开关的约定值为 `on` 开启、`off` 关闭；两个 `close_enabled` 字段表示界面关闭功能的开关，不代表用户当天是否已参与。初始化配置中两个参与开关为 `off`，两个界面关闭开关为 `on`；这些初始化值不替代查询时缺失配置返回的空字符串。
+
+成功响应示例：
+
+```json
+{
+  "mid_call_midc_call_fix": 200,
+  "mid_call_midm_call_fix": "success",
+  "mid_call_rslt_call_fix": {
+    "mid_call_tdpl_call_fix": false,
+    "mid_call_nwen_call_fix": "off",
+    "mid_call_gnen_call_fix": "off",
+    "mid_call_nwcl_call_fix": "on",
+    "mid_call_gncl_call_fix": "on"
+  }
+}
+```
+
+成功业务状态码为 `200`；未登录或登录失效为 `401`；Redis 读取失败为 `500`。HTTP 状态码均为 `200`，失败时 `mid_call_rslt_call_fix` 为空对象，错误信息位于 `mid_call_midm_call_fix`。
 
 ## 领取幸运转盘奖励
 
