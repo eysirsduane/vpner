@@ -52,18 +52,23 @@ func InitRouter() *gin.Engine {
 	// 系统相关路由
 	system := router.Group("").Use(middleware.JWTAuth())
 	{
-		system.POST(mapping.Endpoint("/api/v1/init"), controller.InitHandler)                                  // 初始化配置
-		system.POST(mapping.Endpoint("/api/v1/version"), controller.VersionHandler)                            // 版本检测
-		system.GET(mapping.Endpoint("/api/v1/advert"), controller.AdvertHandler)                               // 获取广告位列表
-		system.GET(mapping.Endpoint("/api/v1/notice"), controller.NoticeHandler)                               // 获取通知列表
-		system.GET(mapping.Endpoint("/api/v1/notice/unread"), controller.UnreadNoticeHandler)                  // 获取未读通知列表
-		system.GET(mapping.Endpoint("/api/v1/popup"), controller.PopupHandler)                                 // 获取统一弹窗
-		system.GET(mapping.Endpoint("/api/v1/delayed_popup"), controller.DelayedPopupHandler)                  // 获取延迟弹窗
-		system.POST(mapping.Endpoint("/api/v1/read_notice"), controller.ReadNoticeHandler)                     // 批量标记通知已读
-		system.GET(mapping.Endpoint("/api/v1/lucky_wheel_winners"), controller.LuckyWheelWinnersHandler)       // 获取用户中奖记录
-		system.POST(mapping.Endpoint("/api/v1/lucky_wheel_play"), controller.LuckyWheelPlayHandler)            // 随机获取幸运转盘奖品
-		system.POST(mapping.Endpoint("/api/v1/lucky_wheel_get_reward"), controller.LuckyWheelGetRewardHandler) // 领取幸运转盘奖励
-		system.GET(mapping.Endpoint("/api/v1/lucky_wheel_get_status"), controller.LuckyWheelGetStatusHandler)  // 获取幸运转盘状态
+		system.POST(mapping.Endpoint("/api/v1/init"), controller.InitHandler)                 // 初始化配置
+		system.POST(mapping.Endpoint("/api/v1/version"), controller.VersionHandler)           // 版本检测
+		system.GET(mapping.Endpoint("/api/v1/advert"), controller.AdvertHandler)              // 获取广告位列表
+		system.GET(mapping.Endpoint("/api/v1/notice"), controller.NoticeHandler)              // 获取通知列表
+		system.GET(mapping.Endpoint("/api/v1/notice/unread"), controller.UnreadNoticeHandler) // 获取未读通知列表
+		system.GET(mapping.Endpoint("/api/v1/popup"), controller.PopupHandler)                // 获取统一弹窗
+		system.GET(mapping.Endpoint("/api/v1/delayed_popup"), controller.DelayedPopupHandler) // 获取延迟弹窗
+		system.POST(mapping.Endpoint("/api/v1/read_notice"), controller.ReadNoticeHandler)    // 批量标记通知已读
+	}
+
+	// 活动相关路由
+	activity := router.Group("").Use(middleware.JWTAuth())
+	{
+		activity.GET(mapping.Endpoint("/api/v1/lucky_wheel_winners"), controller.LuckyWheelWinnersHandler)       // 获取用户中奖记录
+		activity.POST(mapping.Endpoint("/api/v1/lucky_wheel_play"), controller.LuckyWheelPlayHandler)            // 随机获取幸运转盘奖品
+		activity.POST(mapping.Endpoint("/api/v1/lucky_wheel_get_reward"), controller.LuckyWheelGetRewardHandler) // 领取幸运转盘奖励
+		activity.GET(mapping.Endpoint("/api/v1/lucky_wheel_get_status"), controller.LuckyWheelGetStatusHandler)  // 获取幸运转盘状态
 	}
 
 	// 上报相关路由
