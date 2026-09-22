@@ -115,7 +115,7 @@ func loadApp() {
 	AppConfig.IpDbPath = sec.Key("IpDbPath").MustString("conf/ip2region.db")
 	AppConfig.MappingFile = sec.Key("MappingFile").MustString("conf/mapping.json")
 	AppConfig.JwtSecret = sec.Key("JwtSecret").MustString("just-vpn-jwt-secret")
-	AppConfig.JwtExpire = time.Duration(sec.Key("JwtExpireHours").MustInt(720)) * time.Hour
+	AppConfig.JwtExpire = time.Duration(sec.Key("JwtExpireHours").MustInt(2592000)) * time.Second
 	AppConfig.InternalKey = sec.Key("InternalKey").MustString("")
 }
 
