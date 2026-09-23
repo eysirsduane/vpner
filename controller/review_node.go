@@ -20,7 +20,7 @@ func configuredReviewNode(version string, code string) (model.Node, bool) {
 func reviewNodeFromConfig(version string, code string, versions string, link string) (model.Node, bool) {
 	version = strings.TrimSpace(version)
 	link = strings.TrimSpace(link)
-	if version == "" || link == "" || !reviewVersionMatches(versions, version) {
+	if link == "" {
 		return model.Node{}, false
 	}
 	return model.Node{
