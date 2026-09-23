@@ -557,7 +557,7 @@ func rewardText(seconds int, language string) string {
 		}
 		return strconv.Itoa(seconds/(24*60*60)) + "天会员"
 	}
-	if seconds%(60*60) == 0 { 
+	if seconds%(60*60) == 0 {
 		if english {
 			return strconv.Itoa(seconds/(60*60)) + "-hour membership"
 		}
@@ -1235,10 +1235,10 @@ func LogoutHandler(c *gin.Context) {
 // @Router /logoff [post]
 func LogoffHandler(c *gin.Context) {
 	client := middleware.CurrentClientInfo(c)
-	if !realLogoffVersionEnabled(client.Version) {
-		JsonReturn(c, CodeSuccess, "success", nil)
-		return
-	}
+	// if !realLogoffVersionEnabled(client.Version) {
+	// 	JsonReturn(c, CodeSuccess, "success", nil)
+	// 	return
+	// }
 
 	user, err := middleware.CurrentUser(c)
 	if err != nil {
