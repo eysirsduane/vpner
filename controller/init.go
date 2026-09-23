@@ -47,6 +47,8 @@ type InitAppResponse struct {
 
 // InitToolsResponse 工具入口配置
 type InitToolsResponse struct {
+	TelegramUrl            string `json:"telegram_url" example:"https://t.me/example"`             // Telegram 地址
+	TelegramEnabled        string `json:"telegram_enabled" example:"on"`                           // Telegram 入口开关(on=开启,off=关闭)
 	CustomerServiceEnabled string `json:"customer_service_enabled" example:"on"`                   // 在线客服入口开关(on=开启,off=关闭)
 	CustomerServiceUrl     string `json:"customer_service_url" example:"https://example.com/chat"` // 在线客服地址，配置模板中的#ID会替换为当前用户ID
 	CleanMemoryEnabled     string `json:"clean_memory_enabled" example:"on"`                       // 清理内存入口开关(on=开启,off=关闭)
@@ -200,6 +202,8 @@ func buildInitResponse(user model.User, language string) InitResponse {
 			NewUserFreeSeconds: configInt(model.ConfigNewUserFreeSeconds, 3600),
 		},
 		Tools: InitToolsResponse{
+			TelegramUrl:            model.ConfigValue(model.ConfigToolTelegramURL, ""),
+			TelegramEnabled:        configSwitch(model.ConfigToolTelegramEnabled, "off"),
 			CustomerServiceEnabled: configSwitch(model.ConfigToolCustomerServiceEnabled, "off"),
 			CustomerServiceUrl:     buildCustomerServiceURL(user),
 			CleanMemoryEnabled:     configSwitch(model.ConfigToolCleanMemoryEnabled, "off"),
@@ -228,4 +232,3 @@ func InitHandler(c *gin.Context) {
 	language := middleware.CurrentClientInfo(c).Language
 	JsonReturn(c, CodeSuccess, "success", buildInitResponse(user, language))
 }
- 

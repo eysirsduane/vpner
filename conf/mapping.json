@@ -388,6 +388,8 @@
           },
           "tools": {
             "$field": "utls",
+            "telegram_url": "tguri",
+            "telegram_enabled": "tgon",
             "customer_service_enabled": "hlpon",
             "customer_service_url": "hlpuri",
             "clean_memory_enabled": "ramclron",

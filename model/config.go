@@ -19,6 +19,8 @@ const (
 	ConfigToolCustomerServiceURL        = "tool.customer_service_url"
 	ConfigToolCleanMemoryEnabled        = "tool.clean_memory_enabled"
 	ConfigToolMessageEnabled            = "tool.message_enabled"
+	ConfigToolTelegramURL               = "tool.telegram_url"
+	ConfigToolTelegramEnabled           = "tool.telegram_enabled"
 	ConfigNodeLinkAESKey                = "node.link_aes_key"
 	ConfigNodePullURL                   = "node.pull_url"
 	ConfigNodePullIntervalSeconds       = "node.pull_interval_seconds"
@@ -136,6 +138,18 @@ func InitConfigs() error {
 			Code:      ConfigToolMessageEnabled,
 			Value:     "on",
 			Remark:    "消息通知入口开关，on开启，off关闭",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigToolTelegramURL,
+			Value:     "",
+			Remark:    "Telegram 地址",
+		},
+		{
+			BaseModel: BaseModel{CreateTime: now},
+			Code:      ConfigToolTelegramEnabled,
+			Value:     "off",
+			Remark:    "Telegram 入口开关，on开启，off关闭",
 		},
 		{
 			BaseModel: BaseModel{CreateTime: now},

@@ -1016,6 +1016,8 @@ POST /mid_caller/intes/ini
                                                  "mid_call_nwtrialsec_call_fix":  0
                                              },
                            "mid_call_utls_call_fix":  {
+                                                    "mid_call_tguri_call_fix":  "",
+                                                    "mid_call_tgon_call_fix":  "off",
                                                     "mid_call_hlpon_call_fix":  "off",
                                                     "mid_call_hlpuri_call_fix":  "",
                                                     "mid_call_ramclron_call_fix":  "off",
@@ -1034,6 +1036,8 @@ POST /mid_caller/intes/ini
 
 | 字段           | 说明                                                                                             |
 | -------------- | ------------------------------------------------------------------------------------------------ |
+| `mid_call_tguri_call_fix` | Telegram 地址（原始字段 `telegram_url`），字符串，来自 `tool.telegram_url`，默认空字符串；仅入口开启时使用 |
+| `mid_call_tgon_call_fix` | Telegram 入口开关（原始字段 `telegram_enabled`），字符串，来自 `tool.telegram_enabled`，`on=展示`，`off=隐藏`，默认 `off` |
 | `mid_call_hlpon_call_fix` | 在线客服入口开关，`on=展示`，`off=隐藏`                                                          |
 | `mid_call_hlpuri_call_fix`     | 在线客服地址，仅 `mid_call_hlpon_call_fix=on` 时使用；后端会把配置模板中的 `#ID` 替换为当前用户 ID 后返回 |
 | `mid_call_ramclron_call_fix` | 清理内存入口开关，`on=展示`，`off=隐藏`                                                          |
@@ -1074,6 +1078,8 @@ POST /mid_caller/intes/ini
 | `mid_call_rslt_call_fix.mid_call_appl_call_fix.mid_call_siteuri_call_fix` | `string` | 成功时 | 官网地址 |
 | `mid_call_rslt_call_fix.mid_call_appl_call_fix.mid_call_nwtrialsec_call_fix` | `integer` | 成功时 | 新用户默认赠送会员秒数 |
 | `mid_call_rslt_call_fix.mid_call_utls_call_fix` | `object` | 成功时 | 工具入口配置 |
+| `mid_call_rslt_call_fix.mid_call_utls_call_fix.mid_call_tguri_call_fix` | `string` | 成功时 | Telegram 地址，默认空字符串 |
+| `mid_call_rslt_call_fix.mid_call_utls_call_fix.mid_call_tgon_call_fix` | `string` | 成功时 | Telegram 入口开关(on=开启,off=关闭)，默认 off |
 | `mid_call_rslt_call_fix.mid_call_utls_call_fix.mid_call_hlpon_call_fix` | `string` | 成功时 | 在线客服入口开关(on=开启,off=关闭) |
 | `mid_call_rslt_call_fix.mid_call_utls_call_fix.mid_call_hlpuri_call_fix` | `string` | 成功时 | 在线客服地址，配置模板中的#ID会替换为当前用户ID |
 | `mid_call_rslt_call_fix.mid_call_utls_call_fix.mid_call_ramclron_call_fix` | `string` | 成功时 | 清理内存入口开关(on=开启,off=关闭) |

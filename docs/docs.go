@@ -2155,6 +2155,16 @@ const docTemplate = `{
         "controller.InitToolsResponse": {
             "type": "object",
             "properties": {
+                "telegram_url": {
+                    "description": "Telegram 地址",
+                    "type": "string",
+                    "example": "https://t.me/example"
+                },
+                "telegram_enabled": {
+                    "description": "Telegram 入口开关(on=开启,off=关闭)",
+                    "type": "string",
+                    "example": "on"
+                },
                 "clean_memory_enabled": {
                     "description": "清理内存入口开关(on=开启,off=关闭)",
                     "type": "string",
