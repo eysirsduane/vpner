@@ -36,17 +36,20 @@ type InternalReportStatsRequest struct {
 }
 
 type InternalReportStatsResult struct {
-	NewUsers          int64   `json:"new_users"`
-	DailyActiveUsers  int64   `json:"daily_active_users"`
-	ConnectBaseUsers  int64   `json:"connect_base_users"`
-	ConnectedUsers    int64   `json:"connected_users"`
-	CreatedOrders     int64   `json:"created_orders"`
-	PaidOrders        int64   `json:"paid_orders"`
-	NewPurchaseIncome float64 `json:"new_purchase_income"`
-	RenewalIncome     float64 `json:"renewal_income"`
-	TotalIncome       float64 `json:"total_income"`
-	AppleIncome       float64 `json:"apple_income"`
-	ThirdPartyIncome  float64 `json:"third_party_income"`
+	model.RenewalReportStats
+	NewUsers                int64   `json:"new_users"`
+	DailyActiveUsers        int64   `json:"daily_active_users"`
+	ConnectBaseUsers        int64   `json:"connect_base_users"`
+	ConnectedUsers          int64   `json:"connected_users"`
+	CreatedOrders           int64   `json:"created_orders"`
+	PaidOrders              int64   `json:"paid_orders"`
+	NewPurchaseIncome       float64 `json:"new_purchase_income"`
+	RenewalIncome           float64 `json:"renewal_income"`
+	TotalIncome             float64 `json:"total_income"`
+	AppleIncome             float64 `json:"apple_income"`
+	ThirdPartyIncome        float64 `json:"third_party_income"`
+	TotalConnectSuccessRate float64 `json:"total_connect_success_rate"` // 全部用户连接成功率，成功连接去重人数/起始日日活人数×100；连接统计最晚截至次日零点，分母为0时返回0
+	TotalPaymentSuccessRate float64 `json:"total_payment_success_rate"` // 全部用户支付成功率，区间内创建且已支付订单的去重人数/区间内下单去重人数×100；分母为0时返回0
 }
 
 type internalReportResponse struct {
@@ -276,12 +279,16 @@ func queryInternalReportStats(start, end time.Time) (InternalReportStatsResult, 
 	}
 	result.ConnectBaseUsers = result.NewUsers
 
+	if err := queryInternalReportTotalConnectRate(start, end, &result); err != nil {
+		return result, err
+	}
 	if err := queryInternalReportPaymentStats(start, end, &result); err != nil {
 		return result, err
 	}
 	if err := queryInternalReportIncome(start, end, &result); err != nil {
 		return result, err
 	}
+	applyInternalRenewalStats(start, end, &result)
 	return result, nil
 }
 
@@ -461,26 +468,60 @@ WHERE u.id IN ?
 	return nil
 }
 
+func queryInternalReportTotalConnectRate(start, end time.Time, result *InternalReportStatsResult) error {
+	if result.DailyActiveUsers <= 0 {
+		return nil
+	}
+	// DailyActiveUsers represents start's local date, even for multi-day requests.
+	localStart := start.In(time.Local)
+	nextDay := time.Date(localStart.Year(), localStart.Month(), localStart.Day()+1, 0, 0, 0, 0, time.Local)
+	if end.After(nextDay) {
+		end = nextDay
+	}
+	var connectedUsers int64
+	if err := model.DB.Raw(`
+SELECT COUNT(DISTINCT user_id)
+FROM node_connect_history
+WHERE connected_at >= ? AND connected_at < ?
+`, start, end).Row().Scan(&connectedUsers); err != nil {
+		return err
+	}
+	result.TotalConnectSuccessRate = reportSuccessPercent(connectedUsers, result.DailyActiveUsers)
+	return nil
+}
+
 func queryInternalReportPaymentStats(start, end time.Time, result *InternalReportStatsResult) error {
-	var createdOrders, paidOrders int64
+	var createdOrders, paidOrders, totalOrderUsers, totalPaidUsers int64
 	if err := model.DB.Raw(`
 SELECT
-  COUNT(DISTINCT o.uid) AS created_orders,
-  COUNT(DISTINCT CASE WHEN o.pay_status = 3 THEN o.uid END) AS paid_orders
+  COUNT(DISTINCT CASE WHEN u.id IS NOT NULL THEN o.uid END) AS created_orders,
+  COUNT(DISTINCT CASE WHEN u.id IS NOT NULL AND o.pay_status = ? THEN o.uid END) AS paid_orders,
+  COUNT(DISTINCT o.uid) AS total_order_users,
+  COUNT(DISTINCT CASE WHEN o.pay_status = ? THEN o.uid END) AS total_paid_users
 FROM `+"`order`"+` o
-INNER JOIN `+"`user`"+` u
+LEFT JOIN `+"`user`"+` u
   ON u.id = o.uid
   AND u.create_time >= ?
   AND u.create_time < ?
 WHERE o.create_time >= ?
   AND o.create_time < ?
-`, start, end, start, end).Row().Scan(&createdOrders, &paidOrders); err != nil {
+`, model.OrderPayStatusPaid, model.OrderPayStatusPaid, start, end, start, end).
+		Row().Scan(&createdOrders, &paidOrders, &totalOrderUsers, &totalPaidUsers); err != nil {
 		return err
 	}
 
 	result.CreatedOrders = createdOrders
 	result.PaidOrders = paidOrders
+	result.TotalPaymentSuccessRate = reportSuccessPercent(totalPaidUsers, totalOrderUsers)
 	return nil
+}
+
+// reportSuccessPercent returns percentage points (for example, 25 means 25%).
+func reportSuccessPercent(successes, total int64) float64 {
+	if total <= 0 {
+		return 0
+	}
+	return 100 * float64(successes) / float64(total)
 }
 
 func queryInternalReportIncome(start, end time.Time, result *InternalReportStatsResult) error {

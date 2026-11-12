@@ -2188,6 +2188,110 @@ POST /mid_caller/intes/vpnflw
 | `mid_call_rslt_call_fix` | `object` | 是 | 接口业务数据；具体结构见下方以该字段开头的嵌套字段。 |
 <!-- endpoint-fields:/mid_caller/intes/vpnflw:end -->
 
+## 内部统计接口（服务端调用）
+
+```http
+POST /api/v1/internal/report/stats
+```
+
+此接口供管理平台或统计服务调用，使用原始字段名，不要求用户 JWT。鉴权密钥必须与服务端 `InternalKey` 一致；通过请求体 `key` 传入，未填写或为空白时读取请求头 `X-Report-Key`。密钥不可放入客户端 App。
+
+### 请求参数
+
+| 字段 | 类型 | 是否必填 | 说明 |
+| --- | --- | --- | --- |
+| `key` | string | 与 `X-Report-Key` 二选一 | 内部接口鉴权密钥；请求体中非空的 `key` 优先。 |
+| `start_time` | string | 是 | 统计起始时间，支持 `yyyy-MM-dd HH:mm:ss` 或带时区的 RFC3339。无时区格式按 Asia/Shanghai 解析。 |
+| `end_time` | string | 是 | 统计截止时间，格式同上，必须晚于 `start_time`。常规区间查询包含起始时间、不包含截止时间，即 `[start_time, end_time)`。 |
+
+请求示例：
+
+```json
+{
+  "key": "<InternalKey>",
+  "start_time": "2026-11-12 00:00:00",
+  "end_time": "2026-11-12 12:00:00"
+}
+```
+
+### 统一返回示例
+
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "result": {
+    "new_users": 10,
+    "daily_active_users": 20,
+    "connect_base_users": 10,
+    "connected_users": 3,
+    "created_orders": 4,
+    "paid_orders": 1,
+    "new_purchase_income": 199,
+    "renewal_income": 99,
+    "total_income": 298,
+    "apple_income": 199,
+    "third_party_income": 99,
+    "due_today_users": 10,
+    "renewed_today_due_today_users": 4,
+    "due_seven_day_users": 30,
+    "renewed_today_due_seven_day_users": 12,
+    "daily_renewal_stats_available": true,
+    "seven_day_renewal_stats_available": true,
+    "total_connect_success_rate": 75,
+    "total_payment_success_rate": 37.5
+  }
+}
+```
+
+统一返回字段含义：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `code` | integer | 业务码，成功为 `200`，请求、鉴权或查询失败为 `500`。 |
+| `msg` | string | 处理结果或错误信息。 |
+| `result` | object | 统计数据，保留原有 11 个字段，补充 6 个续费统计字段和 2 个总成功率字段，共 19 个字段。 |
+
+### 统计字段与口径
+
+| `result` 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `new_users` | integer | 保持原有新增用户口径：满足单日范围时优先读取新增用户缓存；否则统计区间内创建并登录的用户，以及区间内登录的迁移用户。 |
+| `daily_active_users` | integer | `start_time` 所在自然日的去重日活人数，优先读取 Redis，回退到 `daily_stat`；跨天请求仍只取起始日，不累计多日。 |
+| `connect_base_users` | integer | 保持原有口径，等于 `new_users`，用于原有新增用户连接率。 |
+| `connected_users` | integer | 原新增用户群体中，在请求区间成功连接且 `is_real = 1` 的去重人数。 |
+| `created_orders` | integer | 区间内注册的新用户中，在区间内创建订单的去重人数；虽名为 orders，实际统计人数。 |
+| `paid_orders` | integer | 上述新用户中，区间内创建且当前 `pay_status = 3` 的订单对应的去重人数。 |
+| `new_purchase_income` | number | 按原有首次成功支付分类计算的收入，金额单位元；订单 `pay_time` 在请求区间内。 |
+| `renewal_income` | number | 按原有非首次成功支付分类计算的收入，金额单位元；订单 `pay_time` 在请求区间内。 |
+| `total_income` | number | 区间内成功支付的总收入，按 `pay_time` 统计，金额单位元。 |
+| `apple_income` | number | 总收入中 `pay_type = apple_iap` 的部分，金额单位元。 |
+| `third_party_income` | number | 总收入中非 `apple_iap` 的部分，金额单位元。 |
+| `due_today_users` | integer | 到期用户群体中，起始自然日到期的去重人数；结合每日可用标记读取。 |
+| `renewed_today_due_today_users` | integer | 上述当日到期群体中，在报告截止前成功续费的去重人数，包含提前续费；字段名中的 today 不表示仅统计当天付款。 |
+| `due_seven_day_users` | integer | 到期用户群体中，起始日及之前六个自然日到期的去重人数；结合七日可用标记读取。 |
+| `renewed_today_due_seven_day_users` | integer | 上述七日到期群体中，在报告截止前成功续费的去重人数，包含提前续费。 |
+| `daily_renewal_stats_available` | boolean | 当日续费统计是否有完整覆盖；为 `false` 时不得将对应零值解释为真实续费率。 |
+| `seven_day_renewal_stats_available` | boolean | 七日续费统计是否有完整覆盖；为 `false` 时不得将对应零值解释为真实续费率。 |
+| `total_connect_success_rate` | number | **新增**。全部用户成功连接去重人数 ÷ `daily_active_users` × 100。连接时间从 `start_time` 起算，截止到 `end_time` 与起始日次日零点中的较早者；不限制为新增用户，也不附加 `is_real` 过滤。 |
+| `total_payment_success_rate` | number | **新增**。区间内创建且当前已支付（`pay_status = 3`）订单对应的去重人数 ÷ 区间内创建订单的全部去重人数 × 100；包含新老用户。 |
+
+两个新增字段是百分比数值，`37.5` 表示 `37.5%`，不是 `0.375`，也不是带 `%` 的字符串；不额外四舍五入，分母为零时返回数值 `0`，字段始终存在。
+
+总连接成功率独立查询全部用户，不能用原有 `connected_users / connect_base_users` 替代；总支付成功率也不能用原有 `paid_orders / created_orders` 替代。补齐统计不改变原有新增、连接、支付和收入统计口径，续费统计采用原模板口径。
+
+续费统计与原模板一致，仅支持从自然日零点开始、截止不超过次日零点的范围；其余范围的续费可用标记为 `false`。收入按支付时间统计，支付成功率按订单创建时间统计，两者时间口径不同。
+
+### 启用与数据库初始化
+
+部署此版本并启动服务时，自动迁移会创建 `renewal_tracking` 表、初始化 `started_at`，并为 `order` 表补齐 `renewal_recorded`、`renewal_was_paid`、`vip_before`、`vip_after` 四个内部字段；应用数据库账号需要相应建表、改表权限。快照只在 XX、SS 或苹果支付成功时，与订单及会员权益在同一事务内写入；幸运转盘、邀请等赠送会员时长不计为付费续费。内部快照不会出现在客户端订单 JSON 中。
+
+已有 `started_at` 不会在重启时重置，历史订单也不会伪造快照。中途启用时从次日才算完整自然日，七日标记还要求起始日及之前六日完整覆盖；区间内已支付或已退款订单缺少快照时，对应可用标记为 `false`。所有支付处理实例需要同步更新，避免旧实例继续产生缺少快照的订单。
+
+### HTTP 状态
+
+此内部接口与前文客户端业务接口不同，会使用实际 HTTP 错误状态：成功 `200`，参数或时间范围错误 `400`，内部密钥错误 `403`，查询失败 `500`。失败响应仍保留 `code / msg / result`，统计字段返回零值。
+
 <!-- detailed-client-flows:start -->
 ## 推荐调用流程
 

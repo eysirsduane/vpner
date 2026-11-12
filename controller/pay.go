@@ -833,14 +833,22 @@ func completeXXPayOrder(params map[string]string) error {
 			First(&user).Error; err != nil {
 			return err
 		}
+		renewalWasPaid, err := model.HasPaidOrder(tx, user.Id)
+		if err != nil {
+			return err
+		}
 		vipTime := addVipSeconds(user.VipTime, order.PakTime)
 		if err := tx.Model(&model.Order{}).Where("id = ?", order.Id).Updates(map[string]interface{}{
-			"pay_status":  model.OrderPayStatusPaid,
-			"money":       callbackAmount,
-			"pay_sn":      paySn,
-			"pay_source":  model.OrderPaySourceXXCallback,
-			"verify_time": &now,
-			"pay_time":    &now,
+			"renewal_recorded": true,
+			"renewal_was_paid": renewalWasPaid,
+			"vip_before":       user.VipTime,
+			"vip_after":        vipTime,
+			"pay_status":       model.OrderPayStatusPaid,
+			"money":            callbackAmount,
+			"pay_sn":           paySn,
+			"pay_source":       model.OrderPaySourceXXCallback,
+			"verify_time":      &now,
+			"pay_time":         &now,
 		}).Error; err != nil {
 			return err
 		}
@@ -928,14 +936,22 @@ func completeSSPayOrder(params map[string]string) error {
 			First(&user).Error; err != nil {
 			return err
 		}
+		renewalWasPaid, err := model.HasPaidOrder(tx, user.Id)
+		if err != nil {
+			return err
+		}
 		vipTime := addVipSeconds(user.VipTime, order.PakTime)
 		if err := tx.Model(&model.Order{}).Where("id = ?", order.Id).Updates(map[string]interface{}{
-			"pay_status":  model.OrderPayStatusPaid,
-			"money":       callbackAmount,
-			"pay_sn":      paySn,
-			"pay_source":  model.OrderPaySourceSSCallback,
-			"verify_time": &now,
-			"pay_time":    &now,
+			"renewal_recorded": true,
+			"renewal_was_paid": renewalWasPaid,
+			"vip_before":       user.VipTime,
+			"vip_after":        vipTime,
+			"pay_status":       model.OrderPayStatusPaid,
+			"money":            callbackAmount,
+			"pay_sn":           paySn,
+			"pay_source":       model.OrderPaySourceSSCallback,
+			"verify_time":      &now,
+			"pay_time":         &now,
 		}).Error; err != nil {
 			return err
 		}
@@ -1099,13 +1115,21 @@ func completeAppleOrder(tx *gorm.DB, c *gin.Context, userId int, pack model.Pack
 	}
 
 	now := chinaNow()
+	renewalWasPaid, err := model.HasPaidOrder(tx, user.Id)
+	if err != nil {
+		return err
+	}
 	vipTime := addVipSeconds(user.VipTime, pack.Day*24*60*60)
 	updates := map[string]interface{}{
-		"pay_status":  model.OrderPayStatusPaid,
-		"pay_sn":      transaction.TransactionId,
-		"pay_source":  paySource,
-		"verify_time": &now,
-		"pay_time":    &now,
+		"renewal_recorded": true,
+		"renewal_was_paid": renewalWasPaid,
+		"vip_before":       user.VipTime,
+		"vip_after":        vipTime,
+		"pay_status":       model.OrderPayStatusPaid,
+		"pay_sn":           transaction.TransactionId,
+		"pay_source":       paySource,
+		"verify_time":      &now,
+		"pay_time":         &now,
 	}
 	if err := tx.Model(&model.Order{}).Where("id = ?", order.Id).Updates(updates).Error; err != nil {
 		return err
