@@ -62,6 +62,7 @@ func AutoMigrate() error {
 		&NodeConnectHistory{},
 		&NodeConnectLog{},
 		&Order{},
+		&RenewalTracking{},
 		&Package{},
 		&PayConfig{},
 		&Popup{},
@@ -84,6 +85,9 @@ func AutoMigrate() error {
 		return err
 	}
 	if err := EnsureNodeConnectLogIndexes(); err != nil {
+		return err
+	}
+	if err := InitRenewalTracking(); err != nil {
 		return err
 	}
 	if err := EnsureNodeConnectHistoryIndexes(); err != nil {

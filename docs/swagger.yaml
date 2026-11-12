@@ -139,9 +139,12 @@ definitions:
           type: string
         type: array
       link_url:
-        description: 弹窗跳转链接
-        example: https://example.com/download
-        type: string
+        description: 弹窗跳转链接数组
+        example:
+        - https://example.com/download
+        items:
+          type: string
+        type: array
       title:
         description: 弹窗标题
         example: 服务迁移提醒
@@ -428,9 +431,6 @@ definitions:
       country:
         example: 香港
         type: string
-      img_url:
-        example: https://example.com/hk.png
-        type: string
       max_conn_time:
         example: 300
         type: integer
@@ -660,9 +660,12 @@ definitions:
           type: string
         type: array
       jump_target:
-        description: 跳转目标，内部跳转填业务code，外部跳转填URL
-        example: purchase
-        type: string
+        description: 跳转目标数组，内部跳转填业务code，外部跳转填URL
+        example:
+        - purchase
+        items:
+          type: string
+        type: array
       jump_type:
         description: 跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)
         example: internal
@@ -1487,7 +1490,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: 非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和今日苹果内购收款额度判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐
+      description: 非中国大陆时区（含未传时区）直接返回苹果内购；中国大陆时区继续根据用户地区、客户端版本和每日动态内购限额判断返回苹果内购或H5支付，并创建未支付订单；内购返回套餐
         apple_id 和订单级 app_account_token，前端支付时必须作为 StoreKit appAccountToken 携带
       parameters:
       - description: 发起支付请求
@@ -1511,6 +1514,21 @@ paths:
       security:
       - BearerAuth: []
       summary: 发起支付
+      tags:
+      - 支付
+  /pay/ss_callback:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 接收 SS 支付异步回调，验签、验金额并发放会员权益；处理成功返回纯字符串 success
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+      summary: SS支付回调
       tags:
       - 支付
   /pay/xx_callback:

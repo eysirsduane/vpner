@@ -1144,6 +1144,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/pay/ss_callback": {
+            "get": {
+                "description": "接收 SS 支付异步回调，验签、验金额并发放会员权益；处理成功返回纯字符串 success",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "支付"
+                ],
+                "summary": "SS支付回调",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/pay/xx_callback": {
             "post": {
                 "description": "接收 XX 支付异步回调，验签、验金额并发放会员权益；处理成功返回纯字符串 success",
@@ -1674,9 +1697,14 @@ const docTemplate = `{
                     ]
                 },
                 "link_url": {
-                    "description": "弹窗跳转链接",
-                    "type": "string",
-                    "example": "https://example.com/download"
+                    "description": "弹窗跳转链接数组",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "https://example.com/download"
+                    ]
                 },
                 "title": {
                     "description": "弹窗标题",
@@ -2094,10 +2122,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "香港"
                 },
-                "img_url": {
-                    "type": "string",
-                    "example": "https://example.com/hk.png"
-                },
                 "max_conn_time": {
                     "type": "integer",
                     "example": 300
@@ -2411,9 +2435,14 @@ const docTemplate = `{
                     ]
                 },
                 "jump_target": {
-                    "description": "跳转目标，内部跳转填业务code，外部跳转填URL",
-                    "type": "string",
-                    "example": "purchase"
+                    "description": "跳转目标数组，内部跳转填业务code，外部跳转填URL",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "purchase"
+                    ]
                 },
                 "jump_type": {
                     "description": "跳转方式(none=不跳转,internal=内部跳转,external=外部浏览器)",

@@ -29,6 +29,7 @@ const (
 
 // Order 订单表
 type Order struct {
+	RenewalOrderSnapshot
 	BaseModel
 	PakId           int        `json:"pak_id" gorm:"column:pak_id;type:int;comment:套餐ID"`
 	PakName         string     `json:"pak_name" gorm:"column:pak_name;type:varchar(128);comment:套餐名称"`
